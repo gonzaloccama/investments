@@ -709,7 +709,7 @@
 
     .progress-outer {
         background: rgba(255, 255, 255, 0.02);
-        padding: 3px 36px 3px 3px;
+        padding: 3px 48px 3px 3px;
         border: 1px solid #bebfbf;
         border-radius: 45px;
         margin-bottom: 20px;
@@ -772,16 +772,16 @@
     }
 
 
-    .badge-not-started {
+    .badge-inactive {
         border: 1px dashed #fc751c;
         background-color: rgba(252, 117, 28, 0.10);
         color: #fc751c;
     }
 
-    .badge-progress {
-        border: 1px dashed #1D477A;
-        background-color: rgba(29, 71, 122, 0.10);
-        color: #1D477A;
+    .badge-active {
+        border: 1px dashed #0e5f05;
+        background-color: rgba(14, 95, 5, 0.10);
+        color: #0e5f05;
     }
 
     .badge-canceled {
@@ -994,5 +994,9 @@
 
     .font-18 {
         font-size: 18px !important;
+    }
+
+    .hover-list:hover {
+        background-color: rgba(103, 103, 103, 0.4) !important;
     }
 </style>

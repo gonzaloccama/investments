@@ -1,6 +1,6 @@
 <?php
-$exclude = ['not', 'amount', 'unit', 'type_file', 'user_id'];
-$_files = ['document' => 'PDF', 'image' => 'Imagen']
+$exclude = ['not', 'amount', 'unit', 'type_file', 'user_id', 'attachment'];
+$_files = ['document' => 'PDF', 'image' => 'Imagen', 'attachment' => 'IMG']
 ?>
 <table class="table table-striped responsive">
     <thead>
@@ -36,8 +36,16 @@ $_files = ['document' => 'PDF', 'image' => 'Imagen']
                         @elseif(in_array($hdr, ['type_file']))
                             <a href="#" class="btn btn-link font-weight-bold"
                                wire:click.prevent="openFile({{ $dt->id }}, '{{ $show }}')">{{ $_files[$dt[$hdr]] }}</a>
+                        @elseif(in_array($hdr, ['attachment']))
+                            <a href="#" class="btn btn-link font-weight-bold"
+                               wire:click.prevent="openFile({{ $dt->id }}, '{{ $show }}')">{{ $_files['attachment'] }}</a>
                         @elseif($hdr == 'amount')
-                            {{ __('S/ ') . number_format($dt[$hdr], 2, '.', ',') }}
+
+                            @if(isset($isCurrency) && !empty($isCurrency))
+                                {{ $isCurrency. ' ' . number_format($dt[$hdr], 2, '.', ',') }}
+                            @else
+                                {{ __('S/ ') . number_format($dt[$hdr], 2, '.', ',') }}
+                            @endif
                         @elseif($hdr == 'unit')
                             {{ $dt[$_unit][$hdr] }}
 

@@ -20,6 +20,7 @@ class CreateInvestmentsTable extends Migration
             $table->decimal('amount')->nullable();
             $table->integer('currency');
             $table->integer('period');
+            $table->integer('current_period')->default(0);
             $table->bigInteger('plan')->unsigned()->nullable();
             $table->dateTime('start_date');
             $table->dateTime('end_date');

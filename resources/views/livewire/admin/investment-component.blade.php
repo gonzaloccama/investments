@@ -13,10 +13,19 @@
         ];
 
         /*** status custom ***/
-//        $_statusIndex = [ // lista or lista with index
-//            'Inactivo',
-//            'Activo',
-//        ];
+        //        $_statusIndex = [ // lista or lista with index
+        //            'Inactivo',
+        //            'Activo',
+        //        ];
+        $_status = [ // lista or lista with index
+            'completed' => 'completado',
+            'canceled' => 'cancelado',
+            'inactive' => 'inactivo',
+            'active' => 'activo',
+        ];
+
+        $percents = true;
+        $currencies = true;
 
         //        $filters = $roles;//filters
 
@@ -59,15 +68,31 @@
     <script src="{{ asset('assets/js/vendor/select2.full.js') }}"></script>
     <script src="{{ asset('assets/plugins/flatpickr/flatpickr.js') }}"></script>
     <script src="{{ asset('assets/plugins/flatpickr/es.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/Sortable.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 
             window.livewire.on('refreshContent', () => {
-                activeSelect2('#time_id', 'time_id');
+                activeSelect2('#currency', 'currency');
+                activeSelect2('#plan', 'plan');
+                activeSelect2('#bank_id', 'bank_id');
+
+                $(".sortable").each(function () {
+                    if ($(this).find(".handle").length > 0) {
+                        Sortable.create($(this)[0], {handle: ".handle"});
+                    } else {
+                        Sortable.create($(this)[0]);
+                    }
+                });
+                if ($(".sortable-survey").length > 0) {
+                    Sortable.create($(".sortable-survey")[0]);
+                }
             });
 
             window.livewire.on('refreshSection', () => {
-                // activeFlatpickr('#');
+                activeFlatpickr('#start_date');
+                activeFlatpickr('#end_date');
+                activeFlatpickr('#transfer_date');
             });
 
             window.livewire.on('notification', (mssg) => {

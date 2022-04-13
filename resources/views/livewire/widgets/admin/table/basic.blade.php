@@ -1,8 +1,9 @@
 <div class="card border rounded-0" style="border-color: grey;">
     <?php
-    $money = ['price', 'total', 'subtotal'];
-    $fld = ['not', 'status', 'image', 'activated', 'progress'];
-    $lnk = ['url', 'link', 'mobile', 'phone', 'email', 'whatsapp', 'website']
+    $money = ['price', 'total', 'subtotal', 'amount'];
+    $fld = ['not', 'status', 'image', 'activated', 'progress', 'for_percent'];
+    $lnk = ['url', 'link', 'mobile', 'phone', 'email', 'whatsapp', 'website'];
+    $dtes = ['created_at', 'updated_at', 'start_date', 'end_date'];
     ?>
     <div class="card-body" style="overflow-x: auto">
         {{ $results->links('livewire.widgets.admin.table.detail-pagination') }}
@@ -34,7 +35,7 @@
                     <tr>
                         @foreach(array_keys($headers) as $header)
                             <th class="align-middle" scope="row">
-                                @if(!in_array($header, array_merge($money, $fld, $lnk)))
+                                @if(!in_array($header, array_merge($money, $fld, $lnk, $dtes)))
                                     {{ $result[$header] }}
                                 @elseif($header == 'image')
                                     <div class="text-center">
@@ -49,15 +50,18 @@
                                     </span>
                                     @elseif(isset($_status) && !empty($_status))
                                         <span class="rounded-0 badge badge-{{ $result[$header] }}">
-                                       {{ $_status[$result[$header]] }}
-                                    </span>
+                                           {{ $_status[$result[$header]] }}
+                                        </span>
                                     @else
                                         <span class="rounded-0 badge {{ $result[$header] }}">
-                                       {{ $result[$header] }}
-                                    </span>
+                                           {{ $result[$header] }}
+                                        </span>
                                     @endif
-                                @elseif($header == 'total')
-                                    <p>S/ {{ number_format($result[$header], 2, '.', ',') }}</p>
+                                @elseif(in_array($header, ['total', 'amount']))
+                                    <p class="w-100 text-right">
+                                        {{ isset($currencies) && !empty($currencies) ? $result->isCurrency->symbol : 'S/ ' }}
+                                        {{ number_format($result[$header], 2, '.', ',') }}
+                                    </p>
                                 @elseif(in_array($header, ['mobile', 'phone']))
                                     <a href="tel:{{ $result[$header] }}">{{ $result[$header] }}</a>
                                 @elseif(in_array($header, ['website', 'url', 'link']))
@@ -67,29 +71,37 @@
                                 @elseif(in_array($header, ['whatsapp']))
                                     <a href="https://api.whatsapp.com/send?phone=51{{ $result[$header] }}"
                                        target="_blank">{{ $result[$header] }}</a>
-                                @elseif(in_array($header, ['progress']))
-                                    <?php
-                                    $prc = $result[$header] > 97 ? '#317347' : '#1D477A';
-                                    if ($result->status == 'canceled') {
-                                        $prc = '#f63c44';
-                                    }
-                                    ?>
-                                    {{--                                <div class="progress progress-custom">--}}
-                                    {{--                                    <div class="progress-bar progress-bar-striped progress-bar-animated"--}}
-                                    {{--                                         style="width: {{ $result[$header] }}%; background-color: #{{ $prc }};">--}}
-                                    {{--                                        {{ $result[$header] }}%--}}
-                                    {{--                                    </div>--}}
-                                    {{--                                </div>--}}
 
-                                    <div class="progress-outer" style="border-color:{{ $prc }};">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-striped"
-                                                 style="width:{{ $result[$header] }}%; background-color: {{ $prc }};"></div>
-                                            <div class="progress-value" style="color: {{ $prc }};">
-                                                <span>{{ $result[$header] }}</span>%
+                                @elseif(in_array($header, ['created_at', 'updated_at', 'start_date', 'end_date']))
+                                    <?php
+                                    echo ucfirst(Carbon\Carbon::parse($result[$header])
+                                        ->format('Y-m-d'));
+                                    ?>
+
+                                @elseif(in_array($header, ['progress', 'for_percent']))
+                                    @if($result->status == 'active')
+                                        <?php
+                                        $prc = $result->percent > 97 ? '#317347' : '#0e5f05';
+                                        if ($result->status == 'canceled') {
+                                            $prc = '#f63c44';
+                                        }
+                                        ?>
+
+                                        <div class="progress-outer" style="border-color:{{ $prc }};">
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-striped"
+                                                     style="width:{{ $result->percent }}%; background-color: {{ $prc }};"></div>
+                                                <div class="progress-value" style="color: {{ $prc }};">
+                                                    <span>{{ $result->percent }}</span>%
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <span class="rounded-0 badge badge-inactive">
+                                           inactivo
+                                        </span>
+                                    @endif
+
                                 @elseif($header == 'not')
 
                                     <div class="btn-group dropleft">

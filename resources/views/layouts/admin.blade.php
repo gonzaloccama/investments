@@ -2,7 +2,7 @@
 $config = \App\Models\SystemConfig::find(1);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
