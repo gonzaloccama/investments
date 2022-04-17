@@ -2,14 +2,18 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Http\Livewire\Reports\ContractComponent;
 use App\Models\BankTransfer;
 use App\Models\CashDeposit;
 use App\Models\Investment;
+use App\Models\Payment;
+use App\Models\SystemConfig;
 use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\WithFileUploads;
+use PDF;
 
 class InvestmentComponent extends BaseAdmin
 {
@@ -40,6 +44,10 @@ class InvestmentComponent extends BaseAdmin
     public $transfer_account;
 
     public $paint;
+    public $update;
+    public $modal;
+
+    public $showFile;
 
     public $headers = [
         'code' => '#',
@@ -79,8 +87,8 @@ class InvestmentComponent extends BaseAdmin
         $this->keyWord = '';
 
         $this->iconSort = 'fa-sort-alpha-down';
-        $this->fieldSort = 'created_at';
-        $this->sort = 'desc';
+        $this->fieldSort = 'for_percent';
+        $this->sort = 'asc';
 
         $this->frame = 'index';
 
@@ -105,7 +113,7 @@ class InvestmentComponent extends BaseAdmin
                 $query->orWhere(DB::raw("CONCAT(users.firstname, ' ', users.lastname)"), 'LIKE', '%' . $this->keyTex . '%');
             })
             ->select($table . '.*')
-            ->selectRaw("CONCAT(users.firstname, ' ', users.lastname) as fullname, IF(status='active', DATEDIFF(CURDATE(),end_date), null) as for_percent")
+            ->selectRaw("CONCAT(users.firstname, ' ', users.lastname) as fullname, IF(status='active', IF(TIMESTAMPDIFF(HOUR, CURDATE(), end_date) < 0, 0, TIMESTAMPDIFF(HOUR, CURDATE(), end_date)), null) as for_percent")
             ->join('users', 'users.id', '=', 'user_id')
             ->paginate($this->limit);
 
@@ -162,7 +170,7 @@ class InvestmentComponent extends BaseAdmin
 
     public function saveData()
     {
-//        $this->validate($this->rules, [], $this->attributes);
+        $this->validate($this->rules, [], $this->attributes);
         $months = [
             'Jan' => 'ENE',
             'Feb' => 'FEB',
@@ -216,6 +224,29 @@ class InvestmentComponent extends BaseAdmin
     {
         $this->paint = 'paint-' . $paint;
         $this->emit('refreshSection');
+    }
+
+    public function openEdit()
+    {
+        $this->update = true;
+        $this->emit('refreshSection');
+    }
+
+    public function saveEdit()
+    {
+        $this->validate($this->rules, [], $this->attributes);
+        $data = Investment::find($this->itemId);
+
+        $data->currency = $this->currency;
+        $data->period = $this->period;
+        $data->plan = $this->plan;
+        $data->start_date = $this->start_date;
+
+        if ($data->save()) {
+            $this->update = null;
+            $this->emit('notification', ['Se guardó los cambios exitosamente']);
+            $this->emit('refreshSection');
+        }
     }
 
     public function saveInPaint()
@@ -279,20 +310,39 @@ class InvestmentComponent extends BaseAdmin
         }
     }
 
+    public function activeInvestment()
+    {
+        $dt = Investment::find($this->itemId);
+        $dt->status = 'active';
+        $dt->current_period = 1;
+        if ($dt->save()) {
+            $this->emit('notification', ['Se activó la inversión exitosamente']);
+            $pay = new Payment();
+            $pay->investment_id = $this->itemId;
+            $pay->amount = $dt->return_amount;
+            $pay->currency = $dt->currency;
+            $pay->type_payment = 'return';
+
+            $pay->start_date = $dt->start_date;
+            $pay->end_date = Carbon::parse($dt->start_date)->addMonths(1)->format('Y-m-d');
+            $pay->save();
+        }
+    }
+
     private function updateInvestmentStatus()
     {
         $dt = Investment::find($this->itemId);
-
-        $dt->status = 'active';
+//        $dt->status = 'active';
         $dt->amount = $dt->cashDeposit->sum('amount') + $dt->bankTransfer->sum('amount');
         $dt->return_amount = ($dt->amount * $dt->isPlan->percent) / 100;
-        $dt->current_period = 1;
+//        $dt->current_period = 1;
         $dt->save();
     }
 
     public function closePaint()
     {
         $this->paint = null;
+        $this->update = null;
 
         $this->_amount = null;
         $this->attachment = null;
@@ -303,6 +353,47 @@ class InvestmentComponent extends BaseAdmin
 
         $this->resetErrorBag();
         $this->resetValidation();
+    }
+
+    public function openFile($id, $show)
+    {
+        if ($id) {
+            $this->modal = 'modal-file';
+            if ($show == 'cash') {
+                $this->showFile = CashDeposit::find($id);
+
+            } elseif ($show == 'bankTransfer') {
+                $this->showFile = BankTransfer::find($id);
+            }
+            $this->emit('showModal');
+        }
+    }
+
+    public function closeFile()
+    {
+        $this->modal = null;
+        $this->showFile = null;
+    }
+
+    public function printAgreement(): \Illuminate\Http\Response
+    {
+        $id = base64_decode($_GET['id']);
+
+        if (isset($id)) {
+            $pdf = app('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option("enable_php", true);
+            $pdf->setPaper('A4');
+
+            $data['config'] = SystemConfig::find(1);
+            $data['invest'] = Investment::find($id);
+
+            $pdf->loadView('livewire.admin.investments.agreement', $data);
+
+            $file = $data['invest']->user->lastname . '-' . $data['invest']->code . '-' . $data['invest']->created_at;
+
+//            return $pdf->download($file . '.pdf');
+            return $pdf->stream($file . '.pdf');
+        }
     }
 
     public function edit($id = 0)
@@ -351,7 +442,9 @@ class InvestmentComponent extends BaseAdmin
     {
         $this->frame = 'index';
         $this->cleanItems();
+
         $this->closePaint();
+        $this->closeFile();
     }
 
     public function cleanItems()

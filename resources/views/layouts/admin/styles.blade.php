@@ -779,9 +779,9 @@
     }
 
     .badge-active {
-        border: 1px dashed #0e5f05;
-        background-color: rgba(14, 95, 5, 0.10);
-        color: #0e5f05;
+        border: 1px dashed #1D477A;
+        background-color: rgba(29, 71, 122, 0.10);
+        color: #1D477A;
     }
 
     .badge-canceled {
@@ -794,6 +794,24 @@
         border: 1px dashed #328359;
         background-color: rgba(10, 52, 32, 0.10);
         color: #328359;
+    }
+
+    .badge-paid {
+        border: 1px dashed #328359;
+        background-color: rgba(10, 52, 32, 0.10);
+        color: #328359;
+    }
+
+    .badge-waiting {
+        border: 1px dashed #1D477A;
+        background-color: rgba(29, 71, 122, 0.10);
+        color: #1D477A;
+    }
+
+    .badge-pending {
+        border: 1px dashed #fc751c;
+        background-color: rgba(252, 117, 28, 0.10);
+        color: #fc751c;
     }
 
     /*** noViSlider ***/
@@ -964,6 +982,7 @@
         font-size: 10px !important;
     }
 
+
     .font-11 {
         font-size: 11px !important;
     }
@@ -996,7 +1015,39 @@
         font-size: 18px !important;
     }
 
+    .font-19 {
+        font-size: 19px !important;
+    }
+
+    .font-20 {
+        font-size: 20px !important;
+    }
+
+    .font-21 {
+        font-size: 21px !important;
+    }
+
+    .font-22 {
+        font-size: 22px !important;
+    }
+
+    .font-24 {
+        font-size: 24px !important;
+    }
+
+    .font-26 {
+        font-size: 26px !important;
+    }
+
+    .font-28 {
+        font-size: 28px !important;
+    }
+
     .hover-list:hover {
         background-color: rgba(103, 103, 103, 0.4) !important;
+    }
+
+    .btn-success{
+       background-color: #117e1c;
     }
 </style>

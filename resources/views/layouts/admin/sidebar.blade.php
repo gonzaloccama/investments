@@ -1,6 +1,8 @@
 <div class="menu">
     <?php
-    $menus = \App\Models\SystemMenu::orderBy('order')->where('type', 'admin')->whereNull('parent')->get();
+    $menus = \App\Models\SystemMenu::orderBy('order')->with('children',function ($query){
+        $query->orderBy('order');
+    })->where('type', 'admin')->whereNull('parent')->get();
     ?>
     <div class="main-menu">
         <div class="scroll">

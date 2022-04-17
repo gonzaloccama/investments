@@ -25,7 +25,7 @@
                                 <div class="card-body text-center">
                                     <i class="iconsminds-wallet"></i>
                                     <p class="card-text font-weight-semibold mb-0">Inversión</p>
-                                    <p class="lead text-center">
+                                    <p class="lead text-center font-22">
                                         {{ $investment->isCurrency->symbol . ' ' . number_format($investment->amount, 2, '.', ',') }}
                                     </p>
                                 </div>
@@ -37,7 +37,7 @@
                                 <div class="card-body text-center">
                                     <i class="iconsminds-financial"></i>
                                     <p class="card-text font-weight-semibold mb-0">Retorno Mensual</p>
-                                    <p class="lead text-center">
+                                    <p class="lead text-center font-22">
                                         {{ $investment->isCurrency->symbol . ' ' . number_format($investment->return_amount, 2, '.', ',') }}
                                     </p>
                                 </div>
@@ -50,7 +50,7 @@
                                     <i class="iconsminds-coins"></i>
                                     <p class="card-text font-weight-semibold mb-0">Retorno
                                         x {{ $investment->period }}</p>
-                                    <p class="lead text-center">
+                                    <p class="lead text-center font-22">
                                         {{ $investment->isCurrency->symbol . ' ' . number_format($investment->return_amount * $investment->period, 2, '.', ',') }}
                                     </p>
                                 </div>
@@ -62,8 +62,14 @@
                                 <div class="card-body text-center">
                                     <i class="iconsminds-calendar-4"></i>
                                     <p class="card-text font-weight-semibold mb-0">Días restantes</p>
-                                    <p class="lead text-center">
-                                        {{ $investment->status == 'active' ? $investment->remaining_days : 'Inactivo' }}
+                                    <p class="lead text-center font-22">
+                                        <?php
+                                        if ($investment->status == 'active') {
+                                            echo intdiv($investment->remaining_hours, 24) . ' días, ' . ($investment->remaining_hours % 24) . ' horas';
+                                        } else {
+                                            echo 'Inactivo';
+                                        }
+                                        ?>
                                     </p>
                                 </div>
                             </a>
@@ -73,94 +79,40 @@
                 </div>
             </div>
 
+            @if($investment->amount)
+                <div class="text-right mb-5">
+
+                    @if(in_array($investment->status, ['active', 'completed']))
+                        @if($investment->end_date <= \Carbon\Carbon::today())
+                            <a href="javascript:;" wire:click.prevent="" class="btn btn-success btn-sm"
+                               target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Reembolsar</b></a>
+                        @else
+                            <a href="javascript:;"
+                               class="btn btn-danger btn-sm" target="_blank"><b><i class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar
+                                    inversión</b></a>
+                        @endif
+                        <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
+                           class="btn btn-secondary btn-sm" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Imprimir</b></a>
+                    @else
+                        <a href="javascript:;" wire:click.prevent="activeInvestment"
+                           class="btn btn-secondary btn-sm"
+                           target="_blank"><b><i class="fe-check"></i>&nbsp;&nbsp;Activar inversión</b></a>
+                    @endif
+                </div>
+            @endif
+
             <div class="row">
                 <div class="col-md-7 ">
 
                     <div class="card border">
                         <div class="card-body">
-                            <div class="position-absolute card-top-buttons">
-                                <button class="btn btn-secondary icon-button"
-                                        wire:click.prevent="updatePutContribution('cash')">
-                                    <i class="fe-edit"></i>
-                                </button>
-                            </div>
-                            <h5 class="card-title">Detalles de la Inversión</h5>
-                            <table class="table">
-                                <tr>
-                                    <th class="text-theme-1">Codigo:</th>
-                                    <td>{{ $code }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Modeda:</th>
-                                    <td>{{ $investment->isCurrency->symbol.' ('.$investment->isCurrency->currency.')' }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Meses:</th>
-                                    <td>{{ $period.' meses' }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Plan:</th>
-                                    <td>{!! $investment->isPlan->name . ' &#8212; ' . $investment->isPlan->percent . '%' !!}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Fecha de Inicio:</th>
-                                    <td>
-                                        <?php
-                                        echo ucfirst(Carbon\Carbon::parse($start_date)
-                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Fecha de culminación:</th>
-                                    <td>
-                                        <?php
-                                        echo ucfirst(Carbon\Carbon::parse($end_date)
-                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Progreso:</th>
-                                    <td>
-                                        @if($investment->status == 'active')
-                                            {{ __('Faltan: ') . $investment->remaining_days . ' días' }} <br>
 
-                                            <?php
-                                            $perc = $investment->percent;
+                            @if($update && $investment->status != "active")
+                                @include('livewire.admin.investments.investment.update')
+                            @else
+                                @include('livewire.admin.investments.investment.show')
+                            @endif
 
-                                            $prc = $perc > 97 ? '#317347' : '#0e5f05';
-                                            if ($investment->status == 'canceled') {
-                                                $prc = '#f63c44';
-                                            }
-                                            ?>
-
-                                            <div class="progress-outer w-100" style="border-color:{{ $prc }};">
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-striped"
-                                                         style="width:{{ $perc }}%; background-color: {{ $prc }};"></div>
-                                                    <div class="progress-value" style="color: {{ $prc }};">
-                                                        <span>{{ $perc }}</span>%
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <span class="rounded-0 badge badge-inactive">
-                                               {{ __('Inactivo') }}
-                                            </span>
-                                        @endif
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Estado:</th>
-                                    <td>
-                                        <span class="rounded-0 badge badge-{{  $investment->status }}">
-                                           {{ $_status[ $investment->status] }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
                             <div class="separator mb-4 mt-1"></div>
 
                         </div>
@@ -180,12 +132,14 @@
                 <div class="col-md-5">
                     <div class="card border">
                         <div class="card-body">
-                            <div class="position-absolute card-top-buttons">
-                                <button class="btn btn-secondary icon-button"
-                                        wire:click.prevent="openPaint('cash')">
-                                    <i class="fe-plus"></i>
-                                </button>
-                            </div>
+                            @if(!in_array($investment->status, ['active', 'completed']))
+                                <div class="position-absolute card-top-buttons">
+                                    <button class="btn btn-secondary icon-button"
+                                            wire:click.prevent="openPaint('cash')">
+                                        <i class="fe-plus"></i>
+                                    </button>
+                                </div>
+                            @endif
                             <h5 class="card-title mb-0">Efectivo</h5>
                             <span class="text-small mt-0 font-italic">
                                 Mostrando {{ $c = $investment->cashDeposit->count() }} {{ $c == 1 ? 'elemento' : 'elementos' }}
@@ -212,12 +166,14 @@
                 <div class="col-md-7">
                     <div class="card border">
                         <div class="card-body">
-                            <div class="position-absolute card-top-buttons">
-                                <button class="btn btn-secondary icon-button"
-                                        wire:click.prevent="openPaint('bank-transfer')">
-                                    <i class="fe-plus"></i>
-                                </button>
-                            </div>
+                            @if(!in_array($investment->status, ['active', 'completed']))
+                                <div class="position-absolute card-top-buttons">
+                                    <button class="btn btn-secondary icon-button"
+                                            wire:click.prevent="openPaint('bank-transfer')">
+                                        <i class="fe-plus"></i>
+                                    </button>
+                                </div>
+                            @endif
                             <h5 class="card-title mb-0">Transferencia bancaria</h5>
                             <span class="text-small mt-0 font-italic">
                                 Mostrando {{ $c = $investment->bankTransfer->count() }} {{ $c == 1 ? 'elemento' : 'elementos' }}
@@ -230,9 +186,9 @@
                                     'amount' => 'Monto',
                                     'attachment' => 'Evidencia',
                                     'created_at' => 'Fecha',
-                                    'not' => '',
+//                                    'not' => '',
                                 ];
-                                $show = 'cash';//Show Modal and delete
+                                $show = 'bankTransfer';//Show Modal and delete
                                 $dts = $investment->bankTransfer; //data show in table
                                 $deletion = 'deleteCustomConfirm';
                                 ?>
@@ -250,6 +206,7 @@
                         wire:click.prevent="closeFrame">
                     <b><i class="simple-icon-logout"></i>&nbsp;&nbsp;Regresar</b>
                 </button>
+
 
                 {{--                <button type="submit" class="btn btn-secondary btn-sm"--}}
                 {{--                        wire:click.prevent="saveData">--}}

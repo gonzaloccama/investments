@@ -21,6 +21,7 @@ class CreateSystemConfigsTable extends Migration
 
             $table->text('phones');
             $table->text('emails');
+            $table->text('ruc');
             $table->text('addresses')->nullable();
             $table->text('media_social')->nullable();
             $table->text('facebook_page')->nullable();

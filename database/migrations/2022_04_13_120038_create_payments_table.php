@@ -17,10 +17,13 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('investment_id');
             $table->decimal('amount');
-            $table->enum('type_payment', ['cycle', 'capital']);
-            $table->integer('cycle')->nullable();
+            $table->integer('currency');
+            $table->enum('type_payment', ['return', 'capital']);
+            $table->integer('current_period')->default(1);
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->datetime('payment_date')->nullable();
-            $table->boolean('status')->default(0);
+            $table->enum('status', ['paid', 'pending', 'waiting'])->default('waiting');
             $table->timestamps();
 
             $table->foreign('investment_id')->references('id')->on('investments')->onDelete('cascade');

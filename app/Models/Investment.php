@@ -35,30 +35,50 @@ class Investment extends Model
         return $this->hasMany(BankTransfer::class);
     }
 
-    public function getRemainingDaysAttribute()
+//    public function getRemainingDaysAttribute()
+//    {
+//        if ($this->end_date) {
+//            $remaining_days = Carbon::now()->diffInDays(Carbon::parse($this->end_date));
+//        } else {
+//            $remaining_days = 0;
+//        }
+//        return $remaining_days;
+//    }
+//
+//    public function getBeetweenDaysAttribute()
+//    {
+//        if ($this->end_date) {
+//            $remaining_days = Carbon::create($this->start_date)->diffInDays(Carbon::parse($this->end_date));
+//        } else {
+//            $remaining_days = 0;
+//        }
+//        return $remaining_days;
+//    }
+
+    public function getRemainingHoursAttribute()
     {
-        if ($this->end_date) {
-            $remaining_days = Carbon::now()->diffInDays(Carbon::parse($this->end_date));
+        if ($this->end_date >  Carbon::today()) {
+            $remaining_hours = Carbon::now()->diffInHours(Carbon::parse($this->end_date));
         } else {
-            $remaining_days = 0;
+            $remaining_hours = 0;
         }
-        return $remaining_days;
+        return $remaining_hours;
     }
 
-    public function getBeetweenDaysAttribute()
+    public function getBeetweenHoursAttribute()
     {
         if ($this->end_date) {
-            $remaining_days = Carbon::create($this->start_date)->diffInDays(Carbon::parse($this->end_date));
+            $beetween_hours = Carbon::create($this->start_date)->diffInHours(Carbon::parse($this->end_date));
         } else {
-            $remaining_days = 0;
+            $beetween_hours = 0;
         }
-        return $remaining_days;
+        return $beetween_hours;
     }
 
     public function getPercentAttribute()
     {
         if ($this->end_date && $this->start_date) {
-            $percent = round(($this->beetween_days - $this->remaining_days) * 100 / $this->beetween_days, 2);
+            $percent = round(($this->beetween_hours - $this->remaining_hours) * 100 / $this->beetween_hours, 2);
         } else {
             $percent = 0;
         }

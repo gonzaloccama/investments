@@ -80,8 +80,16 @@
 
                                 @elseif(in_array($header, ['progress', 'for_percent']))
                                     @if($result->status == 'active')
+                                        @if($result->remaining_hours == 0)
+                                            Completado
+                                        @else
+                                            {{ intdiv($result->remaining_hours, 24) . ' días, ' . ($result->remaining_hours % 24) . ' horas' }}
+                                        @endif
+
                                         <?php
-                                        $prc = $result->percent > 97 ? '#317347' : '#0e5f05';
+                                        $prc = $result->percent > 97 ? '#317347' : '#1D477A';
+
+
                                         if ($result->status == 'canceled') {
                                             $prc = '#f63c44';
                                         }
@@ -97,9 +105,15 @@
                                             </div>
                                         </div>
                                     @else
-                                        <span class="rounded-0 badge badge-inactive">
-                                           inactivo
-                                        </span>
+                                        @if($result->amount > 0)
+                                            <span class="rounded-0 badge badge-success-1">
+                                               requiere activar
+                                            </span>
+                                        @else
+                                            <span class="rounded-0 badge badge-inactive">
+                                               sin fondos
+                                            </span>
+                                        @endif
                                     @endif
 
                                 @elseif($header == 'not')

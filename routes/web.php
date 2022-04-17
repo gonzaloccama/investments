@@ -6,9 +6,12 @@ use App\Http\Livewire\Admin\BankComponent;
 use App\Http\Livewire\Admin\CurrencyComponent;
 use App\Http\Livewire\Admin\DashboardComponent;
 use App\Http\Livewire\Admin\InvestmentComponent;
+use App\Http\Livewire\Admin\PaymentComponent;
 use App\Http\Livewire\Admin\PlanComponent;
 use App\Http\Livewire\Admin\TimeComponent;
+use App\Http\Livewire\Admin\UpcomingPaymentComponent;
 use App\Http\Livewire\Admin\UsersComponent;
+use App\Http\Livewire\Reports\ContractComponent;
 use App\Http\Middleware\UserActive;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +57,11 @@ Route::middleware([UserActive::class])->group(function () {
         Route::get('/admin/currencies', CurrencyComponent::class)->name('admin.currencies');
 
         Route::get('/admin/investments', InvestmentComponent::class)->name('admin.investments');
+        Route::get('/admin/payments', PaymentComponent::class)->name('admin.payments');
+        Route::get('/admin/upcoming-payments', UpcomingPaymentComponent::class)->name('admin.upcoming-payments');
+
+        //reports
+        Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');
     });
 
     /***  USERS ***/

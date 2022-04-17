@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <div class="card">
+    <div class="card border rounded-0">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
             <span style="color: white;position: absolute; margin-top: -17px; margin-left: -12px">
@@ -13,51 +13,205 @@
 
         <div class="card-body">
             <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">
-                {{ $data->fullname ? $data->fullname : __('Actualizar usuario') }}
+                {{ $payment->code . ' - Pago Nro: ' . $payment->investment->current_period }}
             </h5>
             <div class="separator mb-5"></div>
-            <div class="scroll">
-                <div class="card-body border">
 
-                    @include('livewire.admin.administrators.details.user', ['dt' => $data])
-
-                    <?php
-                    $dt = [
-                        'name' => 'group',
-                        'text' => 'Rol de usuario',
-                        'required' => 1,
-                        'object' => 'role',
-                        'options' => \App\Models\Role::whereNotIn('id', [1])->get(),
-                    ];
-                    ?>
-                    @include('livewire.widgets.admin.form.select-h', $dt)
-
-                    <?php
-                    $dt = [
-                        'name' => 'activated',
-                        'text' => 'Cuenta activada',
-                        'required' => 0,
-                        'type' => 'checkbox',
-                    ];
-                    ?>
-                    @include('livewire.widgets.admin.form.input-h', $dt)
-
-                    <div class="separator mb-5 mt-5"></div>
-
-                    <div class="text-right">
-                        <button class="btn btn-secondary btn-sm"
-                                wire:click.prevent="closeFrame">
-                            <b><i class="simple-icon-logout"></i>&nbsp;&nbsp;Regresar</b>
-                        </button>
-
-                        <button type="submit" class="btn btn-secondary btn-sm"
-                                wire:click.prevent="updateData">
-                            <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar cambios</b>
-                        </button>
+            <div class="row">
+                <div class="col-12">
+                    <div class="row icon-cards-row mb-4 sortable">
+                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                            <a href="#" class="card border">
+                                <div class="card-body text-center">
+                                    <i class="iconsminds-wallet"></i>
+                                    <p class="card-text font-weight-semibold mb-0">Inversión</p>
+                                    <p class="lead text-center font-22">
+                                        {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->amount, 2, '.', ',') }}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                            <a href="#" class="card border">
+                                <div class="card-body text-center">
+                                    <i class="iconsminds-financial"></i>
+                                    <p class="card-text font-weight-semibold mb-0">Retorno Mensual</p>
+                                    <p class="lead text-center font-22">
+                                        {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->return_amount, 2, '.', ',') }}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                            <a href="#" class="card border">
+                                <div class="card-body text-center">
+                                    <i class="simple-icon-calendar"></i>
+                                    <p class="card-text font-weight-semibold mb-0">Pago Actual</p>
+                                    <p class="lead text-center font-22">
+                                        {{ $payment->current_period }}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                            <a href="#" class="card border">
+                                <div class="card-body text-center">
+                                    <i class="iconsminds-calendar-4"></i>
+                                    <p class="card-text font-weight-semibold mb-0">Actual</p>
+                                    <p class="lead text-center font-22">
+                                        <?php
+                                        echo intdiv($payment->remaining_hours, 24) . ' días, ' . ($payment->remaining_hours % 24) . ' horas';
+                                        ?>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            @if($payment->amount)
+                <div class="text-right mb-5">
+
+                    @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
+                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
+                           target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+                    @endif
+                </div>
+            @endif
+
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card border">
+                        <div class="card-body">
+                            <h3 class="card-title">Detalles del pago</h3>
+                            <table class="table">
+                                <tr>
+                                    <th class="text-theme-1">Inversión</th>
+                                    <td>
+                                        {{ $payment->code }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Monto</th>
+                                    <td>
+                                        {{ $payment->isCurrency->symbol . ' ' . number_format($payment->amount, 2, '.', ',') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Tipo de pago</th>
+                                    <td>
+                                        {{ $_period[$payment->type_payment] }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Periodo Actual</th>
+                                    <td>
+                                        {!! '<b class="text-theme-1">' . $payment->current_period . '</b> de ' .  $payment->investment->period . ' Meses' !!}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="text-theme-1">Inicio del Periodo</th>
+                                    <td>
+                                        <?php
+                                        echo ucfirst(Carbon\Carbon::parse($payment->start_date)
+                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="text-theme-1">Culimnación del Periodo</th>
+                                    <td>
+                                        <?php
+                                        echo ucfirst(Carbon\Carbon::parse($payment->end_date)
+                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="text-theme-1">Fecha de pago</th>
+                                    <td>
+                                        <?php
+                                        if ($payment->payment_date) {
+                                            echo ucfirst(Carbon\Carbon::parse($payment->payment_date)
+                                                ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
+                                        } else {
+                                            echo $_status[$payment->status];
+                                        }
+                                        ?>
+                                    </td>
+
+
+                                </tr>
+
+                                <tr>
+                                    <th class="text-theme-1">Estado</th>
+
+                                    <td>
+                                          <span class="rounded-0 badge badge-{{  $payment->status }}">
+                                           {{ $_status[$payment->status] }}
+                                        </span>
+                                    </td>
+
+
+                                </tr>
+
+                                <tr>
+                                    <th class="text-theme-1">Estado</th>
+
+                                    <td>
+                                        {{ __('Faltan: ') . intdiv($payment->remaining_hours, 24) . ' días, ' . ($payment->remaining_hours % 24) . ' horas' }}
+                                        <br>
+
+                                        <?php
+
+                                        $perc = $payment->percent;
+
+                                        $prc = $perc > 97 ? '#317347' : '#1D477A';
+                                        if ($payment->status == 'canceled') {
+                                            $prc = '#f63c44';
+                                        }
+                                        ?>
+
+                                        <div class="progress-outer w-100" style="border-color:{{ $prc }};">
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-striped"
+                                                     style="width:{{ $perc }}%; background-color: {{ $prc }};"></div>
+                                                <div class="progress-value" style="color: {{ $prc }};">
+                                                    <span>{{ $perc }}</span>%
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-5 mt-4 mt-md-0">
+                    @include('livewire.admin.investments.details.user', ['dt' => $payment->investment->user])
+                </div>
+            </div>
+
+            <div class="separator mb-5 mt-5"></div>
+
+            <div class="text-right">
+                <button class="btn btn-secondary btn-sm"
+                        wire:click.prevent="closeFrame">
+                    <b><i class="simple-icon-logout"></i>&nbsp;&nbsp;Regresar</b>
+                </button>
+
+
+                {{--                <button type="submit" class="btn btn-secondary btn-sm"--}}
+                {{--                        wire:click.prevent="saveData">--}}
+                {{--                    <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>--}}
+                {{--                </button>--}}
             </div>
         </div>
     </div>
 </div>
-

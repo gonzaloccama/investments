@@ -2,5 +2,5 @@
     @include('livewire.widgets.admin.header.more-options')
     <div class="separator mb-5"></div>
 
-    @include('livewire.widgets.admin.table.basic')
+    @include('livewire.widgets.admin.table.table-payment')
 </div>

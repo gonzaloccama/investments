@@ -13,6 +13,17 @@ $wire = [
     'go' => '',
     'delete' => 'deleteConfirm(' . $result->id . ')',
 ];
+
+if (isset($switchAction) && !empty($switchAction)){
+    $actions = [ //static actions table
+        'view' => $actions['view'],
+        'show' => $actions['show'],
+        'edit' => $actions['edit'],
+        'go' => $actions['go'],
+        'delete' => $result[$switchAction] > 0 || $result->status == 'active' ? null : $actions['delete'],
+    ];
+}
+
 ?>
 
 @foreach($actions as $key => $action)

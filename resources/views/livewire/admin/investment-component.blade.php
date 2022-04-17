@@ -7,10 +7,12 @@
         $actions = [ //static actions table
             'view' => null,
             'show' => null,
-            'edit' => 'Editar',
+            'edit' => 'Ver inversión',
             'go' => null,
             'delete' => 'Eliminar',
         ];
+
+        $switchAction = 'amount';
 
         /*** status custom ***/
         //        $_statusIndex = [ // lista or lista with index
@@ -53,9 +55,9 @@
         @include('livewire.admin.investments.'.$frame)
     @endif
 
-    {{--    @if($modal)--}}
-    {{--        @include('livewire.admin.contributors-component.contributions.'.$modal)--}}
-    {{--    @endif--}}
+    @if($modal)
+        @include('livewire.admin.investments.modal.'.$modal)
+    @endif
 </div>
 
 @push('styles')
@@ -105,7 +107,7 @@
             });
 
             window.livewire.on('showModal', () => {
-                // $('#showModal').modal('show');
+                $('#showModal').modal('show');
             });
 
             window.livewire.on('deleteAlert', () => {
