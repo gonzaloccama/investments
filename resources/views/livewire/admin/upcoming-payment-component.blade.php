@@ -31,7 +31,11 @@
 
         //        $percents = true;
         $currencies = true;
-        //        $filters = $roles;//filters
+        $filters = [
+            (object)['id' => 'paid', 'name' => 'Pagado'],
+            (object)['id' => 'waiting', 'name' => 'En espera'],
+            (object)['id' => 'pending', 'name' => 'Por pagar'],
+        ];//filters
 
         //        $customs = [ // custom action table
         //            /** one button **/

@@ -50,11 +50,15 @@
 </div>
 
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/vendor/glide.core.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/css/vendor/select2.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/css/vendor/select2-bootstrap.min.css') }}"/>
 @endpush
 
 @push('scripts')
+    <script src="{{ asset('assets/js/vendor/glide.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/chartjs-plugin-datalabels.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/select2.full.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {

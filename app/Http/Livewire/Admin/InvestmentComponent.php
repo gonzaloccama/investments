@@ -88,7 +88,7 @@ class InvestmentComponent extends BaseAdmin
 
         $this->iconSort = 'fa-sort-alpha-down';
         $this->fieldSort = 'for_percent';
-        $this->sort = 'asc';
+        $this->sort = 'desc';
 
         $this->frame = 'index';
 
@@ -106,11 +106,12 @@ class InvestmentComponent extends BaseAdmin
         }
 
         $data['results'] = Investment::orderBy($this->fieldSort, $this->sort)
+            ->where($table . '.status', 'LIKE', $this->filter)
             ->where(function ($query) use ($findIn) {
                 foreach ($findIn as $in) {
                     $query->orWhere($in, 'LIKE', '%' . $this->keyWord . '%');
                 }
-                $query->orWhere(DB::raw("CONCAT(users.firstname, ' ', users.lastname)"), 'LIKE', '%' . $this->keyTex . '%');
+                $query->orWhere(DB::raw("CONCAT(users.firstname, ' ', users.lastname)"), 'LIKE', '%' . $this->keyWord . '%');
             })
             ->select($table . '.*')
             ->selectRaw("CONCAT(users.firstname, ' ', users.lastname) as fullname, IF(status='active', IF(TIMESTAMPDIFF(HOUR, CURDATE(), end_date) < 0, 0, TIMESTAMPDIFF(HOUR, CURDATE(), end_date)), null) as for_percent")

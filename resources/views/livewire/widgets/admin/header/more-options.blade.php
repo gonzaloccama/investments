@@ -41,15 +41,17 @@
 
             @if(isset($filters) && !empty($filters))
                 <div class="btn-group float-md-left mr-1 mb-1">
+                    <span class="text-muted text-small mt-1 mr-1">Filtrar:  </span>
                     <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button"
+                            style="border-radius: 15px !important;"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filtrar por:
+                        {{ $_status[$filter] ?? 'Todo' }}
                     </button>
 
                     <div class="dropdown-menu">
                         @foreach($filters as $ftr)
                             <a class="dropdown-item {{ $ftr->id === $filter ? 'active' : '' }}"
-                               wire:click.prevent="updateFilter({{ $ftr->id }})"
+                               wire:click.prevent="updateFilter('{{ $ftr->id }}')"
                                href="javascript:;">{{ ucfirst($ftr->name) }}</a>
                         @endforeach
                             <a class="dropdown-item {{ !$filter ? 'active' : '' }}"

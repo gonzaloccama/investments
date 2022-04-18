@@ -23,12 +23,12 @@ class UpcomingPaymentComponent extends BaseAdmin
         'not' => '',
     ];
 
-    protected $attributes = [
-        'name' => '<b><ins>Nombre</ins></b>',
-    ];
-    protected $rules = [
-        'name' => 'required|min:3',
-    ];
+//    protected $attributes = [
+//        'name' => '<b><ins>Nombre</ins></b>',
+//    ];
+//    protected $rules = [
+//        'name' => 'required|min:3',
+//    ];
 
     public function mount()
     {
@@ -60,6 +60,7 @@ class UpcomingPaymentComponent extends BaseAdmin
         }
 
         $data['results'] = Payment::orderBy($this->fieldSort, $this->sort)
+            ->where($table . '.status', 'LIKE', $this->filter)
             ->where(function ($query) use ($findIn) {
                 foreach ($findIn as $in) {
                     $query->orWhere($in, 'LIKE', '%' . $this->keyWord . '%');
@@ -72,18 +73,17 @@ class UpcomingPaymentComponent extends BaseAdmin
             ->join('investments', 'investments.id', '=', $table . '.investment_id')
             ->paginate($this->limit);
 
-        $data['_title'] = 'Proximos pagos';
-
+        $data['_title'] = 'Todos los pagos';
 
         $this->emit('refreshContent');
 
         return view('livewire.admin.upcoming-payment-component', $data)->layout('layouts.admin');
     }
 
-    public function updated($property)
-    {
-        $this->validateOnly($property, $this->rules, [], $this->attributes);
-    }
+//    public function updated($property)
+//    {
+//        $this->validateOnly($property, $this->rules, [], $this->attributes);
+//    }
 
     // BEGIN DYNAMIC METHODS
 
@@ -102,7 +102,7 @@ class UpcomingPaymentComponent extends BaseAdmin
         if ($this->itemId) {
             $data = Payment::find($this->itemId);
 
-            $data->payment_date = Carbon::today();
+            $data->payment_date = Carbon::now();
             $data->status = 'paid';
 
             if ($data->save()) {

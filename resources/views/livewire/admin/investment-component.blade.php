@@ -1,4 +1,5 @@
 <div class="row">
+
     <div class="col-md-12">
         <?php
         $buttons = ['is_add' => $frame == 'index']; // button add
@@ -29,7 +30,12 @@
         $percents = true;
         $currencies = true;
 
-        //        $filters = $roles;//filters
+        $filters = [
+            (object)['id' => 'completed', 'name' => 'Completado'],
+            (object)['id' => 'canceled', 'name' => 'Cancelado'],
+            (object)['id' => 'inactive', 'name' => 'Inactivo'],
+            (object)['id' => 'active', 'name' => 'Activo'],
+        ];//filters
 
         //        $customs = [ // custom action table
         //            /** one button **/

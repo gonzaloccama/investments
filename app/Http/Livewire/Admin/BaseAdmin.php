@@ -29,10 +29,10 @@ class BaseAdmin extends Component
 
     public function updatePagination($size = 0)
     {
-        $this->limit = $size;
+                $this->limit = $size;
     }
 
-    public function updateFilter($size = 0)
+    public function updateFilter($size)
     {
         $this->filter = $size;
     }

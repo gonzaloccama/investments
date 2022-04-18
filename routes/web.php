@@ -3,6 +3,7 @@
 use App\Http\Livewire\Admin\AdministratorComponent;
 use App\Http\Livewire\Admin\AssistantComponent;
 use App\Http\Livewire\Admin\BankComponent;
+use App\Http\Livewire\Admin\BonusComponent;
 use App\Http\Livewire\Admin\CurrencyComponent;
 use App\Http\Livewire\Admin\DashboardComponent;
 use App\Http\Livewire\Admin\InvestmentComponent;
@@ -59,6 +60,7 @@ Route::middleware([UserActive::class])->group(function () {
         Route::get('/admin/investments', InvestmentComponent::class)->name('admin.investments');
         Route::get('/admin/payments', PaymentComponent::class)->name('admin.payments');
         Route::get('/admin/upcoming-payments', UpcomingPaymentComponent::class)->name('admin.upcoming-payments');
+        Route::get('/admin/bonus',BonusComponent::class)->name('admin.bonus');
 
         //reports
         Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');

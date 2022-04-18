@@ -1062,6 +1062,138 @@ $.dore = function (element, options) {
                 });
             }
 
+            if (document.getElementById("charPEN")) {
+                var charPEN = document.getElementById("charPEN").getContext("2d");
+                var myChart = new Chart(charPEN, {
+                    type: "LineWithShadow",
+                    options: {
+                        plugins: {
+                            datalabels: {
+                                display: false
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [
+                                {
+                                    gridLines: {
+                                        display: true,
+                                        lineWidth: 1,
+                                        color: "rgba(167,30,30,0.1)",
+                                        drawBorder: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        stepSize: 10000,
+                                        min: 0,
+                                        max: 50000,
+                                        padding: 0
+                                    }
+                                }
+                            ],
+                            xAxes: [
+                                {
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }
+                            ]
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: chartTooltip
+                    },
+                    data: {
+                        labels: JSON.parse(document.getElementById('data-days').innerHTML),
+                        datasets: [
+                            {
+                                label: "",
+                                data: JSON.parse(document.getElementById('data-amount').innerHTML),
+                                borderColor: themeColor1,
+                                pointBackgroundColor: foregroundColor,
+                                pointBorderColor: themeColor1,
+                                pointHoverBackgroundColor: themeColor1,
+                                pointHoverBorderColor: foregroundColor,
+                                pointRadius: 4,
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 5,
+                                fill: true,
+                                borderWidth: 2,
+                                backgroundColor: themeColor1_10
+                            }
+                        ]
+                    }
+                });
+            }
+
+            if (document.getElementById("charDOLLAR")) {
+                var charDOLLAR = document.getElementById("charDOLLAR").getContext("2d");
+                var myChart = new Chart(charDOLLAR, {
+                    type: "LineWithShadow",
+                    options: {
+                        plugins: {
+                            datalabels: {
+                                display: false
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [
+                                {
+                                    gridLines: {
+                                        display: true,
+                                        lineWidth: 1,
+                                        color: "rgba(167,30,30,0.1)",
+                                        drawBorder: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        stepSize: 5000,
+                                        min: 0,
+                                        max: 25000,
+                                        padding: 0
+                                    }
+                                }
+                            ],
+                            xAxes: [
+                                {
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }
+                            ]
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: chartTooltip
+                    },
+                    data: {
+                        labels: JSON.parse(document.getElementById('data-days-dollar').innerHTML),
+                        datasets: [
+                            {
+                                label: "",
+                                data: JSON.parse(document.getElementById('data-amount-dollar').innerHTML),
+                                borderColor: themeColor1,
+                                pointBackgroundColor: foregroundColor,
+                                pointBorderColor: themeColor1,
+                                pointHoverBackgroundColor: themeColor1,
+                                pointHoverBorderColor: foregroundColor,
+                                pointRadius: 4,
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 5,
+                                fill: true,
+                                borderWidth: 2,
+                                backgroundColor: themeColor1_10
+                            }
+                        ]
+                    }
+                });
+            }
+
             if (document.getElementById("visitChart")) {
                 var visitChart = document.getElementById("visitChart").getContext("2d");
                 var myChart = new Chart(visitChart, {
@@ -4381,13 +4513,43 @@ $.dore = function (element, options) {
                     direction: direction,
                     gap: 7,
                     breakpoints: {
-                        1800: {
+                        1400: {
+                            perView: 4
+                        },
+                        960: {
                             perView: 3
                         },
-                        576: {
+                        640: {
                             perView: 2
                         },
-                        320: {
+                        360: {
+                            perView: 1
+                        }
+                    }
+                }).mount();
+            }
+
+            if ($(".glide.dashboard-dollar").length > 0) {
+                new Glide(".glide.dashboard-dollar", {
+                    bound: true,
+                    rewind: false,
+                    perView: 4,
+                    perTouch: 1,
+                    focusAt: 0,
+                    startAt: 0,
+                    direction: direction,
+                    gap: 7,
+                    breakpoints: {
+                        1400: {
+                            perView: 4
+                        },
+                        960: {
+                            perView: 3
+                        },
+                        640: {
+                            perView: 2
+                        },
+                        360: {
                             perView: 1
                         }
                     }
