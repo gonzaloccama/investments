@@ -420,22 +420,40 @@ class InvestmentComponent extends BaseAdmin
         $this->emit('refreshSection');
     }
 
-    public function updateData()
+    public function updatePayment()
     {
-        if ($this->itemId) {
+        $isAccepted = $this->investment->inPayment()->latest('created_at')->first();
 
-            $this->validate($this->rules, [], $this->attributes);
+        if ($isAccepted->current_period == $this->investment->period && $this->investment->current_period == $this->investment->period) {
+            if ($this->itemId) {
+                $data = Investment::find($this->itemId);
 
-            $data = Investment::find($this->itemId);
+                $data->status = 'completed';
+                $data->progress = 100;
+                $data->payment = true;
+                $data->payment_date = Carbon::now()->format('Y-m-d H:i:s');
 
-            $data->currency = $this->currency;
-            $data->symbol = $this->symbol;
-            $data->code = $this->code;
+                if ($data->save()) {
+                    $dt = new Payment();
 
-            if ($data->save()) {
-                $this->emit('notification', ['Moneda actualizado exitosamente']);
-                $this->closeFrame();
+                    $dt->investment_id = $data->id;
+                    $dt->amount = $data->amount;
+                    $dt->currency = $data->currency;
+                    $dt->type_payment = 'capital';
+                    $dt->payment_date = Carbon::now()->format('Y-m-d H:i:s');
+                    $dt->status = 'paid';
+                    $dt->start_date = $data->start_date;
+                    $dt->end_date = $data->end_date;
+
+                    $dt->save();
+
+                    $this->emit('notification', ['El pago de la inversión de ha actualizado exitosamente']);
+                    $this->closeFrame();
+                }
             }
+        } else {
+            $this->emit('notification', ['Falta completar los pagos de retorno '
+                . $isAccepted->current_period . ' de ' . $this->investment->period . ' meses']);
         }
     }
 

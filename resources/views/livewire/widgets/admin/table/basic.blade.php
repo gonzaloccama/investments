@@ -81,7 +81,7 @@
                                     ?>
 
                                 @elseif(in_array($header, ['progress', 'for_percent']))
-                                    @if($result->status == 'active')
+                                    @if(in_array($result->status, ['active', 'completed']))
                                         @if($result->remaining_hours == 0)
                                             Completado
                                         @else

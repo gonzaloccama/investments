@@ -35,6 +35,11 @@ class Investment extends Model
         return $this->hasMany(BankTransfer::class);
     }
 
+    public function inPayment()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 //    public function getRemainingDaysAttribute()
 //    {
 //        if ($this->end_date) {

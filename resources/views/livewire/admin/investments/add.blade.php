@@ -74,10 +74,9 @@
 
                     @if($userId)
                         <div class="text-md-right text-left mb-3">
-                            <button type="submit" class="btn btn-secondary btn-xs"
-                                    wire:click.prevent="openCreateInvestment">
+                            <a href="{{ route('admin.users') }}" class="btn btn-secondary btn-xs">
                                 <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;Nuevo</b>
-                            </button>
+                            </a>
                             <button type="submit" class="btn btn-secondary btn-xs"
                                     wire:click.prevent="openCreateInvestment">
                                 <b><i class="iconsminds-user"></i>&nbsp;&nbsp;Elegir</b>

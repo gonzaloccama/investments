@@ -29,6 +29,7 @@ class CreateInvestmentsTable extends Migration
             $table->integer('period_progress')->default(0);
             $table->integer('progress')->default(0);
             $table->boolean('payment')->default(0);
+            $table->dateTime('payment_date')->nullable();
             $table->string('referred_id')->nullable();
             $table->integer('bonus_id')->nullable();
             $table->timestamps();

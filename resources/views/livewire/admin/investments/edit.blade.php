@@ -84,8 +84,10 @@
 
                     @if(in_array($investment->status, ['active', 'completed']))
                         @if($investment->end_date <= \Carbon\Carbon::today())
-                            <a href="javascript:;" wire:click.prevent="" class="btn btn-success btn-sm"
-                               target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Reembolsar</b></a>
+                            @if($investment->status != 'completed')
+                                <a href="javascript:;" wire:click.prevent="updatePayment" class="btn btn-success btn-sm"
+                                   target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Reembolsar</b></a>
+                            @endif
                         @else
                             <a href="javascript:;"
                                class="btn btn-danger btn-sm" target="_blank"><b><i class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar

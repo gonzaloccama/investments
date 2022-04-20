@@ -6,7 +6,7 @@
                 use Carbon\Carbon;
                 $total_pen = \App\Models\Investment::whereIn('status', ['completed', 'active'])->where('currency', 1)->sum('amount');
                 $total_today = \App\Models\Investment::whereIn('status', ['completed', 'active'])->where('currency', 1)->whereDate('created_at', Carbon::today())->sum('amount');
-                $paid = \App\Models\Payment::whereIn('status', ['paid'])->where('currency', 1)->whereDate('payment_date', Carbon::today())->sum('amount');
+                $paid = \App\Models\Payment::whereIn('status', ['paid'])->where('currency', 1)->where('type_payment', 'return')->whereDate('payment_date', Carbon::today())->sum('amount');
                 $paid_pending = \App\Models\Payment::whereIn('status', ['pending'])->where('currency', 1)->sum('amount');
                 ?>
                 <ul class="glide__slides">
@@ -66,7 +66,7 @@
                 <?php
                 $total_dol = \App\Models\Investment::whereIn('status', ['completed', 'active'])->where('currency', 2)->sum('amount');
                 $total_today_dol = \App\Models\Investment::whereIn('status', ['completed', 'active'])->where('currency', 2)->whereDate('created_at', Carbon::today())->sum('amount');
-                $paid_dol = \App\Models\Payment::whereIn('status', ['paid'])->where('currency', 2)->whereDate('payment_date', Carbon::today())->sum('amount');
+                $paid_dol = \App\Models\Payment::whereIn('status', ['paid'])->where('currency', 2)->where('type_payment', 'return')->whereDate('payment_date', Carbon::today())->sum('amount');
                 $paid_pending_dol = \App\Models\Payment::whereIn('status', ['pending'])->where('currency', 2)->sum('amount');
                 ?>
                 <ul class="glide__slides">
