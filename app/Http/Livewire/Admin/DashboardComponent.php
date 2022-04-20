@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Investment;
+use App\Models\SystemConfig;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use DatePeriod;
@@ -22,15 +23,23 @@ class DashboardComponent extends BaseAdmin
         return view('livewire.admin.dashboard-component', $data)->layout('layouts.admin');
     }
 
-    public function inTheWeek()
+    public function dailyReport()
     {
-        return Investment::where('status', 'active')
-            ->groupBy('created_at')
-            ->select(DB::raw(
-                'created_at,
-        DATE_FORMAT(created_at, \'%W\') AS week_day,
-        SUM(amount) AS amount'
-            ));
+//        $id = base64_decode($_GET['id']);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->setPaper('A4');
+
+        $data['config'] = SystemConfig::find(1);
+        $data['investments'] = Investment::whereDate('created_at', Carbon::today())->whereIn('status', ['active'])->get();
+
+        $pdf->loadView('livewire.admin.dashboard.daily-report', $data);
+
+        $file = 'REPORTE-' . Carbon::now()->format('Y-m-d H:i:s');
+
+        return $pdf->stream($file . '.pdf');
+
     }
 
     public function allWeek($filter, $currency)

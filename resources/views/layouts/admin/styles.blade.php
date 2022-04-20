@@ -977,6 +977,14 @@
         display: inline-block
     }
 
+    .text-pending {
+        color: #fc751c !important;
+    }
+
+    .text-paid {
+        color: #328359 !important;
+    }
+
     /*** fonts ***/
     .font-10 {
         font-size: 10px !important;
@@ -1047,7 +1055,7 @@
         background-color: rgba(103, 103, 103, 0.4) !important;
     }
 
-    .btn-success{
-       background-color: #117e1c;
+    .btn-success {
+        background-color: #117e1c;
     }
 </style>

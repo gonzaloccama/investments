@@ -19,7 +19,10 @@
     </tr>
     <tr>
         <th class="text-theme-1">Meses:</th>
-        <td>{{ $period.' meses' }}</td>
+        <td>
+            <b class="text-theme-1 font-14">{{ $investment->current_period  }}</b>
+            {{ ' de ' . $period.' meses' }}
+        </td>
     </tr>
     <tr>
         <th class="text-theme-1">Plan:</th>

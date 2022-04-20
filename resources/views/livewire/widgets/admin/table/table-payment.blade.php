@@ -1,7 +1,7 @@
 <div class="card border rounded-0" style="border-color: grey;">
     <?php
     $money = ['amount'];
-    $fld = ['not', 'status', 'progress', 'for_percent'];
+    $fld = ['not', 'status', 'progress', 'for_percent', 'type'];
     $lnk = ['mobile', 'email'];
     $dtes = ['created_at', 'updated_at', 'start_date', 'end_date'];
     ?>
@@ -37,12 +37,13 @@
                             <th class="align-middle" scope="row">
                                 @if(!in_array($header, array_merge($money, $fld, $lnk, $dtes)))
                                     {{ $result[$header] }}
-                                @elseif(in_array($header, ['status']))
+                                @elseif(in_array($header, ['status', 'type']))
                                     @if(isset($_status) && !empty($_status))
                                         <span class="rounded-0 badge badge-{{ $result[$header] }}">
                                            {{ $_status[$result[$header]] }}
                                         </span>
                                     @endif
+
                                 @elseif(in_array($header, ['amount']))
                                     <p class="w-100 text-right">
                                         {{ isset($currencies) && !empty($currencies) ? $result->isCurrency->symbol : 'S/ ' }}

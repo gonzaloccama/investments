@@ -29,6 +29,8 @@ class CreateInvestmentsTable extends Migration
             $table->integer('period_progress')->default(0);
             $table->integer('progress')->default(0);
             $table->boolean('payment')->default(0);
+            $table->string('referred_id')->nullable();
+            $table->integer('bonus_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

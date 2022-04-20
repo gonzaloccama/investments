@@ -4,12 +4,12 @@
         <div class="card auth-card">
             <div class="position-relative image-side ">
 
-                <p class=" text-white h2">MAGIC IS IN THE DETAILS</p>
+                <p class=" text-white h2">Inversiones SUR CAPITAL</p>
 
                 <p class="white mb-0">
-                    Please use your credentials to login.
-                    <br>If you are not a member, please
-                    <a href="#" class="white">register</a>.
+                    Utilice sus credenciales para iniciar sesión.
+                    <br>Si no es miembro, por favor
+                    <a href="#" class="white">registrar</a>.
                 </p>
             </div>
             <div class="form-side">

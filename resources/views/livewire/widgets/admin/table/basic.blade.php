@@ -1,7 +1,7 @@
 <div class="card border rounded-0" style="border-color: grey;">
     <?php
     $money = ['price', 'total', 'subtotal', 'amount'];
-    $fld = ['not', 'status', 'image', 'activated', 'progress', 'for_percent'];
+    $fld = ['not', 'status', 'image', 'activated', 'progress', 'for_percent', 'type'];
     $lnk = ['url', 'link', 'mobile', 'phone', 'email', 'whatsapp', 'website'];
     $dtes = ['created_at', 'updated_at', 'start_date', 'end_date'];
     ?>
@@ -42,6 +42,8 @@
                                         <img src="{{ asset($path) . '/' . $result[$header] }}" style="height: 70px;"
                                              class="img-thumbnail" alt="{{ $result[$header] }}">
                                     </div>
+                                @elseif(in_array($header, ['type']))
+                                    {{ $statusOther[$result[$header]] }}
                                 @elseif(in_array($header, ['status', 'activated']))
                                     @if(isset($_statusIndex) && !empty($_statusIndex))
                                         <span

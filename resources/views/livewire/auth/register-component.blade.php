@@ -2,12 +2,12 @@
     @push('title') {{ $_title }} @endpush
     <div class="col-12 col-md-10 mx-auto my-auto">
         <div class="card auth-card">
-            <div class="position-relative image-side ">
-                <p class=" text-white h2">MAGIC IS IN THE DETAILS</p>
+            <div class="position-relative image-side" style="background: #1e6aa7 !important;">
+                <p class=" text-white h2">Inversiones SUR CAPITAL</p>
                 <p class="white mb-0">
-                    Please use this form to register.
-                    <br>If you are a member, please
-                    <a href="#" class="white">login</a>.
+                    Utilice este formulario para registrarse.
+                    <br>Si es miembro, por favor
+                    <a href="#" class="white">Iniciar sesión</a>.
                 </p>
             </div>
             <div class="form-side">

@@ -6,12 +6,18 @@
         <div class="col-sm-9">
 
             <select id="{{ $name }}" class="form-control" wire:model="{{ $name }}" style="width: 100%"
-                    {{ isset($multiple) && !empty($multiple) ? 'multiple' : '' }}>
+                {{ isset($multiple) && !empty($multiple) ? 'multiple' : '' }}>
                 <option>Seleccione...</option>
                 @if($object)
-                    @foreach($options as $option)
-                        <option value="{{ $option->id }}">{{ $option[$object] }}</option>
-                    @endforeach
+                    @if($object == 'array')
+                        @foreach($options as $option)
+                            <option value="{{ $option['id'] }}">{{ $option['name'] }}</option>
+                        @endforeach
+                    @else
+                        @foreach($options as $option)
+                            <option value="{{ $option->id }}">{{ $option[$object] }}</option>
+                        @endforeach
+                    @endif
                 @else
                     @foreach($options as $key => $option)
                         <option value="{{ $option }}">{{ $option }}</option>

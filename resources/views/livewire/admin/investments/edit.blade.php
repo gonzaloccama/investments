@@ -91,6 +91,9 @@
                                class="btn btn-danger btn-sm" target="_blank"><b><i class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar
                                     inversión</b></a>
                         @endif
+                        <a href="{{ route('admin.upcoming-payments').'?investment=' . base64_encode($investment->id) }}"
+                           class="btn btn-secondary btn-sm"><b><i class="fe-printer"></i>&nbsp;&nbsp;Pagos</b></a>
+
                         <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
                            class="btn btn-secondary btn-sm" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Imprimir</b></a>
                     @else

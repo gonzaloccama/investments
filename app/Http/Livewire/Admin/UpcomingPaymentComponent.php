@@ -9,6 +9,7 @@ use Livewire\Component;
 class UpcomingPaymentComponent extends BaseAdmin
 {
     public $payment;
+    public $investment;
 
     public $headers = [
         'code' => 'Inversión',
@@ -40,6 +41,10 @@ class UpcomingPaymentComponent extends BaseAdmin
         $this->sort = 'asc';
 
         $this->frame = 'index';
+
+        if (isset($_GET['investment']) && !empty($_GET['investment'])) {
+            $this->investment = base64_decode($_GET['investment']);
+        }
     }
 
     public function render()
@@ -67,13 +72,16 @@ class UpcomingPaymentComponent extends BaseAdmin
                 }
                 $query->orWhere('investments.code', 'LIKE', '%' . $this->keyWord . '%');
             })
-//            ->whereIn('payments.status', ['waiting', 'pending'])
+            ->where('payments.type_payment', 'return')
+            ->when($this->investment, function ($query) {
+                $query->where('investment_id', 'LIKE', $this->investment);
+            })
             ->select($table . '.*')
             ->selectRaw("investments.code, TIMESTAMPDIFF(HOUR, CURDATE(),  payments.end_date) as for_percent")
             ->join('investments', 'investments.id', '=', $table . '.investment_id')
             ->paginate($this->limit);
 
-        $data['_title'] = 'Todos los pagos';
+        $data['_title'] = 'Pagos de retorno';
 
         $this->emit('refreshContent');
 

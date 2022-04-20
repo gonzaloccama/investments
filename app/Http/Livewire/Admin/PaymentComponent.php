@@ -3,29 +3,34 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Payment;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 
 class PaymentComponent extends BaseAdmin
 {
+    public $payment;
+    public $investment;
+
     public $headers = [
         'code' => 'Inversión',
         'amount' => 'Monto',
         'type_payment' => 'Tipo de pago',
         'start_date' => 'Inicio',
         'end_date' => 'Fin',
-        'remaining' => 'Faltan',
         'payment_date' => 'Fecha de pago',
+//        'for_percent' => 'Progreso',
         'status' => 'Estado',
 
 //        'not' => '',
     ];
 
-    protected $attributes = [
-        'name' => '<b><ins>Nombre</ins></b>',
-    ];
-    protected $rules = [
-        'name' => 'required|min:3',
-    ];
+//    protected $attributes = [
+//        'name' => '<b><ins>Nombre</ins></b>',
+//    ];
+//    protected $rules = [
+//        'name' => 'required|min:3',
+//    ];
 
     public function mount()
     {
@@ -37,11 +42,15 @@ class PaymentComponent extends BaseAdmin
         $this->sort = 'asc';
 
         $this->frame = 'index';
+
+        if (isset($_GET['investment']) && !empty($_GET['investment'])) {
+            $this->investment = base64_decode($_GET['investment']);
+        }
     }
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['code', 'remaining']);
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'code']);
         $findIn = [];
         $table = 'payments';
 
@@ -49,22 +58,111 @@ class PaymentComponent extends BaseAdmin
             $findIn[] = $table . '.' . $item;
         }
 
+        foreach (Payment::where('status', 'waiting')->whereDate('end_date', '<=', Carbon::today()->toDateString())->get() as $dt) {
+            if ($dt->remaining_hours == 0 && Carbon::parse($dt->end_date)->format('Y-m-d') <= Carbon::today()->format('Y-m-d')) {
+                $dt->status = 'pending';
+                $dt->save();
+            }
+        }
+
         $data['results'] = Payment::orderBy($this->fieldSort, $this->sort)
+            ->where($table . '.status', 'LIKE', $this->filter)
             ->where(function ($query) use ($findIn) {
                 foreach ($findIn as $in) {
                     $query->orWhere($in, 'LIKE', '%' . $this->keyWord . '%');
                 }
                 $query->orWhere('investments.code', 'LIKE', '%' . $this->keyWord . '%');
             })
+            ->where('payments.type_payment', 'capital')
+            ->when($this->investment, function ($query) {
+                $query->where('investment_id', 'LIKE', $this->investment);
+            })
             ->select($table . '.*')
-            ->selectRaw("investments.code, CONCAT(DATEDIFF(payments.end_date, CURDATE()),' días') as remaining")
+            ->selectRaw("investments.code, TIMESTAMPDIFF(HOUR, CURDATE(),  payments.end_date) as for_percent")
             ->join('investments', 'investments.id', '=', $table . '.investment_id')
             ->paginate($this->limit);
 
-        $data['_title'] = 'Todos los pagos';
+        $data['_title'] = 'Pagos de capital';
 
         $this->emit('refreshContent');
 
-        return view('livewire.admin.payment-component', $data)->layout('layouts.admin');
+        return view('livewire.admin.upcoming-payment-component', $data)->layout('layouts.admin');
+    }
+
+//    public function updated($property)
+//    {
+//        $this->validateOnly($property, $this->rules, [], $this->attributes);
+//    }
+
+    // BEGIN DYNAMIC METHODS
+
+    public function edit($id = 0)
+    {
+        $this->frame = 'edit';
+        $this->itemId = $id;
+
+        $this->payment = Payment::find($this->itemId);
+
+        $this->emit('refreshSection');
+    }
+
+    public function updateData()
+    {
+        if ($this->itemId) {
+            $data = Payment::find($this->itemId);
+
+            $data->payment_date = Carbon::now();
+            $data->status = 'paid';
+
+            if ($data->save()) {
+                if ($data->investment->current_period < $data->investment->period && $data->current_period < $data->investment->period) {
+                    $dt = new Payment();
+
+                    $dt->investment_id = $data->investment->id;
+                    $dt->amount = $data->investment->return_amount;
+                    $dt->currency = $data->investment->currency;
+                    $dt->type_payment = 'return';
+                    $dt->current_period = $data->investment->current_period = $data->investment->current_period + 1;
+                    $dt->start_date = Carbon::parse($data->start_date)->addMonths(1)->format('Y-m-d');
+                    $dt->end_date = Carbon::parse($dt->start_date)->addMonths(1)->format('Y-m-d');
+
+                    $dt->save();
+                    $data->investment->save();
+                }
+
+                $this->emit('notification', ['El pago se ha actualizado correctamente exitosamente']);
+                $this->closeFrame();
+            }
+        }
+    }
+
+    public function closeFrame()
+    {
+        $this->frame = 'index';
+        $this->cleanItems();
+    }
+
+    public function cleanItems()
+    {
+        $this->itemId = null;
+        $this->deleteId = null;
+
+        $this->currency = null;
+        $this->symbol = null;
+        $this->code = null;
+
+        $this->frame = 'index';
+
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
+
+    public function delete()
+    {
+        $data = Payment::find($this->deleteId);
+
+        if ($data->delete()) {
+            $this->closeFrame();
+        }
     }
 }

@@ -13,7 +13,7 @@
 
         <div class="card-body">
             <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">
-                {{ $payment->code . ' - Pago Nro: ' . $payment->investment->current_period }}
+                {{ $payment->code . ' - Pago Nro: ' . $payment->current_period }}
             </h5>
             <div class="separator mb-5"></div>
 
@@ -21,7 +21,7 @@
                 <div class="col-12">
                     <div class="row icon-cards-row mb-4 sortable">
                         <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
-                            <a href="#" class="card border">
+                            <a href="#" class="card border shadow">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-wallet"></i>
                                     <p class="card-text font-weight-semibold mb-0">Inversión</p>
@@ -57,11 +57,16 @@
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-calendar-4"></i>
-                                    <p class="card-text font-weight-semibold mb-0">Actual</p>
+                                    <p class="card-text font-weight-semibold mb-0">Estado</p>
                                     <p class="lead text-center font-22">
-                                        <?php
-                                        echo intdiv($payment->remaining_hours, 24) . ' días, ' . ($payment->remaining_hours % 24) . ' horas';
-                                        ?>
+                                        @if($payment->status == 'waiting')
+                                            <?php
+                                            echo intdiv($payment->remaining_hours, 24) . ' días, ' . ($payment->remaining_hours % 24) . ' horas';
+                                            ?>
+                                        @else
+                                            <span class="text-{{ $payment->status }}">{{ $_status[$payment->status] }}</span>
+                                        @endif
+
                                     </p>
                                 </div>
                             </a>
