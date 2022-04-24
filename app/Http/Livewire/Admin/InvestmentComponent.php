@@ -51,6 +51,7 @@ class InvestmentComponent extends BaseAdmin
 
     public $headers = [
         'code' => '#',
+        'dni' => 'DNI',
         'fullname' => 'Inversionista',
         'amount' => 'Monto',
         'start_date' => 'Inicio',
@@ -97,13 +98,15 @@ class InvestmentComponent extends BaseAdmin
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['not', 'fullname', 'for_percent']);
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'fullname', 'for_percent', 'dni']);
         $findIn = [];
         $table = 'investments';
 
         foreach ($rFormat as $item) {
             $findIn[] = $table . '.' . $item;
         }
+
+        $findIn[] = 'users.dni';
 
         $data['results'] = Investment::orderBy($this->fieldSort, $this->sort)
             ->where($table . '.status', 'LIKE', $this->filter)
@@ -114,7 +117,10 @@ class InvestmentComponent extends BaseAdmin
                 $query->orWhere(DB::raw("CONCAT(users.firstname, ' ', users.lastname)"), 'LIKE', '%' . $this->keyWord . '%');
             })
             ->select($table . '.*')
-            ->selectRaw("CONCAT(users.firstname, ' ', users.lastname) as fullname, IF(status='active', IF(TIMESTAMPDIFF(HOUR, CURDATE(), end_date) < 0, 0, TIMESTAMPDIFF(HOUR, CURDATE(), end_date)), null) as for_percent")
+            ->selectRaw("
+            CONCAT(users.firstname, ' ', users.lastname) as fullname, users.dni,
+            IF(status='active', IF(TIMESTAMPDIFF(HOUR, CURDATE(), end_date) < 0, 0, TIMESTAMPDIFF(HOUR, CURDATE(), end_date)), null) as for_percent
+            ")
             ->join('users', 'users.id', '=', 'user_id')
             ->paginate($this->limit);
 

@@ -13,6 +13,7 @@ class UpcomingPaymentComponent extends BaseAdmin
 
     public $headers = [
         'code' => 'Inversión',
+        'dni' => 'DNI',
         'amount' => 'Monto',
         'type_payment' => 'Tipo de pago',
         'start_date' => 'Inicio',
@@ -38,7 +39,7 @@ class UpcomingPaymentComponent extends BaseAdmin
 
         $this->iconSort = 'fa-sort-alpha-down';
         $this->fieldSort = 'end_date';
-        $this->sort = 'asc';
+        $this->sort = 'desc';
 
         $this->frame = 'index';
 
@@ -49,13 +50,15 @@ class UpcomingPaymentComponent extends BaseAdmin
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['not', 'code', 'for_percent']);
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'code', 'for_percent', 'dni']);
         $findIn = [];
         $table = 'payments';
 
         foreach ($rFormat as $item) {
             $findIn[] = $table . '.' . $item;
         }
+
+        $findIn[] = 'users.dni';
 
         foreach (Payment::where('status', 'waiting')->whereDate('end_date', '<=', Carbon::today()->toDateString())->get() as $dt) {
             if ($dt->remaining_hours == 0 && Carbon::parse($dt->end_date)->format('Y-m-d') <= Carbon::today()->format('Y-m-d')) {
@@ -77,8 +80,9 @@ class UpcomingPaymentComponent extends BaseAdmin
                 $query->where('investment_id', 'LIKE', $this->investment);
             })
             ->select($table . '.*')
-            ->selectRaw("investments.code, TIMESTAMPDIFF(HOUR, CURDATE(),  payments.end_date) as for_percent")
+            ->selectRaw("investments.code, users.dni, TIMESTAMPDIFF(HOUR, CURDATE(),  payments.end_date) as for_percent")
             ->join('investments', 'investments.id', '=', $table . '.investment_id')
+            ->join('users', 'users.id', '=', 'investments.user_id')
             ->paginate($this->limit);
 
         $data['_title'] = 'Pagos de retorno';

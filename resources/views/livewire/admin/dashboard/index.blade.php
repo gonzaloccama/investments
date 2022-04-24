@@ -119,7 +119,6 @@
 
 </div>
 
-
 <div class="col-md-6 col-sm-12 mb-4">
     <div class="card dashboard-filled-line-chart">
         <div class="card-body ">
@@ -163,3 +162,10 @@
         </div>
     </div>
 </div>
+
+<div class="col-md-12">
+    <div class="mt-5">
+        <a href="{{ route('daily.report') }}" class="btn btn-secondary" target="_blank">Reportes diarios</a>
+    </div>
+</div>
+

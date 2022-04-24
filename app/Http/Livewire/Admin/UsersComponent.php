@@ -61,7 +61,7 @@ class UsersComponent extends BaseAdmin
         'mobile' => 'required|numeric|digits:9|unique:users',
         'firstname' => 'required|min:3',
         'lastname' => 'required|min:3',
-        'dni' => 'required|numeric|digits:8',
+        'dni' => 'required|numeric|digits:8|unique:users',
         'gender' => 'nullable',
         'address' => 'required',
         'city' => 'nullable',
