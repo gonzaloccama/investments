@@ -103,6 +103,9 @@ class BonusComponent extends BaseAdmin
 
         if ($this->type == 'referred') {
             $rules = array_merge($rules, ['investment_id' => 'required|exists_ref']);
+        } elseif ($this->type == 'invest') {
+            unset($rules['referred_to']);
+            $rules = array_merge($rules, ['investment_id' => 'required|exists30high|exists_bonus']);
         } else {
             unset($rules['referred_to']);
             $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus']);
@@ -112,6 +115,7 @@ class BonusComponent extends BaseAdmin
             [
                 'investment_id.exists_ref' => 'La :attribute no debe tener más de <b>Un Referido</b>.',
                 'investment_id.exists30k' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
+                'investment_id.exists30high' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
                 'investment_id.exists_bonus' => 'La :attribute no debe tener más de <b>Un Bono Reclamado</b>.',
             ],
             $this->attributes);
@@ -131,20 +135,27 @@ class BonusComponent extends BaseAdmin
 
         if ($this->type == 'referred') {
             $rules = array_merge($rules, ['investment_id' => 'required|exists_ref']);
+        } elseif ($this->type == 'invest') {
+            unset($rules['referred_to']);
+            $rules = array_merge($rules, ['investment_id' => 'required|exists30high|exists_bonus']);
         } else {
             unset($rules['referred_to']);
-            $rules = array_merge($rules, ['investment_id' => 'required|exists_30k']);
+            $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus']);
         }
+
         $this->customValidation();
         $this->validate($rules,
-            [],
+            [
+                'investment_id.exists_ref' => 'La :attribute no debe tener más de <b>Un Referido</b>.',
+                'investment_id.exists30k' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
+                'investment_id.exists30high' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
+                'investment_id.exists_bonus' => 'La :attribute no debe tener más de <b>Un Bono Reclamado</b>.',
+            ],
             $this->attributes);
 
         $data = new Bonus();
 
-        $code = mb_convert_case(substr($this->type, 0, 3), MB_CASE_UPPER, "UTF-8") . $this->generateUniqueNumber();
-
-        $data->code = $code;
+        $data->code = $this->generateUniqueCode();
         $data->investment_id = $this->investment_id;
         $data->type = $this->type;
         $data->percent = $this->percent;
@@ -230,7 +241,7 @@ class BonusComponent extends BaseAdmin
 
     public function delete()
     {
-        $data = Bank::find($this->deleteId);
+        $data = Bonus::find($this->deleteId);
 
         if ($data->delete()) {
             $this->closeFrame();
@@ -242,10 +253,11 @@ class BonusComponent extends BaseAdmin
     /**
      * @throws \Exception
      */
-    private function generateUniqueNumber()
+    private function generateUniqueCode()
     {
         do {
-            $code = random_int(100000, 999999);
+            $rand_number = random_int(100000, 999999);
+            $code = mb_convert_case(substr($this->type, 0, 3), MB_CASE_UPPER, "UTF-8") . $rand_number;
         } while (substr(Bonus::where('code', '=', $code)->first(), 3));
 
         return $code;
@@ -256,6 +268,11 @@ class BonusComponent extends BaseAdmin
         Validator::extend('exists_ref', function ($attr, $value) {
             $validate = Bonus::where('investment_id', $value)->where('type', 'referred')->first();
             return !(bool)$validate;
+        });
+
+        Validator::extend('exists30high', function ($attr, $value) {
+            $validate = Investment::where('id', $value)->whereIn('status', ['completed', 'active'])->where('amount', '>', 30000)->first();
+            return (bool)$validate;
         });
 
         Validator::extend('exists30k', function ($attr, $value) {

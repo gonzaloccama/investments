@@ -65,6 +65,7 @@ Route::middleware([UserActive::class])->group(function () {
         //reports
         Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');
         Route::get('daily-report', [DashboardComponent::class, 'dailyReport'])->name('daily.report');
+        Route::get('payment-receipt', [UpcomingPaymentComponent::class, 'receipt'])->name('payment.receipt');
     });
 
     /***  USERS ***/

@@ -17,7 +17,7 @@ class CreateBonusesTable extends Migration
             $table->id();
             $table->string('code', 12);
             $table->unsignedBigInteger('investment_id')->nullable();
-            $table->enum('type', ['referred', 'invest']);
+            $table->enum('type', ['referred', 'reself', 'invest']);
             $table->string('referred_to', 8)->nullable();
             $table->decimal('percent');
             $table->decimal('amount')->nullable();

@@ -2,9 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Admin\Receipt;
+use App\Models\Investment;
 use App\Models\Payment;
+use App\Models\SystemConfig;
 use Carbon\Carbon;
 use Livewire\Component;
+use Storage;
 
 class UpcomingPaymentComponent extends BaseAdmin
 {
@@ -111,6 +115,7 @@ class UpcomingPaymentComponent extends BaseAdmin
 
     public function updateData()
     {
+
         if ($this->itemId) {
             $data = Payment::find($this->itemId);
 
@@ -131,11 +136,55 @@ class UpcomingPaymentComponent extends BaseAdmin
 
                     $dt->save();
                     $data->investment->save();
+
                 }
 
+                $this->receipt();
+
                 $this->emit('notification', ['El pago se ha actualizado correctamente exitosamente']);
-                $this->closeFrame();
+//                $this->closeFrame();
             }
+        }
+    }
+
+    public function receipt()
+    {
+//        $id = base64_decode($_GET['id']);
+//        $id = $_GET['id'];
+        if ($this->itemId) {
+
+            $pdf = app('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option("enable_php", true);
+            $pdf->setPaper('A4');
+
+            $data['config'] = SystemConfig::find(1);
+            $data['payment'] = Payment::find($this->itemId);
+
+            $pdf->loadView('livewire.admin.payments.details.receipt', $data);
+
+            $path = public_path()
+                . '/assets/uploads/receipts/';
+
+            $file = 'recibo-'
+                . str_pad($data['payment']->id, 6, '0', STR_PAD_LEFT) . '-'
+                . $data['payment']->investment->code . '.pdf';
+
+            $receipt = new Receipt();
+            $receipt->investment_id = $data['payment']->investment->id;
+            $receipt->payment_id = $data['payment']->id;
+            $receipt->attachment = $file;
+
+            if ($pdf->save($path . $file)) {
+                $receipt->save();
+                return true;
+            } else {
+                return false;
+            }
+
+//            return $pdf->download($file . '.pdf');
+//        return $pdf->stream('recibo' . '.pdf');
+        } else {
+            return false;
         }
     }
 

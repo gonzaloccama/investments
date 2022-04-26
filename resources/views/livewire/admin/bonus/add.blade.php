@@ -30,6 +30,7 @@
                                 'options' => [
                                     ['id' => 'referred', 'name' => 'Referido'],
                                     ['id' => 'invest', 'name' => 'Inversión 30K'],
+                                    ['id' => 'reself', 'name' => 'Refersirse a si mismo'],
                                 ],
                             ];
                             ?>

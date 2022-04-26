@@ -64,7 +64,8 @@
                                             echo intdiv($payment->remaining_hours, 24) . ' días, ' . ($payment->remaining_hours % 24) . ' horas';
                                             ?>
                                         @else
-                                            <span class="text-{{ $payment->status }}">{{ $_status[$payment->status] }}</span>
+                                            <span
+                                                class="text-{{ $payment->status }}">{{ $_status[$payment->status] }}</span>
                                         @endif
 
                                     </p>
@@ -79,9 +80,16 @@
                 <div class="text-right mb-5">
 
                     @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
-                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
+                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm" id="pending"
                            target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
                     @endif
+
+                    @if(in_array($payment->status, ['paid']) && $receipt = \App\Models\Admin\Receipt::where('payment_id',  $payment->id)->first())
+                        <a href="{{ asset('assets/uploads/receipts/') . '/' . $receipt->attachment }}"
+                           class="btn btn-success btn-sm" id="paid"
+                           target="_blank"><b><i class="la la-file"></i>&nbsp;&nbsp;Recibo</b></a>
+                    @endif
+
                 </div>
             @endif
 

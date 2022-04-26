@@ -191,8 +191,14 @@ class UsersComponent extends BaseAdmin
         if ($this->itemId) {
             $rules = $this->rules;
 
-            unset($rules['email'], $rules['mobile']);
-            $rules = array_merge(['email' => 'required|email', 'mobile' => 'required|numeric'], $rules);
+            unset($rules['email'], $rules['mobile'], $rules['dni']);
+            $rules = array_merge(
+                [
+                    'email' => 'required|email', 
+                    'mobile' => 'required|numeric',
+                    'dni' => 'required|numeric|digits:8',
+                ]
+                , $rules);
 
             $this->validate($rules, [], $this->attributes);
 
