@@ -19,7 +19,7 @@ class CreateSystemMenusTable extends Migration
             $table->string('icon', 64)->nullable();
             $table->string('route', 32)->nullable();
             $table->boolean('is_route')->default(1);
-            $table->string('page')->nullable();
+            $table->string('in_group')->nullable();
             $table->integer('order', false, true)->nullable();
             $table->bigInteger('parent', false, true)->nullable();
             $table->string('type', 26)->nullable();

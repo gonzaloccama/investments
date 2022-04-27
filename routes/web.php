@@ -41,11 +41,9 @@ Auth::routes();
 Route::get('/login', \App\Http\Livewire\Auth\LoginComponent::class)->name('login');
 Route::get('/register', \App\Http\Livewire\Auth\RegisterComponent::class)->name('register');
 
-Route::middleware([UserActive::class])->group(function () {
+Route::middleware(['userActive'])->group(function () {
     /*** ADMINS ***/
     Route::middleware(['auth', 'isAdmin'])->group(function () {
-//        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-        Route::get('/admin/dashboard', DashboardComponent::class)->name('admin.dashboard');
 
         Route::get('/admin/users', UsersComponent::class)->name('admin.users');
         Route::get('/admin/administrators', AdministratorComponent::class)->name('admin.administrators');
@@ -58,19 +56,24 @@ Route::middleware([UserActive::class])->group(function () {
         Route::get('/admin/currencies', CurrencyComponent::class)->name('admin.currencies');
 
         Route::get('/admin/investments', InvestmentComponent::class)->name('admin.investments');
+
+    });
+
+    Route::middleware(['auth', 'isAssistant'])->group(function () {
+//        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        Route::get('/admin/dashboard', DashboardComponent::class)->name('admin.dashboard');
+
         Route::get('/admin/payments', PaymentComponent::class)->name('admin.payments');
         Route::get('/admin/upcoming-payments', UpcomingPaymentComponent::class)->name('admin.upcoming-payments');
-        Route::get('/admin/bonus',BonusComponent::class)->name('admin.bonus');
+
+        Route::get('/admin/bonus', BonusComponent::class)->name('admin.bonus');
 
         //reports
         Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');
         Route::get('daily-report', [DashboardComponent::class, 'dailyReport'])->name('daily.report');
-        Route::get('payment-receipt', [UpcomingPaymentComponent::class, 'receipt'])->name('payment.receipt');
+//        Route::get('payment-receipt', [UpcomingPaymentComponent::class, 'receipt'])->name('payment.receipt');
     });
 
-    /***  USERS ***/
-    Route::middleware(['auth'])->group(function () {
-    });
 });
 
 

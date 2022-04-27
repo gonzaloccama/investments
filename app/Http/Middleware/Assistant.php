@@ -6,7 +6,7 @@ use Auth;
 use Closure;
 use Illuminate\Http\Request;
 
-class Admin
+class Assistant
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (in_array(Auth::user()->group, [1, 2])) {
+        if (in_array(Auth::user()->group, [1, 2, 3])) {
             return $next($request);
         } else {
             Auth::logout();

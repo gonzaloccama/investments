@@ -1,6 +1,6 @@
 <div class="menu">
     <?php
-    $menus = \App\Models\SystemMenu::orderBy('order')->with('children',function ($query){
+    $menus = \App\Models\SystemMenu::orderBy('order')->with('children', function ($query) {
         $query->orderBy('order');
     })->where('type', 'admin')->whereNull('parent')->get();
     ?>
@@ -15,11 +15,13 @@
                         $children[] = $child->route;
                     }
                     ?>
-                    <li class="{{ in_array(Route::currentRouteName(), $children) || Route::currentRouteName() == $menu->route  ? 'active' : '' }} text-center">
-                        <a href="{{ (int)$menu->is_route ? route($menu->route) : '#'.$menu->route }}">
-                            <i class="{{ $menu->icon }}"></i> {{ $menu->name }}
-                        </a>
-                    </li>
+                    @if(in_array(auth()->user()->group, json_decode($menu->in_group)))
+                        <li class="{{ in_array(Route::currentRouteName(), $children) || Route::currentRouteName() == $menu->route  ? 'active' : '' }} text-center">
+                            <a href="{{ (int)$menu->is_route ? route($menu->route) : '#'.$menu->route }}">
+                                <i class="{{ $menu->icon }}"></i> {{ $menu->name }}
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </div>
