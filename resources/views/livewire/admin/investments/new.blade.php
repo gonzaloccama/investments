@@ -94,7 +94,11 @@
                 </div>
 
                 <div class="col-md-5 ">
-                    @include('livewire.admin.investments.details.user', ['dt' => $_user])
+                    <div class="card border">
+                        <div class="card-body">
+                            @include('livewire.admin.investments.details.user', ['dt' => $_user])
+                        </div>
+                    </div>
                 </div>
             </div>
 

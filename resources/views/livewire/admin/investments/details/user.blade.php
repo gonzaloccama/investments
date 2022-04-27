@@ -1,10 +1,9 @@
-<div class="card border">
-    <div class="card-body">
+
         <?php
         $img = $dt->gender == 2 ? 'woman.svg' : 'man.svg';
         $profile = $dt->picture ? $dt->picture : $img;
         ?>
-        <div class="text-center mt-3">
+        <div class="text-center mt-2">
             <img alt="{{ $dt->fullname }}" src="{{ asset('assets/img/avatar/').'/' . $profile }}"
                  class="img-thumbnail border-0 rounded-circle mb-4 list-thumbnail">
             <p class="list-item-heading mb-1">{{ $dt->fullname }}</p>
@@ -29,8 +28,7 @@
 {{--        <p class="text-muted text-small mb-2">Región</p>--}}
 {{--        <p class="mb-3">{{ $dt->u_region->region }}</p>--}}
 
-    </div>
-</div>
+
 {{--<div class="card border rounded-0 p-4 mb-5">--}}
 {{--    <div class="row ">--}}
 {{--        <div class="col-12 col-sm-6 col-md-3 mt-3 mt-md-0">--}}

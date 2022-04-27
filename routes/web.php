@@ -7,6 +7,7 @@ use App\Http\Livewire\Admin\BonusComponent;
 use App\Http\Livewire\Admin\CurrencyComponent;
 use App\Http\Livewire\Admin\DashboardComponent;
 use App\Http\Livewire\Admin\InvestmentComponent;
+use App\Http\Livewire\Admin\InvestmentSearchComponent;
 use App\Http\Livewire\Admin\PaymentComponent;
 use App\Http\Livewire\Admin\PlanComponent;
 use App\Http\Livewire\Admin\TimeComponent;
@@ -54,14 +55,14 @@ Route::middleware(['userActive'])->group(function () {
 
         Route::get('/admin/banks', BankComponent::class)->name('admin.banks');
         Route::get('/admin/currencies', CurrencyComponent::class)->name('admin.currencies');
-
-        Route::get('/admin/investments', InvestmentComponent::class)->name('admin.investments');
-
     });
 
     Route::middleware(['auth', 'isAssistant'])->group(function () {
 //        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
         Route::get('/admin/dashboard', DashboardComponent::class)->name('admin.dashboard');
+
+//        Route::get('/admin/investments-search', InvestmentSearchComponent::class)->name('admin.investments-search');
+        Route::get('/admin/investments', InvestmentComponent::class)->name('admin.investments');
 
         Route::get('/admin/payments', PaymentComponent::class)->name('admin.payments');
         Route::get('/admin/upcoming-payments', UpcomingPaymentComponent::class)->name('admin.upcoming-payments');

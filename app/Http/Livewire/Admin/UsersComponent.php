@@ -55,6 +55,7 @@ class UsersComponent extends BaseAdmin
         'relationship' => '<b><ins>Estado civil</ins></b>',
         'job' => '<b><ins>Ocupación</ins></b>',
     ];
+
     protected $rules = [
         'username' => 'nullable',
         'email' => 'required|email|unique:users',

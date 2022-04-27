@@ -17,14 +17,43 @@
             </h5>
             <div class="separator mb-5"></div>
 
+            @if($addUser)
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <div class="card border">
+                            <div class="card-body">
+
+                                <div class="position-absolute card-top-buttons">
+                                    <button class="btn btn-danger btn-xs" wire:click.prevent="closeAddUser"
+                                    id="closeAdd">
+                                        <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;cerrar</b>
+                                    </button>
+                                </div>
+
+                                <h5 class="card-title">Nuevo Inversionista</h5>
+
+                                @livewire('admin.add-user-component')
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             <div class="row">
                 <div class="col-md-7">
-                    <div class="text-left mt-1">
-                        <h5 class="mb-3">Buscar inversionista</h5>
-                    </div>
+
+
                     <div class="card border">
                         <div class="card-body">
+
+                            <div class="position-absolute card-top-buttons">
+                                <button class="btn btn-secondary btn-xs" wire:click.prevent="openAddUser" id="openAdd">
+                                    <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;Nuevo Inversionista</b>
+                                </button>
+                            </div>
+
+                            <h5 class="card-title">Buscar inversionista</h5>
+
                             <div class="form-group">
 
                                 <div class="input-group mb-5">
@@ -73,16 +102,18 @@
                 <div class="col-md-5 mt-5 mt-md-0">
 
                     @if($userId)
-                        <div class="text-md-right text-left mb-3">
-                            <a href="{{ route('admin.users') }}" class="btn btn-secondary btn-xs">
-                                <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;Nuevo</b>
-                            </a>
-                            <button type="submit" class="btn btn-secondary btn-xs"
-                                    wire:click.prevent="openCreateInvestment">
-                                <b><i class="iconsminds-user"></i>&nbsp;&nbsp;Elegir</b>
-                            </button>
+                        <div class="card border">
+                            <div class="card-body">
+                                <div class="text-md-right text-left mb-3">
+
+                                    <button type="submit" class="btn btn-secondary btn-xs"
+                                            wire:click.prevent="openCreateInvestment">
+                                        <b><i class="iconsminds-user"></i>&nbsp;&nbsp;Elegir</b>
+                                    </button>
+                                </div>
+                                @include('livewire.admin.investments.details.user', ['dt' => $_user])
+                            </div>
                         </div>
-                        @include('livewire.admin.investments.details.user', ['dt' => $_user])
                     @endif
 
                 </div>

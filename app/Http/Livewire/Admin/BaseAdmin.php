@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
@@ -29,7 +30,7 @@ class BaseAdmin extends Component
 
     public function updatePagination($size = 0)
     {
-                $this->limit = $size;
+        $this->limit = $size;
     }
 
     public function updateFilter($size)

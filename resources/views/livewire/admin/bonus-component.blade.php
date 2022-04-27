@@ -42,6 +42,7 @@
         $statusOther = [ //
             'referred' => 'Referido',
             'invest' => 'Inversión 30K',
+            'reself' => 'Referido a si mismo',
         ]
 
         ?>

@@ -20,7 +20,7 @@ class Assistant
         if (in_array(Auth::user()->group, [1, 2, 3])) {
             return $next($request);
         } else {
-            Auth::logout();
+//            Auth::logout();
             return redirect(route('login'));
         }
     }

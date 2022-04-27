@@ -49,6 +49,8 @@ class InvestmentComponent extends BaseAdmin
 
     public $showFile;
 
+    public $addUser;
+
     public $headers = [
         'code' => '#',
         'dni' => 'DNI',
@@ -463,6 +465,16 @@ class InvestmentComponent extends BaseAdmin
         }
     }
 
+    public function openAddUser()
+    {
+        $this->addUser = true;
+    }
+
+    public function closeAddUser()
+    {
+        $this->addUser = null;
+    }
+
     public function closeFrame()
     {
         $this->frame = 'index';
@@ -495,6 +507,8 @@ class InvestmentComponent extends BaseAdmin
         $this->investment = null;
 
         $this->frame = 'index';
+
+        $this->addUser = null;
 
         $this->resetErrorBag();
         $this->resetValidation();

@@ -17,10 +17,10 @@
             </h5>
             <div class="separator mb-5"></div>
 
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-12">
                     <div class="row icon-cards-row mb-4 sortable">
-                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                        <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
                             <a href="#" class="card border shadow">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-wallet"></i>
@@ -31,18 +31,34 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                        <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
+                            <?php
+                            $bonus = \App\Models\Bonus::where('investment_id', $payment->investment->id)
+                                ->where('status', '=', 0)
+                                ->first();
+
+                            $_typeBonus = [ //
+                                'referred' => 'Referido',
+                                'invest' => 'Inversión 30K',
+                                'reself' => 'Referido a si mismo',
+                            ]
+                            ?>
+
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-financial"></i>
-                                    <p class="card-text font-weight-semibold mb-0">Retorno Mensual</p>
+                                    <p class="card-text font-weight-semibold mb-0">Pago Mensual
+                                        <span class="font-11 text-info">{{ ' + ' . $_typeBonus[$bonus->type] }}</span>
+                                    </p>
                                     <p class="lead text-center font-22">
                                         {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->return_amount, 2, '.', ',') }}
+                                        <span
+                                            class="font-11 text-info"> + {{ $payment->investment->isCurrency->symbol . ' ' . number_format($bonus->amount, 2, '.', ',') }}</span>
                                     </p>
                                 </div>
                             </a>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                        <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="simple-icon-calendar"></i>
@@ -53,7 +69,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                        <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-calendar-4"></i>
@@ -80,7 +96,8 @@
                 <div class="text-right mb-5">
 
                     @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
-                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm" id="pending"
+                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
+                           id="pending"
                            target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
                     @endif
 
@@ -207,7 +224,11 @@
 
 
                 <div class="col-md-5 mt-4 mt-md-0">
-                    @include('livewire.admin.investments.details.user', ['dt' => $payment->investment->user])
+                    <div class="card border">
+                        <div class="card-body">
+                            @include('livewire.admin.investments.details.user', ['dt' => $payment->investment->user])
+                        </div>
+                    </div>
                 </div>
             </div>
 
