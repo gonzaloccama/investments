@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Bonus;
 use App\Models\Investment;
+use App\Models\Payment;
 use Carbon\Carbon;
 use Livewire\Component;
 use Validator;
@@ -166,8 +167,17 @@ class BonusComponent extends BaseAdmin
         }
 
         if ($data->save()) {
-            $this->investment->referred_id = $data->id;
-            $this->investment->save();
+
+            $payment = new Payment();
+
+            $payment->investment_id = $this->investment_id;
+            $payment->amount = $data->amount;
+            $payment->currency = $this->investment->currency;
+            $payment->type_payment = 'bonus';
+            $payment->current_period = $this->investment->current_period;
+            $payment->status = 'pending';
+
+            $payment->save();
 
             $this->emit('notification', ['Se creó un nuevo Bonus exitosamente']);
             $this->closeFrame();
@@ -176,39 +186,13 @@ class BonusComponent extends BaseAdmin
 
     public function edit($id = 0)
     {
-        $this->frame = 'edit';
-        $this->itemId = $id;
-
-        $data = Bank::find($this->itemId);
-
-        $this->name = $data->name;
-        $this->url = $data->url;
-        $this->ruc = $data->ruc;
-        $this->address = $data->address;
 
         $this->emit('refreshSection');
     }
 
     public function updateData()
     {
-        if ($this->itemId) {
 
-            $this->customValidation();
-
-            $this->validate($this->rules, [], $this->attributes);
-
-            $data = Bank::find($this->itemId);
-
-            $data->name = $this->name;
-            $data->url = $this->url;
-            $data->ruc = $this->ruc;
-            $data->address = $this->address;
-
-            if ($data->save()) {
-                $this->emit('notification', ['Banco actualizado exitosamente']);
-                $this->closeFrame();
-            }
-        }
     }
 
     public function closeFrame()
@@ -239,14 +223,14 @@ class BonusComponent extends BaseAdmin
         $this->resetValidation();
     }
 
-    public function delete()
-    {
-        $data = Bonus::find($this->deleteId);
-
-        if ($data->delete()) {
-            $this->closeFrame();
-        }
-    }
+//    public function delete()
+//    {
+//        $data = Bonus::find($this->deleteId);
+//
+//        if ($data->delete()) {
+//            $this->closeFrame();
+//        }
+//    }
 
     /*****/
 

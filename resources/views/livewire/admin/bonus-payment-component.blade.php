@@ -8,11 +8,9 @@
             'view' => null,
             'show' => null,
             'edit' => 'Mostar pago',
-            'go' => 'Ir a la inversión',
+            'go' => null,
             'delete' => null,
         ];
-
-        $navigateTo = 'investment';
 
         /*** status custom ***/
         //        $_statusIndex = [ // lista or lista with index
@@ -29,15 +27,16 @@
         $_period = [// lista type payment
             'return' => 'Pago Mensual',
             'capital' => 'Pago de Capital',
+            'bonus' => 'Pago de Bonus',
         ];
 
         //        $percents = true;
         $currencies = true;
-        $filters = [
-            (object)['id' => 'paid', 'name' => 'Pagado'],
-            (object)['id' => 'waiting', 'name' => 'En espera'],
-            (object)['id' => 'pending', 'name' => 'Por pagar'],
-        ];//filters
+        //        $filters = [
+        //            (object)['id' => 'paid', 'name' => 'Pagado'],
+        //            (object)['id' => 'waiting', 'name' => 'En espera'],
+        //            (object)['id' => 'pending', 'name' => 'Por pagar'],
+        //        ];//filters
 
         //        $customs = [ // custom action table
         //            /** one button **/
@@ -60,7 +59,7 @@
         @include('livewire.widgets.admin.header.title-page')
     </div>
     @if($frame)
-        @include('livewire.admin.payments.'.$frame)
+        @include('livewire.admin.bonus-payment.'.$frame)
     @endif
 
     {{--    @if($modal)--}}
@@ -196,5 +195,6 @@
         {{--}--}}
     </script>
 @endpush
+
 
 

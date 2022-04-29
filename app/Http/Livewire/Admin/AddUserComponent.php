@@ -74,7 +74,7 @@ class AddUserComponent extends Component
 
     public function saveData()
     {
-        $this->validate($this->rules, [], $this->attributes);
+                $this->validate($this->rules, [], $this->attributes);
 
         $data = new User();
 
@@ -96,11 +96,11 @@ class AddUserComponent extends Component
         $data->job = $this->job;
 
         if ($data->save()) {
+            $this->emitUp('custom', [$this->dni, $data->id]);
             $this->emit('notification', ['Se creó nuevo usuario exitosamente']);
 
             $this->cleanItems();
         }
-        $this->emitTo('investment-component', 'customFun');
     }
 
     public function cleanItems()

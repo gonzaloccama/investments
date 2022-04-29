@@ -13,6 +13,7 @@ class BaseAdmin extends Component
         'activeConfirm' => 'delete',
         'refresh' => '$refresh',
         'customConfirm' => 'deleteCustom',
+        'custom' => 'customer',
     ];
 
     public $limit;

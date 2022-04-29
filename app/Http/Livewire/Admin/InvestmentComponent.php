@@ -51,6 +51,8 @@ class InvestmentComponent extends BaseAdmin
 
     public $addUser;
 
+    public $frame = 'index';
+
     public $headers = [
         'code' => '#',
         'dni' => 'DNI',
@@ -62,6 +64,10 @@ class InvestmentComponent extends BaseAdmin
         'for_percent' => 'Progreso',
 
         'not' => '',
+    ];
+
+    protected $queryString = [
+        'itemId' => ['except' => null, 'as' => 'id'],
     ];
 
     protected $attributes = [
@@ -93,9 +99,11 @@ class InvestmentComponent extends BaseAdmin
         $this->fieldSort = 'for_percent';
         $this->sort = 'desc';
 
-        $this->frame = 'index';
-
         $this->start_date = Carbon::now()->format('Y-m-d');
+
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
+            $this->edit($_GET['id']);
+        }
     }
 
     public function render()
@@ -465,15 +473,6 @@ class InvestmentComponent extends BaseAdmin
         }
     }
 
-    public function openAddUser()
-    {
-        $this->addUser = true;
-    }
-
-    public function closeAddUser()
-    {
-        $this->addUser = null;
-    }
 
     public function closeFrame()
     {
@@ -522,4 +521,24 @@ class InvestmentComponent extends BaseAdmin
             $this->closeFrame();
         }
     }
+
+    /*** Add user***/
+
+    public function openAddUser()
+    {
+        $this->addUser = true;
+    }
+
+    public function closeAddUser()
+    {
+        $this->addUser = null;
+    }
+
+    public function customer($data)
+    {
+        $this->keyTex = $data[0];
+        $this->updateSelectInvestment($data[1]);
+        $this->closeAddUser();
+    }
+
 }

@@ -154,11 +154,12 @@
     <div class="separator mb-5 mt-5"></div>
 
     <div class="text-right">
-        <button type="submit" class="btn btn-secondary btn-sm" wire:click.prevent="saveData">
+        <button type="submit" class="btn btn-secondary btn-xs" wire:click.prevent="saveData">
             <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
         </button>
     </div>
 </div>
+
 
 {{--@push('scripts')--}}
 {{--    <script type="text/javascript">--}}

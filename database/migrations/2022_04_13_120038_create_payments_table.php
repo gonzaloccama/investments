@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->unsignedBigInteger('investment_id');
             $table->decimal('amount');
             $table->integer('currency');
-            $table->enum('type_payment', ['return', 'capital']);
+            $table->enum('type_payment', ['return', 'capital', 'bonus']);
             $table->integer('current_period')->default(1);
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();

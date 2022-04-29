@@ -32,29 +32,14 @@
                             </a>
                         </div>
                         <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
-                            <?php
-                            $bonus = \App\Models\Bonus::where('investment_id', $payment->investment->id)
-                                ->where('status', '=', 0)
-                                ->first();
-
-                            $_typeBonus = [ //
-                                'referred' => 'Referido',
-                                'invest' => 'Inversión 30K',
-                                'reself' => 'Referido a si mismo',
-                            ]
-                            ?>
-
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-financial"></i>
                                     <p class="card-text font-weight-semibold mb-0">Pago Mensual
-                                        <span class="font-11 text-info">{{ ' + ' . $_typeBonus[$bonus->type] }}</span>
                                     </p>
                                     <p class="lead text-center font-22">
                                         {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->return_amount, 2, '.', ',') }}
-                                        <span
-                                            class="font-11 text-info"> + {{ $payment->investment->isCurrency->symbol . ' ' . number_format($bonus->amount, 2, '.', ',') }}</span>
-                                    </p>
+                                       </p>
                                 </div>
                             </a>
                         </div>

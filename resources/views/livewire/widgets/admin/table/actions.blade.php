@@ -14,7 +14,10 @@ $wire = [
     'delete' => 'deleteConfirm(' . $result->id . ')',
 ];
 
-if (isset($switchAction) && !empty($switchAction)){
+if (isset($actions['go']))
+    $wire = array_merge($wire, ['go' => 'navigateTo(' . $result[$navigateTo]->id . ')',]);
+
+if (isset($switchAction) && !empty($switchAction)) {
     $actions = [ //static actions table
         'view' => $actions['view'],
         'show' => $actions['show'],

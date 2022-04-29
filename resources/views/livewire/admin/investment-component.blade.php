@@ -13,6 +13,8 @@
             'delete' => 'Eliminar',
         ];
 
+        //$navigateTo = 'investment'; //navigate to Component
+
         $switchAction = 'amount';
 
         /*** status custom ***/

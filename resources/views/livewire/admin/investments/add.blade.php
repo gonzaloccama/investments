@@ -48,7 +48,7 @@
 
                             <div class="position-absolute card-top-buttons">
                                 <button class="btn btn-secondary btn-xs" wire:click.prevent="openAddUser" id="openAdd">
-                                    <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;Nuevo Inversionista</b>
+                                    <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;Nuevo</b>
                                 </button>
                             </div>
 

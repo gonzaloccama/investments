@@ -2,15 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
+
 use App\Models\Admin\Receipt;
-use App\Models\Investment;
 use App\Models\Payment;
 use App\Models\SystemConfig;
 use Carbon\Carbon;
-use Livewire\Component;
-use Storage;
 
-class UpcomingPaymentComponent extends BaseAdmin
+class BonusPaymentComponent extends BaseAdmin
 {
     public $payment;
     public $investment;
@@ -20,21 +18,11 @@ class UpcomingPaymentComponent extends BaseAdmin
         'dni' => 'DNI',
         'amount' => 'Monto',
         'type_payment' => 'Tipo de pago',
-        'start_date' => 'Inicio',
-        'end_date' => 'Fin',
         'payment_date' => 'Fecha de pago',
-        'for_percent' => 'Progreso',
         'status' => 'Estado',
 
         'not' => '',
     ];
-
-//    protected $attributes = [
-//        'name' => '<b><ins>Nombre</ins></b>',
-//    ];
-//    protected $rules = [
-//        'name' => 'required|min:3',
-//    ];
 
     public function mount()
     {
@@ -54,7 +42,7 @@ class UpcomingPaymentComponent extends BaseAdmin
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['not', 'code', 'for_percent', 'dni']);
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'code', 'dni']);
         $findIn = [];
         $table = 'payments';
 
@@ -79,29 +67,22 @@ class UpcomingPaymentComponent extends BaseAdmin
                 }
                 $query->orWhere('investments.code', 'LIKE', '%' . $this->keyWord . '%');
             })
-            ->where('payments.type_payment', 'return')
+            ->where('payments.type_payment', 'bonus')
             ->when($this->investment, function ($query) {
                 $query->where('investment_id', 'LIKE', $this->investment);
             })
             ->select($table . '.*')
-            ->selectRaw("investments.code, users.dni, TIMESTAMPDIFF(HOUR, CURDATE(),  payments.end_date) as for_percent")
+            ->selectRaw("investments.code, users.dni")
             ->join('investments', 'investments.id', '=', $table . '.investment_id')
             ->join('users', 'users.id', '=', 'investments.user_id')
             ->paginate($this->limit);
 
-        $data['_title'] = 'Pagos de retorno';
+        $data['_title'] = 'Pagos de bonus';
 
         $this->emit('refreshContent');
 
-        return view('livewire.admin.upcoming-payment-component', $data)->layout('layouts.admin');
+        return view('livewire.admin.bonus-payment-component', $data)->layout('layouts.admin');
     }
-
-//    public function updated($property)
-//    {
-//        $this->validateOnly($property, $this->rules, [], $this->attributes);
-//    }
-
-    // BEGIN DYNAMIC METHODS
 
     public function edit($id = 0)
     {
@@ -145,11 +126,6 @@ class UpcomingPaymentComponent extends BaseAdmin
 //                $this->closeFrame();
             }
         }
-    }
-
-    public function navigateTo($id)
-    {
-        $this->redirect(route('admin.investments') . '?id=' . $id);
     }
 
     public function receipt()
