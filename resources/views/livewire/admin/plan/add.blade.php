@@ -43,6 +43,26 @@
 
             <?php
             $dt = [
+                'name' => 'min_amount',
+                'text' => 'Monto mínimo',
+                'required' => 1,
+                'type' => 'text',
+            ];
+            ?>
+            @include('livewire.widgets.admin.form.input-h', $dt)
+
+            <?php
+            $dt = [
+                'name' => 'max_amount',
+                'text' => 'Monto máximo',
+                'required' => 0,
+                'type' => 'text',
+            ];
+            ?>
+            @include('livewire.widgets.admin.form.input-h', $dt)
+
+            <?php
+            $dt = [
                 'name' => 'status',
                 'text' => 'Estado',
                 'required' => 0,

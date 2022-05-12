@@ -13,7 +13,7 @@
 
             @if($type == 'text')
                 <input type="{{ $type }}" class="form-control" id="{{ $name }}" wire:model="{{ $name }}"
-                       {{ isset($readonly) && !empty($readonly) ? 'readonly' : '' }} placeholder="{{ $text }}">
+                       {{ isset($readonly) && !empty($readonly) ? 'readonly' : '' }} placeholder="{{ $text }}" autocomplete="off">
             @elseif($type == 'checkbox')
                 <div class="custom-switch custom-switch-primary mb-2">
                     <input class="custom-switch-input" id="{{ $name }}" type="{{ $type }}"

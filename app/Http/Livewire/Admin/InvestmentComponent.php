@@ -473,6 +473,29 @@ class InvestmentComponent extends BaseAdmin
         }
     }
 
+    public function cancelInvestment()
+    {
+        if (Carbon::parse($this->investment->end_date)->format('Y-m-d') > Carbon::today()->format('Y-m-d')) {
+//            dd('canceled');
+            if ($this->itemId) {
+                $data = Investment::find($this->itemId);
+
+                $data->status = 'canceled';
+                $data->payment = true;
+                $data->payment_date = Carbon::now()->format('Y-m-d H:i:s');
+
+                if ($data->save()) {
+                    $dt = $data->inPayment()->where('type_payment', 'return')->whereNotIn('status', ['paid'])->latest('created_at')->first();
+                    $dt->status = 'paid';
+                    $dt->save();
+
+                    $this->emit('notification', ['El pago se ha cancelado exitosamente']);
+                    $this->closeFrame();
+                }
+            }
+        }
+    }
+
 
     public function closeFrame()
     {

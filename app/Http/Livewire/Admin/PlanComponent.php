@@ -10,13 +10,17 @@ class PlanComponent extends BaseAdmin
 {
     public $name;
     public $percent;
+    public $min_amount;
+    public $max_amount;
     public $status;
     public $time_id;
 
     public $headers = [
-        'id' => '#',
+//        'id' => '#',
         'name' => 'Nombre',
         'percent' => 'Porcentaje',
+        'min_amount' => 'Monto mínimo',
+        'max_amount' => 'Monto máximo',
         'status' => 'Estado',
         'plan_time' => 'Retorno',
 
@@ -26,12 +30,17 @@ class PlanComponent extends BaseAdmin
     protected $attributes = [
         'name' => '<b><ins>Nombre</ins></b>',
         'percent' => '<b><ins>Porcentaje</ins></b>',
+        'min_amount' => '<b><ins>Monto mínimo</ins></b>',
+        'max_amount' => '<b><ins>Monto máximo</ins></b>',
         'status' => '<b><ins>Estado</ins></b>',
         'time_id' => '<b><ins>Retorno</ins></b>',
     ];
+
     protected $rules = [
         'name' => 'required|min:3',
         'percent' => 'required|numeric',
+        'min_amount' => 'required|numeric',
+        'max_amount' => 'nullable|numeric',
         'status' => 'nullable',
         'time_id' => 'required',
     ];
@@ -101,6 +110,8 @@ class PlanComponent extends BaseAdmin
 
         $data->name = $this->name;
         $data->percent = $this->percent;
+        $data->min_amount = $this->min_amount;
+        $data->max_amount = $this->max_amount;
         $data->status = $this->status;
         $data->time_id = $this->time_id;
 
@@ -120,6 +131,8 @@ class PlanComponent extends BaseAdmin
 
         $this->name = $data->name;
         $this->percent = $data->percent;
+        $this->min_amount = $data->min_amount;
+        $this->max_amount = $data->max_amount;
         $this->status = $data->status;
         $this->time_id = $data->time_id;
 
@@ -136,6 +149,8 @@ class PlanComponent extends BaseAdmin
 
             $data->name = $this->name;
             $data->percent = $this->percent;
+            $data->min_amount = $this->min_amount;
+            $data->max_amount = $this->max_amount;
             $data->status = $this->status;
             $data->time_id = $this->time_id;
 
@@ -159,6 +174,8 @@ class PlanComponent extends BaseAdmin
 
         $this->name = null;
         $this->percent = null;
+        $this->min_amount = null;
+        $this->max_amount = null;
         $this->status = true;
         $this->time_id = null;
 

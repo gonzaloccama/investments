@@ -20,6 +20,11 @@ class Payment extends Model
         return $this->belongsTo(Currency::class, 'currency');
     }
 
+    public function toBonus()
+    {
+        return $this->belongsTo(Bonus::class, 'bonus_id');
+    }
+
     public function getCodeAttribute()
     {
         return $this->investment->code;

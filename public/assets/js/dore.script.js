@@ -456,6 +456,7 @@ $.dore = function (element, options) {
 
         function setMenuClassNames(clickIndex, calledFromResize, link) {
             menuClickCount = clickIndex;//.addClass("menu-default menu-sub-hidden sub-hidden") //custom add
+            // var container = $("#app-container");
             var container = $("#app-container").addClass("menu-default menu-sub-hidden sub-hidden");
             if (container.length == 0) {
                 return;

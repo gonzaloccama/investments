@@ -8,6 +8,15 @@
 @endif
 
 <h5 class="card-title">Detalles de la Inversión</h5>
+
+@if($investment->amount < $investment->isPlan->min_amount)
+    <div class="alert alert-danger"><i class="fe-alert-triangle"></i>
+        Los fondos de la inversión debe ser como mínimo <b>
+            {{ $investment->isCurrency->symbol . ' ' . number_format($investment->isPlan->min_amount, 2, '.', ',') }}
+        </b> para ser activado
+    </div>
+@endif
+
 <table class="table">
     <tr>
         <th class="text-theme-1">Codigo:</th>
@@ -50,7 +59,8 @@
         <th class="text-theme-1">Progreso:</th>
         <td>
             @if($investment->status == 'active')
-                {{ __('Faltan: ') . intdiv($investment->remaining_hours, 24) . ' días, ' . ($investment->remaining_hours % 24) . ' horas' }} <br>
+                {{ __('Faltan: ') . intdiv($investment->remaining_hours, 24) . ' días, ' . ($investment->remaining_hours % 24) . ' horas' }}
+                <br>
 
                 <?php
 

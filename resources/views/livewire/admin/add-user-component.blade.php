@@ -158,6 +158,22 @@
             <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
         </button>
     </div>
+    <script type="text/javascript">
+        // console.log("Child loaded.");
+        initField();
+        activeFlatpickr('#birthdate');
+
+        window.livewire.on('childRefresh', () => {
+            initField();
+        });
+
+        function initField() {
+            activeSelect2('#gender', 'gender');
+            activeSelect2('#relationship', 'relationship');
+            activeSelect2('#region', 'region');
+            activeSelect2('#province', 'province');
+        }
+    </script>
 </div>
 
 
@@ -174,36 +190,35 @@
 {{--        });--}}
 
 
+{{--        --}}{{--function activeSelect2(sel, varModel) {--}}
+{{--        --}}{{--    $(sel).select2({--}}
+{{--        --}}{{--        theme: "material",--}}
+{{--        --}}{{--        // dir: direction,--}}
+{{--        --}}{{--        placeholder: "Seleccione...",--}}
+{{--        --}}{{--        maximumSelectionSize: 6,--}}
+{{--        --}}{{--        containerCssClass: ":all:",--}}
+{{--        --}}{{--        templateResult: formatOption,--}}
+{{--        --}}{{--    });--}}
+{{--        --}}{{--    $(sel).on('change', function (e) {--}}
+{{--        --}}{{--        @this.--}}
+{{--        --}}{{--        set(varModel, e.target.value);--}}
+{{--        --}}{{--    });--}}
 
-{{--        function activeSelect2(sel, varModel) {--}}
-{{--            $(sel).select2({--}}
-{{--                theme: "material",--}}
-{{--                // dir: direction,--}}
-{{--                placeholder: "Seleccione...",--}}
-{{--                maximumSelectionSize: 6,--}}
-{{--                containerCssClass: ":all:",--}}
-{{--                templateResult: formatOption,--}}
-{{--            });--}}
-{{--            $(sel).on('change', function (e) {--}}
-{{--                @this.--}}
-{{--                set(varModel, e.target.value);--}}
-{{--            });--}}
+{{--        --}}{{--    function formatOption(option) {--}}
+{{--        --}}{{--        var $option = $(--}}
+{{--        --}}{{--            '<strong>' + option.text + '</strong>'--}}
+{{--        --}}{{--        );--}}
+{{--        --}}{{--        return $option;--}}
+{{--        --}}{{--    }--}}
+{{--        --}}{{--}--}}
 
-{{--            function formatOption(option) {--}}
-{{--                var $option = $(--}}
-{{--                    '<strong>' + option.text + '</strong>'--}}
-{{--                );--}}
-{{--                return $option;--}}
-{{--            }--}}
-{{--        }--}}
-
-{{--        function activeFlatpickr(sel, is_time = 0) {--}}
-{{--            $(sel).flatpickr({--}}
-{{--                enableTime: !!is_time,--}}
-{{--                dateFormat: `${is_time ? 'Y-m-d H:i' : 'Y-m-d'}`,--}}
-{{--                disableMobile: "true",--}}
-{{--                "locale": "es"--}}
-{{--            });--}}
-{{--        }--}}
+{{--        --}}{{--function activeFlatpickr(sel, is_time = 0) {--}}
+{{--        --}}{{--    $(sel).flatpickr({--}}
+{{--        --}}{{--        enableTime: !!is_time,--}}
+{{--        --}}{{--        dateFormat: `${is_time ? 'Y-m-d H:i' : 'Y-m-d'}`,--}}
+{{--        --}}{{--        disableMobile: "true",--}}
+{{--        --}}{{--        "locale": "es"--}}
+{{--        --}}{{--    });--}}
+{{--        --}}{{--}--}}
 {{--    </script>--}}
 {{--@endpush--}}

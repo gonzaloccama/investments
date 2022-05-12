@@ -15,6 +15,7 @@ class BonusPaymentComponent extends BaseAdmin
 
     public $headers = [
         'code' => 'Inversión',
+        'bonus' => 'Bonus',
         'dni' => 'DNI',
         'amount' => 'Monto',
         'type_payment' => 'Tipo de pago',
@@ -42,7 +43,7 @@ class BonusPaymentComponent extends BaseAdmin
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['not', 'code', 'dni']);
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'code', 'dni', 'bonus']);
         $findIn = [];
         $table = 'payments';
 
@@ -51,6 +52,7 @@ class BonusPaymentComponent extends BaseAdmin
         }
 
         $findIn[] = 'users.dni';
+        $findIn[] = 'bonuses.code';
 
         foreach (Payment::where('status', 'waiting')->whereDate('end_date', '<=', Carbon::today()->toDateString())->get() as $dt) {
             if ($dt->remaining_hours == 0 && Carbon::parse($dt->end_date)->format('Y-m-d') <= Carbon::today()->format('Y-m-d')) {
@@ -72,9 +74,10 @@ class BonusPaymentComponent extends BaseAdmin
                 $query->where('investment_id', 'LIKE', $this->investment);
             })
             ->select($table . '.*')
-            ->selectRaw("investments.code, users.dni")
+            ->selectRaw("investments.code, users.dni, bonuses.code as bonus")
             ->join('investments', 'investments.id', '=', $table . '.investment_id')
             ->join('users', 'users.id', '=', 'investments.user_id')
+            ->join('bonuses', 'bonuses.investment_id', '=', 'investments.id')
             ->paginate($this->limit);
 
         $data['_title'] = 'Pagos de bonus';
@@ -96,7 +99,6 @@ class BonusPaymentComponent extends BaseAdmin
 
     public function updateData()
     {
-
         if ($this->itemId) {
             $data = Payment::find($this->itemId);
 
@@ -104,26 +106,13 @@ class BonusPaymentComponent extends BaseAdmin
             $data->status = 'paid';
 
             if ($data->save()) {
-                if ($data->investment->current_period < $data->investment->period && $data->current_period < $data->investment->period) {
-                    $dt = new Payment();
 
-                    $dt->investment_id = $data->investment->id;
-                    $dt->amount = $data->investment->return_amount;
-                    $dt->currency = $data->investment->currency;
-                    $dt->type_payment = 'return';
-                    $dt->current_period = $data->investment->current_period = $data->investment->current_period + 1;
-                    $dt->start_date = Carbon::parse($data->start_date)->addMonths(1)->format('Y-m-d');
-                    $dt->end_date = Carbon::parse($dt->start_date)->addMonths(1)->format('Y-m-d');
-
-                    $dt->save();
-                    $data->investment->save();
-
-                }
+                $data->toBonus->status = 1;
+                $data->toBonus->save();
 
                 $this->receipt();
 
                 $this->emit('notification', ['El pago se ha actualizado correctamente exitosamente']);
-//                $this->closeFrame();
             }
         }
     }

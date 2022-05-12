@@ -6,6 +6,7 @@ use App\Http\Livewire\Admin\BankComponent;
 use App\Http\Livewire\Admin\BonusComponent;
 use App\Http\Livewire\Admin\BonusPaymentComponent;
 use App\Http\Livewire\Admin\CurrencyComponent;
+use App\Http\Livewire\Admin\DailyReportComponent;
 use App\Http\Livewire\Admin\DashboardComponent;
 use App\Http\Livewire\Admin\InvestmentComponent;
 use App\Http\Livewire\Admin\InvestmentSearchComponent;
@@ -73,8 +74,10 @@ Route::middleware(['userActive'])->group(function () {
 
         //reports
         Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');
-        Route::get('daily-report', [DashboardComponent::class, 'dailyReport'])->name('daily.report');
-//        Route::get('payment-receipt', [UpcomingPaymentComponent::class, 'receipt'])->name('payment.receipt');
+//        Route::get('daily-report', [DashboardComponent::class, 'dailyReport'])->name('daily.report');
+
+
+        Route::get('daily-report', DailyReportComponent::class)->name('daily.report');
     });
 
 });

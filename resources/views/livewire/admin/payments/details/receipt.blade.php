@@ -75,17 +75,36 @@
     <main>
 
         <p class="text-justify mb-0 font-16"><b>Entregué al Sr(a):</b>
-            <span style="color: #6a6a6a;">{{ $payment->investment->user->fullname }}</span>
+            <span style="color: #6a6a6a;">{{ $payment->investment->user->fullname }}</span>.
         </p>
 
         <p class="text-justify mb-0 font-16"><b>La suma de:</b>
             <span
-                style="color: #6a6a6a;">{{ $payment->isCurrency->symbol }} {{ number_format($payment->amount, 2, '.', ',') }}</span>
+                style="color: #6a6a6a;">{{ $payment->isCurrency->symbol }} {{ number_format($payment->amount, 2, '.', ',') }}</span>.
         </p>
 
         <p class="text-justify mb-0 font-16"><b>Por concepto de:</b>
             <span style="color: #6a6a6a;">
-            Pago por retorno mensual.
+                <?php
+                $type_bonus = [
+                    'referred' => 'Referido',
+                    'reself' => 'Referido de 30K a si mismo',
+                    'invest' => 'Bonus por mayor a 30K',
+                ];
+
+                $type_paid = [
+                    'return' => 'Pago de retorno mesual',
+                    'capital' => 'Pago de capital',
+                ];
+
+                if ($payment->toBonus) {
+                    $type_paid = array_merge(
+                        ['bonus' => 'Por bonus ' . $type_bonus[$payment->toBonus->type]
+                            . ' de ' . number_format($payment->toBonus->percent, 0) . '%'], $type_paid);
+                }
+
+                ?>
+                {{ $type_paid[$payment->type_payment] }}.
             </span>
         </p>
 

@@ -109,7 +109,7 @@ class BonusComponent extends BaseAdmin
             $rules = array_merge($rules, ['investment_id' => 'required|exists30high|exists_bonus']);
         } else {
             unset($rules['referred_to']);
-            $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus']);
+            $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus_res']);
         }
         $this->customValidation();
         $this->validateOnly($property, $rules,
@@ -118,8 +118,10 @@ class BonusComponent extends BaseAdmin
                 'investment_id.exists30k' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
                 'investment_id.exists30high' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
                 'investment_id.exists_bonus' => 'La :attribute no debe tener más de <b>Un Bono Reclamado</b>.',
+                'investment_id.exists_bonus_res' => 'La :attribute no debe tener más de <b>Un Bono Reclamado</b>.',
             ],
-            $this->attributes);
+            $this->attributes
+        );
     }
 
     // BEGIN DYNAMIC METHODS
@@ -141,7 +143,7 @@ class BonusComponent extends BaseAdmin
             $rules = array_merge($rules, ['investment_id' => 'required|exists30high|exists_bonus']);
         } else {
             unset($rules['referred_to']);
-            $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus']);
+            $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus_res']);
         }
 
         $this->customValidation();
@@ -151,6 +153,7 @@ class BonusComponent extends BaseAdmin
                 'investment_id.exists30k' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
                 'investment_id.exists30high' => 'La :attribute debe tener más de <b>30K de monto invertido</b>.',
                 'investment_id.exists_bonus' => 'La :attribute no debe tener más de <b>Un Bono Reclamado</b>.',
+                'investment_id.exists_bonus_res' => 'La :attribute no debe tener más de <b>Un Bono Reclamado</b>.',
             ],
             $this->attributes);
 
@@ -175,6 +178,7 @@ class BonusComponent extends BaseAdmin
             $payment->currency = $this->investment->currency;
             $payment->type_payment = 'bonus';
             $payment->current_period = $this->investment->current_period;
+            $payment->bonus_id = $data->id;
             $payment->status = 'pending';
 
             $payment->save();
@@ -266,6 +270,11 @@ class BonusComponent extends BaseAdmin
 
         Validator::extend('exists_bonus', function ($attr, $value) {
             $validate = Bonus::where('investment_id', $value)->where('type', 'invest')->first();
+            return !(bool)$validate;
+        });
+
+        Validator::extend('exists_bonus_res', function ($attr, $value) {
+            $validate = Bonus::where('investment_id', $value)->where('type', 'reself')->first();
             return !(bool)$validate;
         });
     }

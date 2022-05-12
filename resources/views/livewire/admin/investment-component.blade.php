@@ -103,6 +103,7 @@
                 activeFlatpickr('#start_date');
                 activeFlatpickr('#end_date');
                 activeFlatpickr('#transfer_date');
+
             });
 
             window.livewire.on('notification', (mssg) => {

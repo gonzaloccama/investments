@@ -63,7 +63,7 @@ class AddUserComponent extends Component
 
     public function render()
     {
-
+        $this->emit('childRefresh');
         return view('livewire.admin.add-user-component');
     }
 
@@ -74,7 +74,7 @@ class AddUserComponent extends Component
 
     public function saveData()
     {
-                $this->validate($this->rules, [], $this->attributes);
+        $this->validate($this->rules, [], $this->attributes);
 
         $data = new User();
 

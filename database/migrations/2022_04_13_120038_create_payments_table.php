@@ -16,6 +16,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('investment_id');
+            $table->unsignedBigInteger('bonus_id')->nullable();
             $table->decimal('amount');
             $table->integer('currency');
             $table->enum('type_payment', ['return', 'capital', 'bonus']);
@@ -27,6 +28,7 @@ class CreatePaymentsTable extends Migration
             $table->timestamps();
 
             $table->foreign('investment_id')->references('id')->on('investments')->onDelete('cascade');
+            $table->foreign('bonus_id')->references('id')->on('bonuses')->onDelete('set null');
         });
     }
 

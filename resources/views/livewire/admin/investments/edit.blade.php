@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            @if($investment->amount)
+            @if($investment->amount && $investment->amount >= $investment->isPlan->min_amount)
                 <div class="text-right mb-5">
 
                     @if(in_array($investment->status, ['active', 'completed']))
@@ -89,7 +89,7 @@
                                    target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Reembolsar</b></a>
                             @endif
                         @else
-                            <a href="javascript:;"
+                            <a href="javascript:;" wire:click.prevent="cancelInvestment"
                                class="btn btn-danger btn-sm" target="_blank"><b><i class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar
                                     inversión</b></a>
                         @endif

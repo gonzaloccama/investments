@@ -1,4 +1,11 @@
 <div class="col-md-12">
+    <?php
+    $typeBonus = [ //
+        'referred' => 'Referido',
+        'invest' => 'Inversión 30K',
+        'reself' => 'Referido a si mismo',
+    ]
+    ?>
     <div class="card border rounded-0">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
@@ -13,7 +20,7 @@
 
         <div class="card-body">
             <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">
-                {{ $payment->code . ' - Pago Nro: ' . $payment->current_period }}
+                {{ $payment->code . ' - Pago de: ' . $payment->type_payment }}
             </h5>
             <div class="separator mb-5"></div>
 
@@ -31,26 +38,15 @@
                                 </div>
                             </a>
                         </div>
+
                         <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
-                            <?php
-                            $bonus = \App\Models\Bonus::where('investment_id', $payment->investment->id)
-                                ->where('status', '=', 0)
-                                ->first();
-
-                            $_typeBonus = [ //
-                                'referred' => 'Referido',
-                                'invest' => 'Inversión 30K',
-                                'reself' => 'Referido a si mismo',
-                            ]
-                            ?>
-
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-financial"></i>
-                                    <p class="card-text font-weight-semibold mb-0">Pago Mensual
+                                    <p class="card-text font-weight-semibold mb-0">Pago Bonus
                                     </p>
                                     <p class="lead text-center font-22">
-                                        {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->return_amount, 2, '.', ',') }}
+                                        {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->amount, 2, '.', ',') }}
                                     </p>
                                 </div>
                             </a>
@@ -59,9 +55,9 @@
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="simple-icon-calendar"></i>
-                                    <p class="card-text font-weight-semibold mb-0">Pago Actual</p>
+                                    <p class="card-text font-weight-semibold mb-0">{{ $typeBonus[$payment->toBonus->type] }}</p>
                                     <p class="lead text-center font-22">
-                                        {{ $payment->current_period }}
+                                        {{ number_format($payment->toBonus->percent, 0, '.', ',') }}%
                                     </p>
                                 </div>
                             </a>
@@ -92,11 +88,16 @@
             @if($payment->amount)
                 <div class="text-right mb-5">
 
-                    @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
+                    @if(in_array($payment->status, ['pending']))
+                        {{--                        @if($refer = \App\Models\User::where('dni', $payment->toBonus->referred_to)->count() && $payment->toBonus->type == 'referred' || $payment->toBonus->type != 'referred')--}}
+
                         <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
                            id="pending"
                            target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+
+                        {{--                        @endif--}}
                     @endif
+
 
                     @if(in_array($payment->status, ['paid']) && $receipt = \App\Models\Admin\Receipt::where('payment_id',  $payment->id)->first())
                         <a href="{{ asset('assets/uploads/receipts/') . '/' . $receipt->attachment }}"
@@ -112,11 +113,36 @@
                     <div class="card border">
                         <div class="card-body">
                             <h3 class="card-title">Detalles del pago</h3>
+
+{{--                            @if(!$refer)--}}
+                                <div class="alert alert-danger"><i class="fe-alert-triangle"></i> El referido por el
+                                    usuario no está en nuestros registros
+                                </div>
+{{--                            @endif--}}
+
                             <table class="table">
                                 <tr>
                                     <th class="text-theme-1">Inversión</th>
                                     <td>
                                         {{ $payment->code }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Capital de inversión</th>
+                                    <td>
+                                        {{ $payment->isCurrency->symbol . ' ' .number_format($payment->investment->amount, 2, '.', ',') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Porcentaje del Bonus</th>
+                                    <td>
+                                        {{ number_format($payment->toBonus->percent, 0, '.', ',') }}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Codigo del Bonus</th>
+                                    <td>
+                                        {{ $payment->toBonus->code }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -128,33 +154,7 @@
                                 <tr>
                                     <th class="text-theme-1">Tipo de pago</th>
                                     <td>
-                                        {{ $_period[$payment->type_payment] }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-theme-1">Periodo Actual</th>
-                                    <td>
-                                        {!! '<b class="text-theme-1">' . $payment->current_period . '</b> de ' .  $payment->investment->period . ' Meses' !!}
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th class="text-theme-1">Inicio del Periodo</th>
-                                    <td>
-                                        <?php
-                                        echo ucfirst(Carbon\Carbon::parse($payment->start_date)
-                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th class="text-theme-1">Culimnación del Periodo</th>
-                                    <td>
-                                        <?php
-                                        echo ucfirst(Carbon\Carbon::parse($payment->end_date)
-                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
-                                        ?>
+                                        {{ $typeBonus[$payment->toBonus->type] }}
                                     </td>
                                 </tr>
 
@@ -186,34 +186,7 @@
 
                                 </tr>
 
-                                <tr>
-                                    <th class="text-theme-1">Estado</th>
 
-                                    <td>
-                                        {{ __('Faltan: ') . intdiv($payment->remaining_hours, 24) . ' días, ' . ($payment->remaining_hours % 24) . ' horas' }}
-                                        <br>
-
-                                        <?php
-
-                                        $perc = $payment->percent;
-
-                                        $prc = $perc > 97 ? '#317347' : '#1D477A';
-                                        if ($payment->status == 'canceled') {
-                                            $prc = '#f63c44';
-                                        }
-                                        ?>
-
-                                        <div class="progress-outer w-100" style="border-color:{{ $prc }};">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-striped"
-                                                     style="width:{{ $perc }}%; background-color: {{ $prc }};"></div>
-                                                <div class="progress-value" style="color: {{ $prc }};">
-                                                    <span>{{ $perc }}</span>%
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
                             </table>
                         </div>
                     </div>
