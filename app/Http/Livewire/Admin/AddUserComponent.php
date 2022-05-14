@@ -46,7 +46,7 @@ class AddUserComponent extends Component
     protected $rules = [
 //        'username' => 'nullable',
         'email' => 'required|email|unique:users',
-        'mobile' => 'required|numeric|digits:9|unique:users',
+        'mobile' => 'required|numeric|digits:9',
         'firstname' => 'required|min:3',
         'lastname' => 'required|min:3',
         'dni' => 'required|numeric|digits:8|unique:users',
@@ -63,7 +63,7 @@ class AddUserComponent extends Component
 
     public function render()
     {
-        $this->emit('childRefresh');
+        $this->dispatchBrowserEvent('childRefresh');
         return view('livewire.admin.add-user-component');
     }
 
@@ -97,6 +97,7 @@ class AddUserComponent extends Component
 
         if ($data->save()) {
             $this->emitUp('custom', [$this->dni, $data->id]);
+            $this->emitUp('closeModal');
             $this->emit('notification', ['Se creó nuevo usuario exitosamente']);
 
             $this->cleanItems();

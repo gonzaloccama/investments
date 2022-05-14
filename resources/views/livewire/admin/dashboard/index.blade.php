@@ -165,7 +165,7 @@
 
 <div class="col-md-12">
     <div class="mt-5">
-        <a href="{{ route('daily.report') }}" class="btn btn-secondary" target="_blank">Reportes diarios</a>
+        <a href="{{ route('daily.report') }}" class="btn btn-secondary">Reportes diarios</a>
     </div>
 </div>
 

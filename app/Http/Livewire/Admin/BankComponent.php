@@ -9,10 +9,10 @@ use Validator;
 
 class BankComponent extends BaseAdmin
 {
-public $name;
-public $url;
-public $ruc;
-public $address;
+    public $name;
+    public $url;
+    public $ruc;
+    public $address;
 
     public $headers = [
         'id' => '#',

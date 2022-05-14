@@ -59,7 +59,7 @@ class UsersComponent extends BaseAdmin
     protected $rules = [
         'username' => 'nullable',
         'email' => 'required|email|unique:users',
-        'mobile' => 'required|numeric|digits:9|unique:users',
+        'mobile' => 'required|numeric|digits:9',
         'firstname' => 'required|min:3',
         'lastname' => 'required|min:3',
         'dni' => 'required|numeric|digits:8|unique:users',

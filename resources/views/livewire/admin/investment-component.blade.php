@@ -119,6 +119,12 @@
                 $('#showModal').modal('show');
             });
 
+            window.livewire.on('closeModal', () => {
+                $('#showModal').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop.fade.show').remove();
+            });
+
             window.livewire.on('deleteAlert', () => {
                 deleteSwal();
             });

@@ -13,30 +13,31 @@
 
         <div class="card-body">
             <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">
-                {{ $_user ? $_user->fullname : __('Nuevo Inversión') }}
+{{--                {{ $_user ? $_user->fullname : __('Nuevo Inversión') }}--}}
             </h5>
             <div class="separator mb-5"></div>
 
             @if($addUser)
-                <div class="row mb-5">
-                    <div class="col-md-12">
-                        <div class="card border">
-                            <div class="card-body">
+                @include('livewire.admin.investments.modal.modal-user')
+{{--                <div class="row mb-5">--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="card border">--}}
+{{--                            <div class="card-body">--}}
 
-                                <div class="position-absolute card-top-buttons">
-                                    <button class="btn btn-danger btn-xs" wire:click.prevent="closeAddUser"
-                                    id="closeAdd">
-                                        <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;cerrar</b>
-                                    </button>
-                                </div>
+{{--                                <div class="position-absolute card-top-buttons">--}}
+{{--                                    <button class="btn btn-danger btn-xs" wire:click.prevent="closeAddUser"--}}
+{{--                                    id="closeAdd">--}}
+{{--                                        <b><i class="iconsminds-add-user"></i>&nbsp;&nbsp;cerrar</b>--}}
+{{--                                    </button>--}}
+{{--                                </div>--}}
 
-                                <h5 class="card-title">Nuevo Inversionista</h5>
+{{--                                <h5 class="card-title">Nuevo Inversionista</h5>--}}
 
-                                @livewire('admin.add-user-component')
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{{--                                @livewire('admin.add-user-component')--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             @endif
 
             <div class="row">

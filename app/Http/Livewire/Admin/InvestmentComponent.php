@@ -550,11 +550,14 @@ class InvestmentComponent extends BaseAdmin
     public function openAddUser()
     {
         $this->addUser = true;
+        $this->emit('showModal');
     }
 
     public function closeAddUser()
     {
         $this->addUser = null;
+
+        $this->emit('closeModal');
     }
 
     public function customer($data)

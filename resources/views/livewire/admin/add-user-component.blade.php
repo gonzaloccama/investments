@@ -1,6 +1,6 @@
 <div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
             <div class="card border rounded-0 shadow-none p-3">
                 <?php
                 $dt = [
@@ -78,7 +78,7 @@
 
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-12 mt-md-0 mt-3">
             <div class="card border rounded-0 shadow-none p-3">
                 <?php
                 $dt = [
@@ -153,25 +153,53 @@
 
     <div class="separator mb-5 mt-5"></div>
 
-    <div class="text-right">
-        <button type="submit" class="btn btn-secondary btn-xs" wire:click.prevent="saveData">
+    <div class="text-right mt-3">
+        <button type="submit" class="btn btn-secondary" wire:click.prevent="saveData">
             <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
         </button>
     </div>
     <script type="text/javascript">
-        // console.log("Child loaded.");
+        console.log("Child loaded.");
         initField();
+
         activeFlatpickr('#birthdate');
 
-        window.livewire.on('childRefresh', () => {
+        window.addEventListener('childRefresh', event => {
             initField();
         });
 
         function initField() {
-            activeSelect2('#gender', 'gender');
-            activeSelect2('#relationship', 'relationship');
-            activeSelect2('#region', 'region');
-            activeSelect2('#province', 'province');
+            initSelect2('#gender', 'gender');
+            initSelect2('#relationship', 'relationship');
+            initSelect2('#region', 'region');
+            initSelect2('#province', 'province');
+        }
+
+        function initSelect2(sel, varModel) {
+            if ($().select2) {
+                $(sel).select2({
+                    theme: "material",
+                    // dir: direction,
+                    placeholder: "Seleccione...",
+                    maximumSelectionSize: 6,
+                    containerCssClass: ":all:",
+                    "language": {
+                        "noResults": function () {
+                            return "No se han encontrado resultados";
+                        }
+                    },
+                });
+                $(sel).on('change', function (e) {
+                    @this.
+                    set(varModel, $(this).val());
+                });
+            }
+            function formatOption(option) {
+                var $option = $(
+                    '<strong>' + option.text + '</strong>'
+                );
+                return $option;
+            }
         }
     </script>
 </div>

@@ -61,7 +61,7 @@
 
 <footer class="font-italic font-14">
     <div id="notices">
-        <span>{{ \Carbon\Carbon::today() }}</span>
+        <span>{{ $created_at }}</span>
     </div>
 {{--    <div class="num">pág. <span class="pagenum"></span></div>--}}
 </footer>
@@ -80,7 +80,7 @@
     </p>
 
     <b class="name mb-3 mt-5 font-16 text-left">
-        <u>INFORME N°02-2022-GRUPO DE INVERSIONES “SUR CAPITAL”.</u>
+        <u>INFORME N°{{ str_pad($next, 3, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::now()->year }}-GRUPO DE INVERSIONES “SUR CAPITAL”.</u>
     </b>
 
     <table class="mt-3 tb-d w-100">

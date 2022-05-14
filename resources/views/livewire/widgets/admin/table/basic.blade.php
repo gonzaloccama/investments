@@ -76,8 +76,13 @@
 
                                 @elseif(in_array($header, ['created_at', 'updated_at', 'start_date', 'end_date']))
                                     <?php
-                                    echo ucfirst(Carbon\Carbon::parse($result[$header])
-                                        ->format('Y-m-d'));
+                                    if (isset($humanDiff) && !empty($humanDiff)) {
+                                        echo ucfirst(Carbon\Carbon::parse($result[$humanDiff])
+                                            ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y | g:i:s A'));
+                                    } else {
+                                        echo ucfirst(Carbon\Carbon::parse($result[$header])
+                                            ->format('Y-m-d'));
+                                    }
                                     ?>
 
                                 @elseif(in_array($header, ['progress', 'for_percent']))
@@ -120,6 +125,10 @@
 
                                 @elseif($header == 'not')
 
+                                    @if(isset($customs) && !empty($customs))
+                                        @include('livewire.widgets.admin.table.custom-actions')
+                                    @endif
+
                                     <div class="btn-group dropleft">
                                         <button type="button" class="btn btn-secondary btn-xs" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
@@ -137,9 +146,6 @@
                                         </div>
                                     </div>
 
-                                    @if(isset($customs) && !empty($customs))
-                                        @include('livewire.widgets.admin.table.custom-actions')
-                                    @endif
                                 @endif
                             </th>
                         @endforeach

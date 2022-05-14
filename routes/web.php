@@ -71,13 +71,11 @@ Route::middleware(['userActive'])->group(function () {
         Route::get('/admin/bonus-payments', BonusPaymentComponent::class)->name('admin.bonus-payments');
 
         Route::get('/admin/bonus', BonusComponent::class)->name('admin.bonus');
+        Route::get('daily-report', DailyReportComponent::class)->name('daily.report');
 
         //reports
         Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');
 //        Route::get('daily-report', [DashboardComponent::class, 'dailyReport'])->name('daily.report');
-
-
-        Route::get('daily-report', DailyReportComponent::class)->name('daily.report');
     });
 
 });
