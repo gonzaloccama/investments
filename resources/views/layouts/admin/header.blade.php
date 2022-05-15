@@ -56,102 +56,86 @@
                         aria-haspopup="true" aria-expanded="false">
                     <i class="simple-icon-grid"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right mt-3  position-absolute" id="iconMenuDropdown">
+                <div class="dropdown-menu dropdown-menu-right mt-3 position-absolute" id="iconMenuDropdown"
+                     style="height: 110px !important;">
 
 
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-equalizer d-block"></i>
-                        <span>Settings</span>
+                    <a href="{{ route('admin.investments') }}" class="icon-menu-item">
+                        <i class="simple-icon-layers d-block"></i>
+                        <span>Inversiones</span>
                     </a>
 
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-male-female d-block"></i>
-                        <span>Usuarios</span>
-                    </a>
-
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-layer-forward d-block"></i>
-                        <span>Red Social</span>
-                    </a>
-
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-bar-chart-4 d-block"></i>
-                        <span>Aportes</span>
-                    </a>
-
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-file d-block"></i>
-                        <span>Trabajos</span>
-                    </a>
-
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-suitcase d-block"></i>
-                        <span>Tareas</span>
+                    <a href="{{ route('admin.upcoming-payments') }}" class="icon-menu-item">
+                        <i class="iconsminds-folders d-block"></i>
+                        <span>Retorno</span>
                     </a>
 
                 </div>
             </div>
 
-            <div class="position-relative d-inline-block">
-                <button class="header-icon btn btn-empty" type="button" id="notificationButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="simple-icon-bell"></i>
-                    <span class="count">3</span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right mt-3 position-absolute" id="notificationDropdown">
-                    <div class="scroll">
-                        <div class="d-flex flex-row mb-3 pb-3 border-bottom">
-                            <a href="#">
-                                <img src="{{ asset('assets/img/profiles/l-2.jpg') }}" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
-                            </a>
-                            <div class="pl-3">
+            @if(0)
+                <div class="position-relative d-inline-block">
+                    <button class="header-icon btn btn-empty" type="button" id="notificationButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="simple-icon-bell"></i>
+                        <span class="count">3</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right mt-3 position-absolute" id="notificationDropdown">
+                        <div class="scroll">
+                            <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                                 <a href="#">
-                                    <p class="font-weight-medium mb-1">Joisse Kaycee just sent a new comment!</p>
-                                    <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    <img src="{{ asset('assets/img/profiles/l-2.jpg') }}" alt="Notification Image"
+                                         class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                                 </a>
+                                <div class="pl-3">
+                                    <a href="#">
+                                        <p class="font-weight-medium mb-1">Joisse Kaycee just sent a new comment!</p>
+                                        <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex flex-row mb-3 pb-3 border-bottom">
-                            <a href="#">
-                                <img src="{{ asset('assets/img/notifications/1.jpg') }}" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
-                            </a>
-                            <div class="pl-3">
+                            <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                                 <a href="#">
-                                    <p class="font-weight-medium mb-1">1 item is out of stock!</p>
-                                    <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    <img src="{{ asset('assets/img/notifications/1.jpg') }}" alt="Notification Image"
+                                         class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                                 </a>
+                                <div class="pl-3">
+                                    <a href="#">
+                                        <p class="font-weight-medium mb-1">1 item is out of stock!</p>
+                                        <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex flex-row mb-3 pb-3 border-bottom">
-                            <a href="#">
-                                <img src="{{ asset('assets/img/notifications/2.jpg') }}" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
-                            </a>
-                            <div class="pl-3">
+                            <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                                 <a href="#">
-                                    <p class="font-weight-medium mb-1">New order received! It is total $147,20.</p>
-                                    <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    <img src="{{ asset('assets/img/notifications/2.jpg') }}" alt="Notification Image"
+                                         class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                                 </a>
+                                <div class="pl-3">
+                                    <a href="#">
+                                        <p class="font-weight-medium mb-1">New order received! It is total $147,20.</p>
+                                        <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex flex-row mb-3 pb-3 ">
-                            <a href="#">
-                                <img src="{{ asset('assets/img/notifications/3.jpg') }}" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
-                            </a>
-                            <div class="pl-3">
+                            <div class="d-flex flex-row mb-3 pb-3 ">
                                 <a href="#">
-                                    <p class="font-weight-medium mb-1">3 items just added to wish list by a user!
-                                    </p>
-                                    <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    <img src="{{ asset('assets/img/notifications/3.jpg') }}" alt="Notification Image"
+                                         class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                                 </a>
+                                <div class="pl-3">
+                                    <a href="#">
+                                        <p class="font-weight-medium mb-1">3 items just added to wish list by a user!
+                                        </p>
+                                        <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
+
 
             <button class="header-icon btn btn-empty d-none d-sm-inline-block" type="button" id="fullScreenButton">
                 <i class="simple-icon-size-fullscreen"></i>
@@ -174,9 +158,8 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right mt-3">
-                <a class="dropdown-item" href="#">Mi cuenta</a>
-                <a class="dropdown-item" href="#">Cambiar
-                    Contraseña</a>
+                <a class="dropdown-item" href="{{ route('admin.profile') . '?tab=edit-profile' }}">Mi cuenta</a>
+                <a class="dropdown-item" href="{{ route('admin.profile') . '?tab=chang-pwd' }}">Cambiar Contraseña</a>
                 <div class="separator"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

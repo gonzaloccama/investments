@@ -1,4 +1,4 @@
-@if(!in_array($investment->status, ['active', 'completed']))
+@if(!in_array($investment->status, ['active', 'completed', 'canceled']) && !$investment->amount)
     <div class="position-absolute card-top-buttons">
         <button class="btn btn-secondary icon-button"
                 wire:click.prevent="openEdit">
@@ -58,7 +58,7 @@
     <tr>
         <th class="text-theme-1">Progreso:</th>
         <td>
-            @if($investment->status == 'active')
+            @if(in_array($investment->status, ['active', 'completed']))
                 {{ __('Faltan: ') . intdiv($investment->remaining_hours, 24) . ' días, ' . ($investment->remaining_hours % 24) . ' horas' }}
                 <br>
 

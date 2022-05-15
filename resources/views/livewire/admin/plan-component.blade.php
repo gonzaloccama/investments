@@ -64,6 +64,7 @@
 
             window.livewire.on('refreshContent', () => {
                 activeSelect2('#time_id', 'time_id');
+                activeSelect2('#currency', 'currency');
             });
 
             window.livewire.on('refreshSection', () => {

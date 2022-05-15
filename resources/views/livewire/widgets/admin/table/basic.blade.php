@@ -86,31 +86,44 @@
                                     ?>
 
                                 @elseif(in_array($header, ['progress', 'for_percent']))
-                                    @if(in_array($result->status, ['active', 'completed']))
+                                    @if(in_array($result->status, ['active', /*'inactive',*/ 'completed', 'canceled']))
                                         @if($result->remaining_hours == 0)
-                                            Completado
+
+                                            @if($result->payment_date)
+                                                Reembolsado
+                                            @else
+                                                Completado
+                                            @endif
+                                        @elseif($result->status == 'canceled')
+                                            Cancelado
                                         @else
                                             {{ intdiv($result->remaining_hours, 24) . ' días, ' . ($result->remaining_hours % 24) . ' horas' }}
                                         @endif
 
                                         <?php
-                                        $prc = $result->percent > 97 ? '#317347' : '#1D477A';
+                                        $percent = $result->percent;
 
+                                        $prc = $result->percent > 97 ? '#317347' : '#1D477A';
 
                                         if ($result->status == 'canceled') {
                                             $prc = '#f63c44';
+                                            $percent = 0.00;
                                         }
                                         ?>
 
                                         <div class="progress-outer" style="border-color:{{ $prc }};">
                                             <div class="progress">
                                                 <div class="progress-bar progress-bar-striped"
-                                                     style="width:{{ $result->percent }}%; background-color: {{ $prc }};"></div>
+                                                     style="width:{{ $percent }}%; background-color: {{ $prc }};"></div>
                                                 <div class="progress-value" style="color: {{ $prc }};">
-                                                    <span>{{ $result->percent }}</span>%
+                                                    <span>{{ $percent }}</span>%
                                                 </div>
                                             </div>
                                         </div>
+                                        {{--                                    @elseif(in_array($result->status, ['canceled']))--}}
+                                        {{--                                        <span class="rounded-0 badge badge-canceled">--}}
+                                        {{--                                               inactivo--}}
+                                        {{--                                            </span>--}}
                                     @else
                                         @if($result->amount > 0)
                                             <span class="rounded-0 badge badge-success-1">

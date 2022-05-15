@@ -9,7 +9,7 @@
     <div class="card border rounded-0">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
-            <span style="color: white;position: absolute; margin-top: -17px; margin-left: -12px">
+            <span style="color: #a0a0a0;position: absolute; margin-top: -17px; margin-left: -12px">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1" fill="none"
                      stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -55,7 +55,9 @@
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="simple-icon-calendar"></i>
-                                    <p class="card-text font-weight-semibold mb-0">{{ $typeBonus[$payment->toBonus->type] }}</p>
+                                    <p class="card-text font-weight-semibold mb-0">
+                                        {{ $typeBonus[$payment->toBonus->type] }}
+                                    </p>
                                     <p class="lead text-center font-22">
                                         {{ number_format($payment->toBonus->percent, 0, '.', ',') }}%
                                     </p>
@@ -86,26 +88,26 @@
             </div>
 
             @if($payment->amount)
-                <div class="text-right mb-5">
 
-                    @if(in_array($payment->status, ['pending']))
-                        {{--                        @if($refer = \App\Models\User::where('dni', $payment->toBonus->referred_to)->count() && $payment->toBonus->type == 'referred' || $payment->toBonus->type != 'referred')--}}
-
-                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
-                           id="pending"
-                           target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
-
-                        {{--                        @endif--}}
+                @if(in_array($payment->status, ['pending']))
+                    @if($refer = \App\Models\User::where('dni', $payment->toBonus->referred_to)->count() && $payment->toBonus->type == 'referred' || $payment->toBonus->type != 'referred')
+                        <div class="text-right mb-5">
+                            <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
+                               id="pending"
+                               target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+                        </div>
                     @endif
+                @endif
 
 
-                    @if(in_array($payment->status, ['paid']) && $receipt = \App\Models\Admin\Receipt::where('payment_id',  $payment->id)->first())
+                @if(in_array($payment->status, ['paid']) && $receipt = \App\Models\Admin\Receipt::where('payment_id',  $payment->id)->first())
+                    <div class="text-right mb-5">
                         <a href="{{ asset('assets/uploads/receipts/') . '/' . $receipt->attachment }}"
                            class="btn btn-success btn-sm" id="paid"
                            target="_blank"><b><i class="la la-file"></i>&nbsp;&nbsp;Recibo</b></a>
-                    @endif
+                    </div>
+                @endif
 
-                </div>
             @endif
 
             <div class="row">
@@ -114,11 +116,11 @@
                         <div class="card-body">
                             <h3 class="card-title">Detalles del pago</h3>
 
-{{--                            @if(!$refer)--}}
+                            @if(!$refer)
                                 <div class="alert alert-danger"><i class="fe-alert-triangle"></i> El referido por el
                                     usuario no está en nuestros registros
                                 </div>
-{{--                            @endif--}}
+                            @endif
 
                             <table class="table">
                                 <tr>
@@ -143,6 +145,17 @@
                                     <th class="text-theme-1">Codigo del Bonus</th>
                                     <td>
                                         {{ $payment->toBonus->code }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-theme-1">Recomendado</th>
+                                    <td>
+                                        DNI: {{ $payment->toBonus->referred_to }} <br>
+                                        @if(!$refer)
+                                            <div class="alert alert-danger mt-2"><i class="fe-alert-triangle"></i> El
+                                                referido aun no se encuentra!
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>

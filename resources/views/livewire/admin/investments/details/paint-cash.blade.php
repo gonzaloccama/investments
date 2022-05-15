@@ -31,7 +31,7 @@
                             'text' => 'Evidencia',
                             'required' => 1,
                             'type' => 'file',
-                            'accept' => '',
+                            'accept' => 'image',
                         ];
                         ?>
                         @include('livewire.widgets.admin.form.input-h', $dt)
@@ -46,13 +46,9 @@
                     </div>
 
 
-                    <div class="col-md-12 d-flex">
-                        <button type="submit" class="btn btn-secondary btn-sm ml-auto"
-                                wire:click.prevent="saveInPaint">
-                            <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
-                        </button>
+                    <div class="col-md-12">
+                        @include('livewire.admin.investments.details.save-button')
                     </div>
-
                 </div>
             </div>
         </div>

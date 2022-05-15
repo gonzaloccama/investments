@@ -13,21 +13,21 @@
         <th class="text-theme-1">Codigo:</th>
         <td>{{ $code }}</td>
     </tr>
-    <tr>
-        <th class="text-theme-1">Modeda:</th>
-        <td>
-            <?php
-            $options = \App\Models\Currency::select('currencies.*')
-                ->selectRaw('CONCAT("(", symbol,")"," ", currency) as currency')->get();
-            ?>
-            <select class="form-control" id="currency" wire:model="currency">
-                @foreach($options as $option)
-                    <option value="{{ $option->id }}">{{ $option->currency }}</option>
-                @endforeach
-            </select>
-            @include('livewire.widgets.admin.form.error', ['name' => 'currency'])
-        </td>
-    </tr>
+{{--    <tr>--}}
+{{--        <th class="text-theme-1">Modeda:</th>--}}
+{{--        <td>--}}
+{{--            <?php--}}
+{{--            $options = \App\Models\Currency::select('currencies.*')--}}
+{{--                ->selectRaw('CONCAT("(", symbol,")"," ", currency) as currency')->get();--}}
+{{--            ?>--}}
+{{--            <select class="form-control" id="currency" wire:model="currency">--}}
+{{--                @foreach($options as $option)--}}
+{{--                    <option value="{{ $option->id }}">{{ $option->currency }}</option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
+{{--            @include('livewire.widgets.admin.form.error', ['name' => 'currency'])--}}
+{{--        </td>--}}
+{{--    </tr>--}}
     <tr>
         <th class="text-theme-1">Meses:</th>
         <td>
@@ -40,7 +40,7 @@
         <td>
             <?php
             $options = \App\Models\Plan::select('plans.*')
-                ->selectRaw('CONCAT(percent," %"," ", name) as plan')->get();
+                ->selectRaw('CONCAT(name," (",percent,"%)") as plan')->get();
             ?>
             <select class="form-control" id="plan" wire:model="plan">
                 @foreach($options as $option)

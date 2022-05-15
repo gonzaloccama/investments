@@ -2,7 +2,7 @@
     <div class="card border rounded-0">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
-            <span style="color: white;position: absolute; margin-top: -17px; margin-left: -12px">
+            <span style="color: #a0a0a0;position: absolute; margin-top: -17px; margin-left: -12px">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1" fill="none"
                      stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -62,10 +62,14 @@
                                 <div class="card-body text-center">
                                     <i class="iconsminds-calendar-4"></i>
                                     <p class="card-text font-weight-semibold mb-0">Días restantes</p>
-                                    <p class="lead text-center font-22">
+                                    <p class="lead text-center font-22 {{ $investment->status == 'completed' ? 'text-success' : '' }}">
                                         <?php
                                         if ($investment->status == 'active') {
                                             echo intdiv($investment->remaining_hours, 24) . ' días, ' . ($investment->remaining_hours % 24) . ' horas';
+                                        } elseif ($investment->payment_date) {
+                                            echo 'Completado <small class="font-11">— Reembosado</small>';
+                                        } elseif ($investment->status == 'completed') {
+                                            echo 'Completado';
                                         } else {
                                             echo 'Inactivo';
                                         }
@@ -79,31 +83,63 @@
                 </div>
             </div>
 
+
             @if($investment->amount && $investment->amount >= $investment->isPlan->min_amount)
-                <div class="text-right mb-5">
 
-                    @if(in_array($investment->status, ['active', 'completed']))
-                        @if($investment->end_date <= \Carbon\Carbon::today())
-                            @if($investment->status != 'completed')
-                                <a href="javascript:;" wire:click.prevent="updatePayment" class="btn btn-success btn-sm"
-                                   target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Reembolsar</b></a>
-                            @endif
-                        @else
-                            <a href="javascript:;" wire:click.prevent="cancelInvestment"
-                               class="btn btn-danger btn-sm" target="_blank"><b><i class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar
-                                    inversión</b></a>
-                        @endif
-                        <a href="{{ route('admin.upcoming-payments').'?investment=' . base64_encode($investment->id) }}"
-                           class="btn btn-secondary btn-sm"><b><i class="fe-printer"></i>&nbsp;&nbsp;Pagos</b></a>
+                @switch($investment->status)
+                    @case(in_array($investment->status, ['active', 'completed']))
+                    <div class="text-right mb-5">
+                        <div class="btn-group dropleft">
 
-                        <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
-                           class="btn btn-secondary btn-sm" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Imprimir</b></a>
-                    @else
+                            <button class="btn btn-secondary btn-sm text-white mr-2" type="button"
+                                    style="border-radius: 25px !important;"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="iconsminds-arrow-left-2"></i>
+                                Más opciones
+                            </button>
+
+                            <div class="dropdown-menu">
+
+
+                                @if($investment->end_date <= \Carbon\Carbon::today())
+                                    <?php
+                                    $_payment = $investment->inPayment->where('type_payment', 'capital')->first();
+                                    ?>
+                                    @if($investment->status != 'completed')
+                                        <a href="javascript:;" wire:click.prevent="updatePayment"
+                                           class="dropdown-item text-success"
+                                           target="_blank"><b><i class="fe-circle"></i>&nbsp;&nbsp;Reembolsar</b></a>
+                                    @elseif($receipt = \App\Models\Admin\Receipt::where('payment_id',  $_payment->id)->first())
+                                        <a href="{{ asset('assets/uploads/receipts/') . '/' . $receipt->attachment }}"
+                                           class="dropdown-item text-success"
+                                           target="_blank"><b><i class="fe-file"></i>&nbsp;&nbsp;Recibo</b></a>
+                                    @endif
+                                @else
+                                    <a href="javascript:;" wire:click.prevent="cancelInvestment"
+                                       class="dropdown-item text-danger" target="_blank"><b><i
+                                                class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar
+                                            inversión</b></a>
+                                @endif
+
+                                <a href="{{ route('admin.upcoming-payments').'?investment=' . base64_encode($investment->id) }}"
+                                   class="dropdown-item text-primary"><b><i
+                                            class="fe-corner-up-right"></i>&nbsp;&nbsp;Pagos mensuales</b></a>
+
+                                <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
+                                   class="dropdown-item text-primary" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Contrato</b></a>
+
+                            </div>
+                        </div>
+                    </div>
+                    @break
+                    @case($investment->status == 'inactive')
+                    <div class="text-right mb-5">
                         <a href="javascript:;" wire:click.prevent="activeInvestment"
                            class="btn btn-secondary btn-sm"
                            target="_blank"><b><i class="fe-check"></i>&nbsp;&nbsp;Activar inversión</b></a>
-                    @endif
-                </div>
+                    </div>
+                    @break
+                @endswitch
             @endif
 
             <div class="row">
@@ -141,7 +177,7 @@
                 <div class="col-md-5">
                     <div class="card border">
                         <div class="card-body">
-                            @if(!in_array($investment->status, ['active', 'completed']))
+                            @if(!in_array($investment->status, ['active', 'completed', 'canceled']))
                                 <div class="position-absolute card-top-buttons">
                                     <button class="btn btn-secondary icon-button"
                                             wire:click.prevent="openPaint('cash')">
@@ -175,7 +211,7 @@
                 <div class="col-md-7">
                     <div class="card border">
                         <div class="card-body">
-                            @if(!in_array($investment->status, ['active', 'completed']))
+                            @if(!in_array($investment->status, ['active', 'completed', 'canceled']))
                                 <div class="position-absolute card-top-buttons">
                                     <button class="btn btn-secondary icon-button"
                                             wire:click.prevent="openPaint('bank-transfer')">

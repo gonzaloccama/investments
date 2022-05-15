@@ -46,7 +46,7 @@
 </head>
 <body>
 
-<div style="border: 3px solid rgba(17,39,92,0.34); border-radius: 25px; padding: 20px 30px;">
+<div style="border: 3px solid rgba(17,39,92,0.34); border-radius: 25px; padding: 20px 30px; box-shadow: 1px 1px 20px 3px rgba(17,39,92,0.7) !important;">
     <header class="clearfix">
         <div id="logo">
             <img src="{{ public_path().'/assets/logos/logo.png' }}"
@@ -139,7 +139,7 @@
         </table>
     </main>
 </div>
-<hr>
+<hr class="mt-5 mb-5">
 <div style="border: 3px solid rgba(17,39,92,0.34); border-radius: 25px; padding: 20px 30px;">
     <header class="clearfix">
         <div id="logo">
@@ -169,17 +169,17 @@
     <main>
 
         <p class="text-justify mb-0 font-16"><b>Entregué al Sr(a):</b>
-            <span style="color: #6a6a6a;">{{ $payment->investment->user->fullname }}</span>
+            <span style="color: #6a6a6a;">{{ $payment->investment->user->fullname }}</span>.
         </p>
 
         <p class="text-justify mb-0 font-16"><b>La suma de:</b>
             <span
-                style="color: #6a6a6a;">{{ $payment->isCurrency->symbol }} {{ number_format($payment->amount, 2, '.', ',') }}</span>
+                style="color: #6a6a6a;">{{ $payment->isCurrency->symbol }} {{ number_format($payment->amount, 2, '.', ',') }}</span>.
         </p>
 
         <p class="text-justify mb-0 font-16"><b>Por concepto de:</b>
             <span style="color: #6a6a6a;">
-            Pago por retorno mensual.
+                {{ $type_paid[$payment->type_payment] }}.
             </span>
         </p>
 

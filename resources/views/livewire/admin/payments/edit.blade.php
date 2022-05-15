@@ -2,7 +2,7 @@
     <div class="card border rounded-0">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
-            <span style="color: white;position: absolute; margin-top: -17px; margin-left: -12px">
+            <span style="color: #a0a0a0;position: absolute; margin-top: -17px; margin-left: -12px">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1" fill="none"
                      stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -39,7 +39,7 @@
                                     </p>
                                     <p class="lead text-center font-22">
                                         {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->return_amount, 2, '.', ',') }}
-                                       </p>
+                                    </p>
                                 </div>
                             </a>
                         </div>
@@ -78,17 +78,38 @@
             </div>
 
             @if($payment->amount)
-                <div class="text-right mb-5">
+                <div class="text-right">
 
                     @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
-                        <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
-                           id="pending"
-                           target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+                        @if(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(15, 31)))
+                            @if(in_array(\Carbon\Carbon::now()->day, range(1, 5)))
+                                <a href="javascript:;" wire:click.prevent="updateData"
+                                   class="btn btn-secondary btn-sm mb-5"
+                                   id="pending"
+                                   target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+                            @else
+                                <div class="alert alert-warning mb-5">
+                                    <b>Los pagos se habilitan los días 1—5 de cada mes.</b>
+                                </div>
+                            @endif
+                        @elseif(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(1, 14)))
+                            @if(in_array(\Carbon\Carbon::now()->day, range(15, 20)))
+                                <a href="javascript:;" wire:click.prevent="updateData"
+                                   class="btn btn-secondary btn-sm mb-5"
+                                   id="pending"
+                                   target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+                            @else
+                                <div class="alert alert-warning mb-5">
+                                    <b>Los pagos se habilitan los días 15—20 de cada</b>
+                                    mes.
+                                </div>
+                            @endif
+                        @endif
                     @endif
 
                     @if(in_array($payment->status, ['paid']) && $receipt = \App\Models\Admin\Receipt::where('payment_id',  $payment->id)->first())
                         <a href="{{ asset('assets/uploads/receipts/') . '/' . $receipt->attachment }}"
-                           class="btn btn-success btn-sm" id="paid"
+                           class="btn btn-success btn-sm mb-5" id="paid"
                            target="_blank"><b><i class="la la-file"></i>&nbsp;&nbsp;Recibo</b></a>
                     @endif
 

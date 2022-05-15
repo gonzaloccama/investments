@@ -17,6 +17,7 @@ class CreatePlansTable extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('percent');
+            $table->integer('currency');
             $table->decimal('min_amount');
             $table->decimal('max_amount')->nullable();
             $table->double('status');

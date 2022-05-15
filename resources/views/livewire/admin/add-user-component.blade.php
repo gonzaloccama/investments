@@ -154,10 +154,19 @@
     <div class="separator mb-5 mt-5"></div>
 
     <div class="text-right mt-3">
-        <button type="submit" class="btn btn-secondary" wire:click.prevent="saveData">
-            <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
-        </button>
+        <div wire:loading wire:target="saveData">
+            <button type="submit" class="btn btn-secondary text-white" disabled>
+                <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardando...</b>
+            </button>
+        </div>
+
+        <div wire:loading.remove>
+            <button type="submit" class="btn btn-secondary" wire:click.prevent="saveData">
+                <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
+            </button>
+        </div>
     </div>
+
     <script type="text/javascript">
         console.log("Child loaded.");
         initField();
@@ -194,6 +203,7 @@
                     set(varModel, $(this).val());
                 });
             }
+
             function formatOption(option) {
                 var $option = $(
                     '<strong>' + option.text + '</strong>'

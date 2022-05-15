@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Http\Livewire\Reports\ContractComponent;
+use App\Models\Admin\Receipt;
 use App\Models\BankTransfer;
 use App\Models\CashDeposit;
 use App\Models\Investment;
 use App\Models\Payment;
+use App\Models\Plan;
 use App\Models\SystemConfig;
 use App\Models\User;
 use Carbon\Carbon;
@@ -83,7 +85,7 @@ class InvestmentComponent extends BaseAdmin
         'progress' => '<b><ins>Código</ins></b>',
     ];
     protected $rules = [
-        'currency' => 'required',
+//        'currency' => 'required',
         'period' => 'required',
         'plan' => 'required',
         'start_date' => 'required',
@@ -221,7 +223,7 @@ class InvestmentComponent extends BaseAdmin
         $data->code = $code;
         $data->user_id = $this->userId;
         $data->amount = $this->amount;
-        $data->currency = $this->currency;
+        $data->currency = Plan::find($this->plan)->currency;
         $data->period = $this->period;
         $data->plan = $this->plan;
         $data->start_date = $this->start_date;
@@ -254,7 +256,7 @@ class InvestmentComponent extends BaseAdmin
         $this->validate($this->rules, [], $this->attributes);
         $data = Investment::find($this->itemId);
 
-        $data->currency = $this->currency;
+        $data->currency = Plan::find($this->plan)->currency;
         $data->period = $this->period;
         $data->plan = $this->plan;
         $data->start_date = $this->start_date;
@@ -463,6 +465,8 @@ class InvestmentComponent extends BaseAdmin
 
                     $dt->save();
 
+                    $this->receipt($dt->id);
+
                     $this->emit('notification', ['El pago de la inversión de ha actualizado exitosamente']);
                     $this->closeFrame();
                 }
@@ -567,4 +571,39 @@ class InvestmentComponent extends BaseAdmin
         $this->closeAddUser();
     }
 
+    /*** receipt refund capital ***/
+    public function receipt($id)
+    {
+            $pdf = app('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option("enable_php", true);
+            $pdf->setPaper('A4');
+
+            $data['config'] = SystemConfig::find(1);
+            $data['payment'] = Payment::find($id);
+
+            $pdf->loadView('livewire.admin.payments.details.receipt', $data);
+
+            $path = public_path()
+                . '/assets/uploads/receipts/';
+
+            $file = 'recibo-'
+                . str_pad($data['payment']->id, 6, '0', STR_PAD_LEFT) . '-'
+                . $data['payment']->investment->code . '.pdf';
+
+            $receipt = new Receipt();
+            $receipt->investment_id = $data['payment']->investment->id;
+            $receipt->payment_id = $data['payment']->id;
+            $receipt->attachment = $file;
+
+            if ($pdf->save($path . $file)) {
+                $receipt->save();
+                return true;
+            } else {
+                return false;
+            }
+
+//            return $pdf->download($file . '.pdf');
+//        return $pdf->stream('recibo' . '.pdf');
+
+    }
 }

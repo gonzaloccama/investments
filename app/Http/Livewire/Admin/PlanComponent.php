@@ -10,6 +10,7 @@ class PlanComponent extends BaseAdmin
 {
     public $name;
     public $percent;
+    public $currency;
     public $min_amount;
     public $max_amount;
     public $status;
@@ -19,6 +20,7 @@ class PlanComponent extends BaseAdmin
 //        'id' => '#',
         'name' => 'Nombre',
         'percent' => 'Porcentaje',
+        'currency' => 'Moneda',
         'min_amount' => 'Monto mínimo',
         'max_amount' => 'Monto máximo',
         'status' => 'Estado',
@@ -30,6 +32,7 @@ class PlanComponent extends BaseAdmin
     protected $attributes = [
         'name' => '<b><ins>Nombre</ins></b>',
         'percent' => '<b><ins>Porcentaje</ins></b>',
+        'currency' => '<b><ins>Moneda</ins></b>',
         'min_amount' => '<b><ins>Monto mínimo</ins></b>',
         'max_amount' => '<b><ins>Monto máximo</ins></b>',
         'status' => '<b><ins>Estado</ins></b>',
@@ -39,6 +42,7 @@ class PlanComponent extends BaseAdmin
     protected $rules = [
         'name' => 'required|min:3',
         'percent' => 'required|numeric',
+        'currency' => 'required',
         'min_amount' => 'required|numeric',
         'max_amount' => 'nullable|numeric',
         'status' => 'nullable',
@@ -61,7 +65,7 @@ class PlanComponent extends BaseAdmin
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['not', 'plan_time']);
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'plan_time', 'currency']);
         $findIn = [];
         $table = 'plans';
 
@@ -69,7 +73,7 @@ class PlanComponent extends BaseAdmin
             $findIn[] = $table . '.' . $item;
         }
 
-//        $findIn[] = 'times.name';
+        $findIn[] = 'currencies.currency';
 
         $data['results'] = Plan::orderBy($this->fieldSort, $this->sort)
             ->where(function ($query) use ($findIn) {
@@ -78,8 +82,9 @@ class PlanComponent extends BaseAdmin
                 }
             })
             ->select($table . '.*')
-            ->selectRaw('times.name as plan_time')
+            ->selectRaw('times.name as plan_time, concat(currencies.currency, " (", currencies.symbol, ")") as currency')
             ->join('times', 'times.id', '=', $table . '.time_id')
+            ->join('currencies', 'currencies.id', '=', $table . '.currency')
             ->paginate($this->limit);
 
         $data['_title'] = 'Planes';
@@ -110,6 +115,7 @@ class PlanComponent extends BaseAdmin
 
         $data->name = $this->name;
         $data->percent = $this->percent;
+        $data->currency = $this->currency;
         $data->min_amount = $this->min_amount;
         $data->max_amount = $this->max_amount;
         $data->status = $this->status;
@@ -131,6 +137,7 @@ class PlanComponent extends BaseAdmin
 
         $this->name = $data->name;
         $this->percent = $data->percent;
+        $this->currency = $data->currency;
         $this->min_amount = $data->min_amount;
         $this->max_amount = $data->max_amount;
         $this->status = $data->status;
@@ -149,6 +156,7 @@ class PlanComponent extends BaseAdmin
 
             $data->name = $this->name;
             $data->percent = $this->percent;
+            $data->currency = $this->currency;
             $data->min_amount = $this->min_amount;
             $data->max_amount = $this->max_amount;
             $data->status = $this->status;
@@ -174,6 +182,7 @@ class PlanComponent extends BaseAdmin
 
         $this->name = null;
         $this->percent = null;
+        $this->currency = null;
         $this->min_amount = null;
         $this->max_amount = null;
         $this->status = true;

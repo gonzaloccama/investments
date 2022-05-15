@@ -2,7 +2,7 @@
     <div class="card">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
-            <span style="color: white;position: absolute; margin-top: -17px; margin-left: -12px">
+            <span style="color: #a0a0a0;position: absolute; margin-top: -17px; margin-left: -12px">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1" fill="none"
                      stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
                     <line x1="18" y1="6" x2="6" y2="18"></line>

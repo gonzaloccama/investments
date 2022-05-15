@@ -1058,4 +1058,12 @@
     .btn-success {
         background-color: #117e1c;
     }
+
+    input:read-only {
+        background-color: rgba(37, 43, 47, 0.18) !important;
+    }
+
+    .w-45{
+        width: 45% !important;
+    }
 </style>

@@ -12,6 +12,7 @@ use App\Http\Livewire\Admin\InvestmentComponent;
 use App\Http\Livewire\Admin\InvestmentSearchComponent;
 use App\Http\Livewire\Admin\PaymentComponent;
 use App\Http\Livewire\Admin\PlanComponent;
+use App\Http\Livewire\Admin\ProfileComponent;
 use App\Http\Livewire\Admin\TimeComponent;
 use App\Http\Livewire\Admin\UpcomingPaymentComponent;
 use App\Http\Livewire\Admin\UsersComponent;
@@ -76,6 +77,8 @@ Route::middleware(['userActive'])->group(function () {
         //reports
         Route::get('contract-investments', [InvestmentComponent::class, 'printAgreement'])->name('contract.investments');
 //        Route::get('daily-report', [DashboardComponent::class, 'dailyReport'])->name('daily.report');
+
+        Route::get('/admin/profile', ProfileComponent::class)->name('admin.profile');
     });
 
 });

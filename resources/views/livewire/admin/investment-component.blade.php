@@ -83,7 +83,7 @@
         $(document).ready(function () {
 
             window.livewire.on('refreshContent', () => {
-                activeSelect2('#currency', 'currency');
+                // activeSelect2('#currency', 'currency');
                 activeSelect2('#plan', 'plan');
                 activeSelect2('#bank_id', 'bank_id');
 
