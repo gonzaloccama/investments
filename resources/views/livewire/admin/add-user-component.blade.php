@@ -7,17 +7,19 @@
                     'name' => 'dni',
                     'text' => 'DNI',
                     'required' => 1,
-                    'type' => 'text',
+                    'function' => 'searchData'
                 ];
                 ?>
-                @include('livewire.widgets.admin.form.input-h', $dt)
+                @include('livewire.widgets.admin.form.input-button-h', $dt)
 
-                <?php
+
+            <?php
                 $dt = [
                     'name' => 'firstname',
                     'text' => 'Nombres',
                     'required' => 1,
                     'type' => 'text',
+                    'readonly' => $disable_read,
                 ];
                 ?>
                 @include('livewire.widgets.admin.form.input-h', $dt)
@@ -28,6 +30,7 @@
                     'text' => 'Apellidos',
                     'required' => 1,
                     'type' => 'text',
+                    'readonly' => $disable_read,
                 ];
                 ?>
                 @include('livewire.widgets.admin.form.input-h', $dt)

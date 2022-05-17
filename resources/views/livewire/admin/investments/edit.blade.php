@@ -100,6 +100,13 @@
 
                             <div class="dropdown-menu">
 
+                                <a href="{{ route('admin.upcoming-payments').'?investment=' . base64_encode($investment->id) }}"
+                                   class="dropdown-item text-primary"><b><i
+                                            class="fe-corner-up-right"></i>&nbsp;&nbsp;Pagos mensuales</b></a>
+
+                                <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
+                                   class="dropdown-item text-primary" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Contrato</b></a>
+
 
                                 @if($investment->end_date <= \Carbon\Carbon::today())
                                     <?php
@@ -121,12 +128,7 @@
                                             inversión</b></a>
                                 @endif
 
-                                <a href="{{ route('admin.upcoming-payments').'?investment=' . base64_encode($investment->id) }}"
-                                   class="dropdown-item text-primary"><b><i
-                                            class="fe-corner-up-right"></i>&nbsp;&nbsp;Pagos mensuales</b></a>
 
-                                <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
-                                   class="dropdown-item text-primary" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Contrato</b></a>
 
                             </div>
                         </div>

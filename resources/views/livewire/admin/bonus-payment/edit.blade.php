@@ -86,11 +86,14 @@
                     </div>
                 </div>
             </div>
+            <?php
+            $refer = \App\Models\User::where('dni', $payment->toBonus->referred_to)->get();
+            ?>
 
             @if($payment->amount)
 
                 @if(in_array($payment->status, ['pending']))
-                    @if($refer = \App\Models\User::where('dni', $payment->toBonus->referred_to)->count() && $payment->toBonus->type == 'referred' || $payment->toBonus->type != 'referred')
+                    @if($refer->count() && $payment->toBonus->type == 'referred' || $payment->toBonus->type != 'referred')
                         <div class="text-right mb-5">
                             <a href="javascript:;" wire:click.prevent="updateData" class="btn btn-secondary btn-sm"
                                id="pending"
@@ -116,7 +119,7 @@
                         <div class="card-body">
                             <h3 class="card-title">Detalles del pago</h3>
 
-                            @if(!$refer)
+                            @if(!$refer->count())
                                 <div class="alert alert-danger"><i class="fe-alert-triangle"></i> El referido por el
                                     usuario no está en nuestros registros
                                 </div>
@@ -151,7 +154,7 @@
                                     <th class="text-theme-1">Recomendado</th>
                                     <td>
                                         DNI: {{ $payment->toBonus->referred_to }} <br>
-                                        @if(!$refer)
+                                        @if(!$refer->count())
                                             <div class="alert alert-danger mt-2"><i class="fe-alert-triangle"></i> El
                                                 referido aun no se encuentra!
                                             </div>

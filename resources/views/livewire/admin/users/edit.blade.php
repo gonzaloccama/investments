@@ -27,6 +27,7 @@
                             'text' => 'DNI',
                             'required' => 1,
                             'type' => 'text',
+                            'readonly' => true,
                         ];
                         ?>
                         @include('livewire.widgets.admin.form.input-h', $dt)
@@ -37,6 +38,7 @@
                             'text' => 'Nombres',
                             'required' => 1,
                             'type' => 'text',
+                            'readonly' => true,
                         ];
                         ?>
                         @include('livewire.widgets.admin.form.input-h', $dt)
@@ -47,6 +49,7 @@
                             'text' => 'Apellidos',
                             'required' => 1,
                             'type' => 'text',
+                            'readonly' => true,
                         ];
                         ?>
                         @include('livewire.widgets.admin.form.input-h', $dt)

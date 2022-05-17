@@ -22,17 +22,17 @@
             {{--        </form>--}}
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 col-12">
                     <div class="card border rounded-0 shadow-none p-3">
                         <?php
                         $dt = [
                             'name' => 'dni',
                             'text' => 'DNI',
                             'required' => 1,
-                            'type' => 'text',
+                            'function' => 'searchData'
                         ];
                         ?>
-                        @include('livewire.widgets.admin.form.input-h', $dt)
+                        @include('livewire.widgets.admin.form.input-button-h', $dt)
 
                         <?php
                         $dt = [
@@ -40,6 +40,7 @@
                             'text' => 'Nombres',
                             'required' => 1,
                             'type' => 'text',
+                            'readonly' => $disable_read,
                         ];
                         ?>
                         @include('livewire.widgets.admin.form.input-h', $dt)
@@ -50,6 +51,7 @@
                             'text' => 'Apellidos',
                             'required' => 1,
                             'type' => 'text',
+                            'readonly' => $disable_read,
                         ];
                         ?>
                         @include('livewire.widgets.admin.form.input-h', $dt)
@@ -100,7 +102,7 @@
 
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-12 mt-md-0 mt-3">
                     <div class="card border rounded-0 shadow-none p-3">
                         <?php
                         $dt = [

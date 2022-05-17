@@ -63,7 +63,7 @@
     <div id="notices">
         <span>{{ $created_at }}</span>
     </div>
-{{--    <div class="num">pág. <span class="pagenum"></span></div>--}}
+    {{--    <div class="num">pág. <span class="pagenum"></span></div>--}}
 </footer>
 
 {{--<hr>--}}
@@ -80,7 +80,8 @@
     </p>
 
     <b class="name mb-3 mt-5 font-16 text-left">
-        <u>INFORME N°{{ str_pad($next, 3, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::now()->year }}-GRUPO DE INVERSIONES “SUR CAPITAL”.</u>
+        <u>INFORME N°{{ str_pad($next, 3, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::now()->year }}-GRUPO DE
+            "{{ mb_convert_case($config->name, MB_CASE_UPPER, "UTF-8") }}".</u>
     </b>
 
     <table class="mt-3 tb-d w-100">
@@ -89,7 +90,7 @@
         <tr>
             <th class="pl-4 w-20"><b>DE</b></th>
             <th class="pl-0">:</th>
-            <td class="pl-0 w-70">
+            <td class="pl-0 w-70 text-uppercase font-italic">
                 Sr. JHOSEP MARCELO
                 COILA GONZALES
             </td>
@@ -98,15 +99,15 @@
         <tr>
             <th class="pl-4 w-20"><b>DEL</b></th>
             <th class="pl-0">:</th>
-            <td class="pl-0 w-70">Sr. ANGEL JESUS CASILLA
-                GONZALES
+            <td class="pl-0 w-70 text-uppercase font-italic">
+                Sr(a). {{  mb_convert_case(auth()->user()->fullname, MB_CASE_TITLE, "UTF-8") }}
             </td>
         </tr>
 
         <tr>
             <th class="pl-4 w-20"><b>ASUNTO</b></th>
             <th class="pl-0">:</th>
-            <td class="pl-0 w-70">Informe Diario de
+            <td class="pl-0 w-70 text-uppercase font-italic">Informe Diario de
                 INGRESO DE EFECTIVO
             </td>
         </tr>
@@ -124,8 +125,8 @@
         </tbody>
     </table>
 
-    <p class="text-justify font-14">Yo, ANGEL JESUS CASILLA GONZALES con DNI 70188569, encargado de la administración y
-        caja de la empresa <b>GRUPO DE INVERSIONES “SUR CAPITAL”</b>, procedo hacer parte diario por concepto de ingreso
+    <p class="text-justify font-14">Yo, {{  mb_convert_case(auth()->user()->fullname, MB_CASE_TITLE, "UTF-8") }} con DNI {{ auth()->user()->dni }}, encargado de la administración y
+        caja de la empresa <b>{{ mb_convert_case($config->name, MB_CASE_UPPER, "UTF-8") }}</b>, procedo hacer parte diario por concepto de ingreso
         de efectivo de la fecha
         <?php
         echo ucfirst(Carbon\Carbon::today()
@@ -142,7 +143,7 @@
             </th>
             <td class="p-1 pr-4  text-right w-30">
                 <?php
-                $s = \App\Models\Investment::whereIn('status', ['completed', 'active'])
+                $s = \App\Models\Investment::whereIn('status', ['active'])
                     ->where('currency', 1)->whereDate('created_at', \Carbon\Carbon::today())->sum('amount');
                 ?>
                 {{ 'S/ ' . number_format($s, 2, '.', ',') }}
@@ -155,7 +156,7 @@
             </th>
             <td class="p-1 pr-4 text-right w-30">
                 <?php
-                $d = \App\Models\Investment::whereIn('status', ['completed', 'active'])
+                $d = \App\Models\Investment::whereIn('status', ['active'])
                     ->where('currency', 2)->whereDate('created_at', \Carbon\Carbon::today())->sum('amount');
                 ?>
                 {{ '$ ' . number_format($d, 2, '.', ',') }}
@@ -168,25 +169,33 @@
     <table border="0" cellspacing="0" cellpadding="0" class="font-11">
         <thead>
         <tr>
-            <th class="total">#</th>
-            <th class="desc">DNI</th>
-            <th class="desc">NOMBRES</th>
-            <th class="unit">MONTO</th>
-            <th class="qty">INGRESO</th>
-            <th class="total">RETORNO</th>
+            <th class="total font-15 pt-3 pb-3">CÓDIGO</th>
+            <th class="desc font-15 pt-3 pb-3">DNI</th>
+            <th class="desc font-15 pt-3 pb-3">NOMBRES</th>
+            <th class="unit font-15 pt-3 pb-3">MONTO</th>
+            {{--            <th class="qty">INGRESO</th>--}}
+            <th class="total font-15 pt-3 pb-3">RETORNO</th>
         </tr>
         </thead>
         <tbody>
         @if($investments->count() > 0)
             @foreach($investments as $invest)
                 <tr>
-                    <td class="total">{{ $invest->code }}</td>
-                    <td class="desc">{{ $invest->user->dni }}</td>
-                    <td class="desc">{{ $invest->user->fullname }}
+                    <td class="total p-2"><b>{{ $invest->code }}</b></td>
+                    <td class="desc p-2">{{ $invest->user->dni }}</td>
+                    <td class="desc p-2">{{ mb_convert_case($invest->user->fullname, MB_CASE_TITLE, "UTF-8") }}
                     </td>
-                    <td class="unit">{{ $invest->amount }}</td>
-                    <td class="qty">30</td>
-                    <td class="total">{{ $invest->return_amount }}</td>
+                    <td class="unit text-right p-2 nav-nowrap">
+                        {{ $invest->isCurrency->symbol }}
+                        {{ number_format($invest->amount, 2, '.', ',') }}
+                    </td>
+                    {{--                    <td class="qty p-2">30</td>--}}
+                    <td class="total p-2 nav-nowrap">
+                        <b>
+                            {{ $invest->isCurrency->symbol }}
+                            {{ $invest->return_amount }}
+                        </b>
+                    </td>
                 </tr>
             @endforeach
         @else
@@ -213,12 +222,13 @@
             </td>
         </tr>
         <tr>
-            <td class="col-md-6 pt-0 bg-white text-center">
+            <td class="col-md-6 pt-0 bg-white text-center font-14 text-uppercase">
                 <p class="p-0 m-0">Sr. JHOSEP MARCELO COILA GONZALES</p>
                 <p class="p-0 m-0">GERENTE GENERAL</p>
             </td>
-            <td class="col-md-6 pt-0 bg-white text-center">
-                <p class="p-0 m-0">Sr. ANGEL JESUS CASILLA GONZALES</p>
+            <td class="col-md-6 pt-0 bg-white text-center font-14">
+                <p class="p-0 m-0 text-uppercase">
+                    Sr(a). {{  mb_convert_case(auth()->user()->fullname, MB_CASE_TITLE, "UTF-8") }}</p>
             </td>
         </tr>
     </table>

@@ -19,9 +19,11 @@ class Assistant
     {
         if (in_array(Auth::user()->group, [1, 2, 3])) {
             return $next($request);
-        } else {
-//            Auth::logout();
+        } elseif (in_array(Auth::user()->group, [4, 5])) {
+            Auth::logout();
             return redirect(route('login'));
+        } else {
+            return redirect(route('admin.dashboard'));
         }
     }
 }

@@ -47,6 +47,7 @@
                 'name' => 'firstname',
                 'text' => 'Nombres',
                 'required' => 1,
+                'readonly' => 1,
                 'type' => 'text',
             ];
             ?>
@@ -57,6 +58,7 @@
                 'name' => 'lastname',
                 'text' => 'Apellidos',
                 'required' => 1,
+                'readonly' => 1,
                 'type' => 'text',
             ];
             ?>

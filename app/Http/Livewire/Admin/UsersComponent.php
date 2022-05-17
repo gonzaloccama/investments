@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\DB;
 use Str;
 
@@ -26,6 +28,8 @@ class UsersComponent extends BaseAdmin
     public $birthdate;
     public $relationship;
     public $job;
+
+    public $disable_read;
 
     public $headers = [
         'dni' => 'DNI',
@@ -148,8 +152,8 @@ class UsersComponent extends BaseAdmin
         $data->region = $this->region;
         $data->country = $this->country;
         $data->dni = $this->dni;
-        $data->firstname = $this->firstname;
-        $data->lastname = $this->lastname;
+        $data->firstname = mb_convert_case($this->firstname, MB_CASE_TITLE, "UTF-8");
+        $data->lastname = mb_convert_case($this->lastname, MB_CASE_TITLE, "UTF-8");
         $data->gender = $this->gender;
         $data->birthdate = $this->birthdate;
         $data->relationship = $this->relationship;
@@ -213,8 +217,8 @@ class UsersComponent extends BaseAdmin
             $data->region = $this->region;
             $data->country = $this->country;
             $data->dni = $this->dni;
-            $data->firstname = $this->firstname;
-            $data->lastname = $this->lastname;
+            $data->firstname = mb_convert_case($this->firstname, MB_CASE_TITLE, "UTF-8");
+            $data->lastname = mb_convert_case($this->lastname, MB_CASE_TITLE, "UTF-8");
             $data->gender = $this->gender;
             $data->birthdate = $this->birthdate;
             $data->relationship = $this->relationship;
@@ -254,6 +258,8 @@ class UsersComponent extends BaseAdmin
 
         $this->frame = 'index';
 
+        $this->disable_read = false;
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -266,4 +272,40 @@ class UsersComponent extends BaseAdmin
             $this->closeFrame();
         }
     }
+
+    /*** begin search data ***/
+    public function searchData()
+    {
+        $this->validate(['dni' => 'required|numeric|digits:8',], [], $this->attributes);
+        $data = [];
+        if ($this->dni) {
+            $data = $this->getDNI($this->dni);
+            if ($data && $data->Nombre != '' && $data->Paterno != '') {
+                $this->firstname = mb_convert_case($data->Nombre, MB_CASE_TITLE, "UTF-8");
+                $this->lastname = mb_convert_case($data->Paterno . ' ' . $data->Materno, MB_CASE_TITLE, "UTF-8");
+
+                $this->disable_read = true;
+            }else{
+                $this->firstname = null;
+                $this->lastname = null;
+                $this->disable_read = false;
+            }
+        }
+    }
+
+    private function getDNI($id)
+    {
+        $client = new Client(['verify' => false]);
+        try {
+            $response = $client
+                ->get('https://www.facturacionelectronica.us/' .
+                    'facturacion/controller/ws_consulta_rucdni_v2.php?documento=' .
+                    'DNI&usuario=10447915125&password=985511933&nro_documento=' . $id)
+                ->getBody();
+            return json_decode($response)->result;
+        } catch (RequestException $e) {
+            return null;
+        }
+    }
+    /*** end search data ***/
 }

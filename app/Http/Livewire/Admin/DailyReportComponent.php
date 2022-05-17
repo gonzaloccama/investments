@@ -15,7 +15,7 @@ class DailyReportComponent extends BaseAdmin
 
     public $headers = [
         'id' => '#',
-        'type_report' => 'Reporte',
+        'attachment' => 'Reporte',
         'created_at' => 'fecha',
 
         'not' => '',
@@ -68,7 +68,7 @@ class DailyReportComponent extends BaseAdmin
 
         $data['config'] = SystemConfig::find(1);
         $data['investments'] = Investment::whereDate('created_at', Carbon::today())->whereIn('status', ['active'])->get();
-        $data['created_at'] = Carbon::now()->format('Y-m-d|H-i-s');
+        $data['created_at'] = Carbon::now()->format('Y-m-d — g:i:s A');
 
         if ($d = DailyReport::latest('created_at')->first()) {
             if (Carbon::parse($d->created_at)->year == Carbon::now()->year) {
@@ -82,7 +82,7 @@ class DailyReportComponent extends BaseAdmin
 
         $pdf->loadView('livewire.admin.dashboard.daily-report', $data);
 
-        $file = 'REPORTE-' . Carbon::now()->format('Y-m-d--H-i-s') . '.pdf';
+        $file = 'REPORTE-N'. str_pad($data['next'], 3, '0', STR_PAD_LEFT) . '-' . Carbon::now()->format('Y-m-d—H-i-s') . '.pdf';
         $path = public_path()
             . '/assets/uploads/daily-reports/';
 

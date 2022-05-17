@@ -11,9 +11,10 @@
                class="col-sm-3 col-form-label">{{ $text }} {!! $required ? $txt . '<i class="text-danger">*</i>':'' !!}</label>
         <div class="col-sm-9 @error($name) error-validate @enderror">
 
-            @if($type == 'text')
+            @if(in_array($type, ['text', 'password']))
                 <input type="{{ $type }}" class="form-control" id="{{ $name }}" wire:model="{{ $name }}"
-                       {{ isset($readonly) && !empty($readonly) ? 'readonly' : '' }} placeholder="{{ $text }}" autocomplete="off">
+                       {{ isset($readonly) && !empty($readonly) ? 'readonly' : '' }} placeholder="{{ $text }}"
+                       autocomplete="off">
             @elseif($type == 'checkbox')
                 <div class="custom-switch custom-switch-primary mb-2">
                     <input class="custom-switch-input" id="{{ $name }}" type="{{ $type }}"
@@ -37,18 +38,18 @@
                 </div>
                 <div class="" wire:loading wire:target="{{ $name }}">Cargando...</div>
             @elseif($type == 'radio')
-{{--                <div class="radio-check">--}}
-{{--                    <input type="radio" value="{{ $val1[0] }}" id="{{ $val1[2] }}"--}}
-{{--                           wire:model="{{ $name }}">--}}
-{{--                    <input type="radio" value="{{ $val2[0] }}" id="{{ $val2[2] }}"--}}
-{{--                           wire:model="{{ $name }}">--}}
-{{--                    <label for="{{ $val1[2] }}" class="option option-1">--}}
-{{--                        <span>{{ $val1[1] }}</span>--}}
-{{--                    </label>--}}
-{{--                    <label for="{{ $val2[2] }}" class="option option-2">--}}
-{{--                        <span>{{ $val2[1] }}</span>--}}
-{{--                    </label>--}}
-{{--                </div>--}}
+                {{--                <div class="radio-check">--}}
+                {{--                    <input type="radio" value="{{ $val1[0] }}" id="{{ $val1[2] }}"--}}
+                {{--                           wire:model="{{ $name }}">--}}
+                {{--                    <input type="radio" value="{{ $val2[0] }}" id="{{ $val2[2] }}"--}}
+                {{--                           wire:model="{{ $name }}">--}}
+                {{--                    <label for="{{ $val1[2] }}" class="option option-1">--}}
+                {{--                        <span>{{ $val1[1] }}</span>--}}
+                {{--                    </label>--}}
+                {{--                    <label for="{{ $val2[2] }}" class="option option-2">--}}
+                {{--                        <span>{{ $val2[1] }}</span>--}}
+                {{--                    </label>--}}
+                {{--                </div>--}}
 
                 <div class="radio-button">
 
@@ -65,6 +66,7 @@
                     </div>
 
                 </div>
+
             @endif
 
 

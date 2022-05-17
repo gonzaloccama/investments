@@ -4,7 +4,7 @@
         'name' => 'current_password',
         'text' => 'Contraseña actual',
         'required' => 1,
-        'type' => 'text',
+        'type' => 'password',
     ];
     ?>
     @include('livewire.widgets.admin.form.input-h', $dt)
@@ -14,7 +14,7 @@
         'name' => 'password',
         'text' => 'Nueva contraseña',
         'required' => 1,
-        'type' => 'text',
+        'type' => 'password',
     ];
     ?>
     @include('livewire.widgets.admin.form.input-h', $dt)
@@ -24,7 +24,7 @@
         'name' => 'confirm_password',
         'text' => 'Confirmar contraseña',
         'required' => 1,
-        'type' => 'text',
+        'type' => 'password',
     ];
     ?>
     @include('livewire.widgets.admin.form.input-h', $dt)

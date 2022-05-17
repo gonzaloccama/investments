@@ -80,6 +80,7 @@ class ProfileComponent extends BaseAdmin
     public function mount()
     {
         $this->frame = 'index';
+        $this->openTab('edit-profile');
     }
 
     public function render()
@@ -88,8 +89,8 @@ class ProfileComponent extends BaseAdmin
 
         $this->emit('refreshContent');
 
-        if ($this->tab == 'edit-profile')
-            $this->openTab('edit-profile');
+//        if ($this->tab == 'edit-profile')
+//            $this->openTab('edit-profile');
 
         return view('livewire.admin.profile-component', $data)->layout('layouts.admin');
     }

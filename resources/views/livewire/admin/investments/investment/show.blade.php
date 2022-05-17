@@ -92,9 +92,9 @@
     <tr>
         <th class="text-theme-1">Estado:</th>
         <td>
-                                        <span class="rounded-0 badge badge-{{  $investment->status }}">
-                                           {{ $_status[ $investment->status] }}
-                                        </span>
+            <span class="rounded-0 badge badge-{{  $investment->status }}">
+               {{ $_status[ $investment->status] }}
+            </span>
         </td>
     </tr>
 </table>

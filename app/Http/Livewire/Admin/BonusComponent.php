@@ -136,14 +136,26 @@ class BonusComponent extends BaseAdmin
     {
         $rules = $this->rules;
 
+        $_amount = 0;
+
         if ($this->type == 'referred') {
             $rules = array_merge($rules, ['investment_id' => 'required|exists_ref']);
+            $_amount = $this->percent * $this->investment->amount / 100;
+
         } elseif ($this->type == 'invest') {
             unset($rules['referred_to']);
             $rules = array_merge($rules, ['investment_id' => 'required|exists30high|exists_bonus']);
+
+            if ($this->investment->currency == 1)
+                $_amount = $this->percent * ($this->investment->amount - 30000) / 100;
+            elseif ($this->investment->currency == 2)
+                $_amount = $this->percent * ($this->investment->amount - 7500) / 100;
+
         } else {
             unset($rules['referred_to']);
             $rules = array_merge($rules, ['investment_id' => 'required|exists30k|exists_bonus_res']);
+            $_amount = $this->percent * $this->investment->amount / 100;
+
         }
 
         $this->customValidation();
@@ -163,7 +175,8 @@ class BonusComponent extends BaseAdmin
         $data->investment_id = $this->investment_id;
         $data->type = $this->type;
         $data->percent = $this->percent;
-        $data->amount = $this->percent * $this->investment->amount / 100;
+
+        $data->amount = $_amount;
 
         if ($this->type == 'referred') {
             $data->referred_to = $this->referred_to;
@@ -259,8 +272,19 @@ class BonusComponent extends BaseAdmin
         });
 
         Validator::extend('exists30high', function ($attr, $value) {
-            $validate = Investment::where('id', $value)->whereIn('status', ['completed', 'active'])->where('amount', '>', 30000)->first();
-            return (bool)$validate;
+            $validate = false;
+
+            $data = Investment::where('id', $value)->whereIn('status', ['completed', 'active'])->first();
+
+            if ($data) {
+                if ($data->currency == 1 && $data->amount > 30000) {
+                    $validate = true;
+                } elseif ($data->currency == 2 && $data->amount > 7500) {
+                    $validate = true;
+                }
+            }
+
+            return $validate;
         });
 
         Validator::extend('exists30k', function ($attr, $value) {
