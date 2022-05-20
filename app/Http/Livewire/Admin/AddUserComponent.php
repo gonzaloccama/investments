@@ -149,6 +149,10 @@ class AddUserComponent extends Component
                 $this->firstname = null;
                 $this->lastname = null;
                 $this->disable_read = false;
+                $this->addError(
+                    'dni',
+                    '<b><ins>DNI</ins></b>, sin resultados de busqueda <b><ins>¡edite los campos!.</ins></b>'
+                );
             }
         }
     }
@@ -164,6 +168,10 @@ class AddUserComponent extends Component
                 ->getBody();
             return json_decode($response)->result;
         } catch (RequestException $e) {
+            $this->addError(
+                'dni',
+                'En la <b><ins>busqueda del DNI</ins></b> algo salió mal.'
+            );
             return null;
         }
     }

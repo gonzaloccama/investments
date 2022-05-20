@@ -10,7 +10,9 @@
                 <div class="input-group-append">
                     <button class="btn btn-secondary" type="button"
                             wire:click.prevent="{{ $function }}"
-                            id="button-dni"><b>Buscar...</b>
+                            id="button-dni">
+                        <b wire:loading.remove wire:target="{{ $function }}">Buscar...</b>
+                        <b wire:loading wire:target="{{ $function }}">Buscando...</b>
                     </button>
                 </div>
             </div>

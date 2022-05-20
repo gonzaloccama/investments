@@ -163,7 +163,7 @@
             </button>
         </div>
 
-        <div wire:loading.remove>
+        <div wire:loading.remove wire:target="saveData">
             <button type="submit" class="btn btn-secondary" wire:click.prevent="saveData">
                 <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
             </button>

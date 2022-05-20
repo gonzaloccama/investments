@@ -23,7 +23,7 @@ class DashboardComponent extends BaseAdmin
         return view('livewire.admin.dashboard-component', $data)->layout('layouts.admin');
     }
 
-    public function dailyReport()
+    public function dailyReport()//not working
     {
 //        $id = base64_decode($_GET['id']);
 

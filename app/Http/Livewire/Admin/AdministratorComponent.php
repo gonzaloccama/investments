@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use function MongoDB\BSON\toJSON;
 
 class AdministratorComponent extends BaseAdmin
 {
@@ -99,14 +100,17 @@ class AdministratorComponent extends BaseAdmin
 
     public function saveData()
     {
-        $this->validate(['itemId' => 'required'], [], ['itemId' => '<b><u>para administrador</u></b>']);
+        try {
+            $this->validate(['itemId' => 'required'], [], ['itemId' => '<b><u>para administrador</u></b>']);
 
-        $data = User::find($this->itemId);
-        $data->group = 2;
+            $data = User::find($this->itemId);
+            $data->group = 2;
 
-        if ($data->save()) {
-            $this->emit('notification', ['Se creó nuevo administrador exitosamente']);
-            $this->closeFrame();
+            if ($data->save()) {
+                $this->emit('notification', ['Se creó nuevo administrador exitosamente']);
+                $this->closeFrame();
+            }
+        } catch (\Exception $e) {
         }
     }
 
@@ -126,19 +130,22 @@ class AdministratorComponent extends BaseAdmin
 
     public function updateData()
     {
-        if ($this->itemId) {
+        try {
+            if ($this->itemId) {
 
-            $this->validate($this->rules, [], $this->attributes);
+                $this->validate($this->rules, [], $this->attributes);
 
-            $data = User::find($this->itemId);
+                $data = User::find($this->itemId);
 
-            $data->group = $this->group;
-            $data->activated = $this->activated;
+                $data->group = $this->group;
+                $data->activated = $this->activated;
 
-            if ($data->save()) {
-                $this->emit('notification', ['Administrador actualizado exitosamente']);
-                $this->closeFrame();
+                if ($data->save()) {
+                    $this->emit('notification', ['Administrador actualizado exitosamente']);
+                    $this->closeFrame();
+                }
             }
+        } catch (\Exception $e) {
         }
     }
 

@@ -42,33 +42,33 @@ function loadStyle(href, callback) {
     <div class="p-4">
     <p class="text-muted mb-2">Light Theme</p>
     <div class="d-flex flex-row justify-content-between mb-3">
-      <a href="#" data-theme="dore.light.bluenavy.min.css" class="theme-color theme-color-bluenavy"></a>
-      <a href="#" data-theme="dore.light.blueyale.min.css" class="theme-color theme-color-blueyale"></a>
-      <a href="#" data-theme="dore.light.blueolympic.min.css" class="theme-color theme-color-blueolympic"></a>
-      <a href="#" data-theme="dore.light.greenmoss.min.css" class="theme-color theme-color-greenmoss"></a>
-      <a href="#" data-theme="dore.light.greenlime.min.css" class="theme-color theme-color-greenlime"></a>
+      <a href="#" data-theme="dore.light.bluenavy.css" class="theme-color theme-color-bluenavy"></a>
+      <a href="#" data-theme="dore.light.blueyale.css" class="theme-color theme-color-blueyale"></a>
+      <a href="#" data-theme="dore.light.blueolympic.css" class="theme-color theme-color-blueolympic"></a>
+      <a href="#" data-theme="dore.light.greenmoss.css" class="theme-color theme-color-greenmoss"></a>
+      <a href="#" data-theme="dore.light.greenlime.css" class="theme-color theme-color-greenlime"></a>
     </div>
     <div class="d-flex flex-row justify-content-between mb-4">
-      <a href="#" data-theme="dore.light.purplemonster.min.css" class="theme-color theme-color-purplemonster"></a>
-      <a href="#" data-theme="dore.light.orangecarrot.min.css" class="theme-color theme-color-orangecarrot"></a>
-      <a href="#" data-theme="dore.light.redruby.min.css" class="theme-color theme-color-redruby"></a>
-      <a href="#" data-theme="dore.light.yellowgranola.min.css" class="theme-color theme-color-yellowgranola"></a>
-      <a href="#" data-theme="dore.light.greysteel.min.css" class="theme-color theme-color-greysteel"></a>
+      <a href="#" data-theme="dore.light.purplemonster.css" class="theme-color theme-color-purplemonster"></a>
+      <a href="#" data-theme="dore.light.orangecarrot.css" class="theme-color theme-color-orangecarrot"></a>
+      <a href="#" data-theme="dore.light.redruby.min" class="theme-color theme-color-redruby"></a>
+      <a href="#" data-theme="dore.light.yellowgra.min.css" class="theme-color theme-color-yellowgranola"></a>
+      <a href="#" data-theme="dore.light.greysteel.css" class="theme-color theme-color-greysteel"></a>
     </div>
     <p class="text-muted mb-2">Dark Theme</p>
     <div class="d-flex flex-row justify-content-between mb-3">
-      <a href="#" data-theme="dore.dark.bluenavy.min.css" class="theme-color theme-color-bluenavy"></a>
-      <a href="#" data-theme="dore.dark.blueyale.min.css" class="theme-color theme-color-blueyale"></a>
-      <a href="#" data-theme="dore.dark.blueolympic.min.css" class="theme-color theme-color-blueolympic"></a>
-      <a href="#" data-theme="dore.dark.greenmoss.min.css" class="theme-color theme-color-greenmoss"></a>
-      <a href="#" data-theme="dore.dark.greenlime.min.css" class="theme-color theme-color-greenlime"></a>
+      <a href="#" data-theme="dore.dark.bluenavy.css" class="theme-color theme-color-bluenavy"></a>
+      <a href="#" data-theme="dore.dark.blueyale.css" class="theme-color theme-color-blueyale"></a>
+      <a href="#" data-theme="dore.dark.blueolympic.css" class="theme-color theme-color-blueolympic"></a>
+      <a href="#" data-theme="dore.dark.greenmoss.css" class="theme-color theme-color-greenmoss"></a>
+      <a href="#" data-theme="dore.dark.greenlime.css" class="theme-color theme-color-greenlime"></a>
     </div>
     <div class="d-flex flex-row justify-content-between">
-    <a href="#" data-theme="dore.dark.purplemonster.min.css" class="theme-color theme-color-purplemonster"></a>
-    <a href="#" data-theme="dore.dark.orangecarrot.min.css" class="theme-color theme-color-orangecarrot"></a>
-    <a href="#" data-theme="dore.dark.redruby.min.css" class="theme-color theme-color-redruby"></a>
-    <a href="#" data-theme="dore.dark.yellowgranola.min.css" class="theme-color theme-color-yellowgranola"></a>
-    <a href="#" data-theme="dore.dark.greysteel.min.css" class="theme-color theme-color-greysteel"></a>
+    <a href="#" data-theme="dore.dark.purplemonster.css" class="theme-color theme-color-purplemonster"></a>
+    <a href="#" data-theme="dore.dark.orangecarrot.css" class="theme-color theme-color-orangecarrot"></a>
+    <a href="#" data-theme="dore.dark.redruby.css" class="theme-color theme-color-redruby"></a>
+    <a href="#" data-theme="dore.dark.yellowgranola.css" class="theme-color theme-color-yellowgranola"></a>
+    <a href="#" data-theme="dore.dark.greysteel.css" class="theme-color theme-color-greysteel"></a>
   </div>
   </div>
   <div class="p-4">

@@ -33,9 +33,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/clear', function () {
     $output = new \Symfony\Component\Console\Output\BufferedOutput();
+    Artisan::call('log:clear');
     Artisan::call('optimize:clear', array(), $output);
     return $output->fetch();
-})->name('/clear');
+})->name('clear');
+
+Route::get('/clear-temp', function () {
+    Artisan::call('temp:file');
+    dd('Temporary files have been cleared');
+})->name('clear-temp');
 
 Route::get('/', function () {
     return redirect(\route('login'));

@@ -60,45 +60,47 @@ class DailyReportComponent extends BaseAdmin
 
     public function openFrame()
     {
-        $report = new DailyReport();
+        try {
+            $report = new DailyReport();
 
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->setPaper('A4');
+            $pdf = app('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option("enable_php", true);
+            $pdf->setPaper('A4');
 
-        $data['config'] = SystemConfig::find(1);
-        $data['investments'] = Investment::whereDate('created_at', Carbon::today())->whereIn('status', ['active'])->get();
-        $data['created_at'] = Carbon::now()->format('Y-m-d — g:i:s A');
+            $data['config'] = SystemConfig::find(1);
+            $data['investments'] = Investment::whereDate('created_at', Carbon::today())->whereIn('status', ['active'])->get();
+            $data['created_at'] = Carbon::now()->format('Y-m-d — g:i:s A');
 
-        if ($d = DailyReport::latest('created_at')->first()) {
-            if (Carbon::parse($d->created_at)->year == Carbon::now()->year) {
-                $data['next'] = $report->increase = $report->next();
+            if ($d = DailyReport::latest('created_at')->first()) {
+                if (Carbon::parse($d->created_at)->year == Carbon::now()->year) {
+                    $data['next'] = $report->increase = $report->next();
+                } else {
+                    $data['next'] = $report->increase = 1;
+                }
             } else {
                 $data['next'] = $report->increase = 1;
             }
-        } else {
-            $data['next'] = $report->increase = 1;
-        }
 
-        $pdf->loadView('livewire.admin.dashboard.daily-report', $data);
+            $pdf->loadView('livewire.admin.dashboard.daily-report', $data);
 
-        $file = 'REPORTE-N'. str_pad($data['next'], 3, '0', STR_PAD_LEFT) . '-' . Carbon::now()->format('Y-m-d—H-i-s') . '.pdf';
-        $path = public_path()
-            . '/assets/uploads/daily-reports/';
+            $file = 'REPORTE-N' . str_pad($data['next'], 3, '0', STR_PAD_LEFT) . '-' . Carbon::now()->format('Y-m-d—H-i-s') . '.pdf';
+            $path = public_path()
+                . '/assets/uploads/daily-reports/';
 
-        $report->type_report = 'reporte diario';
-        $report->attachment = $file;
+            $report->type_report = 'reporte diario';
+            $report->attachment = $file;
 
-        if ($pdf->save($path . $file)) {
-            $report->save();
-            return true;
-        } else {
-            return false;
-        }
-
-//            return $pdf->download($file . '.pdf');
+            if ($pdf->save($path . $file)) {
+                $report->save();
+                return true;
+            } else {
+                return false;
+            }
+            //            return $pdf->download($file . '.pdf');
 //        return $pdf->stream('recibo' . '.pdf');
 
+        } catch (\Exception $e) {
+        }
     }
 
     public function showModal($id)

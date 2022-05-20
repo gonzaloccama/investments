@@ -47,9 +47,9 @@ class RegisterComponent extends Component
         if (Auth::user()) {
             $this->redirect(route('admin.dashboard'));
         }
-        else {
-            $this->redirect(route('login'));
-        }
+//        else {
+//            $this->redirect(route('register'));
+//        }
     }
 
     public function render()

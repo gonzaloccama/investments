@@ -99,63 +99,68 @@ class BonusPaymentComponent extends BaseAdmin
 
     public function updateData()
     {
-        if ($this->itemId) {
-            $data = Payment::find($this->itemId);
+        try {
+            if ($this->itemId) {
+                $data = Payment::find($this->itemId);
 
-            $data->payment_date = Carbon::now();
-            $data->status = 'paid';
+                $data->payment_date = Carbon::now();
+                $data->status = 'paid';
 
-            if ($data->save()) {
+                if ($data->save()) {
 
-                $data->toBonus->status = 1;
-                $data->toBonus->save();
+                    $data->toBonus->status = 1;
+                    $data->toBonus->save();
 
-                $this->receipt();
+                    $this->receipt();
 
-                $this->emit('notification', ['El pago se ha actualizado correctamente exitosamente']);
+                    $this->emit('notification', ['El pago se ha actualizado correctamente exitosamente']);
+                }
             }
+        } catch (\Exception $e) {
         }
     }
 
     public function receipt()
     {
-//        $id = base64_decode($_GET['id']);
-//        $id = $_GET['id'];
-        if ($this->itemId) {
+        try {
+            if ($this->itemId) {
 
-            $pdf = app('dompdf.wrapper');
-            $pdf->getDomPDF()->set_option("enable_php", true);
-            $pdf->setPaper('A4');
+                $pdf = app('dompdf.wrapper');
+                $pdf->getDomPDF()->set_option("enable_php", true);
+                $pdf->setPaper('A4');
 
-            $data['config'] = SystemConfig::find(1);
-            $data['payment'] = Payment::find($this->itemId);
+                $data['config'] = SystemConfig::find(1);
+                $data['payment'] = Payment::find($this->itemId);
 
-            $pdf->loadView('livewire.admin.payments.details.receipt', $data);
+                $pdf->loadView('livewire.admin.payments.details.receipt', $data);
 
-            $path = public_path()
-                . '/assets/uploads/receipts/';
+                $path = public_path()
+                    . '/assets/uploads/receipts/';
 
-            $file = 'recibo-'
-                . str_pad($data['payment']->id, 6, '0', STR_PAD_LEFT) . '-'
-                . $data['payment']->investment->code . '.pdf';
+                $file = 'recibo-'
+                    . str_pad($data['payment']->id, 6, '0', STR_PAD_LEFT) . '-'
+                    . $data['payment']->investment->code . '.pdf';
 
-            $receipt = new Receipt();
-            $receipt->investment_id = $data['payment']->investment->id;
-            $receipt->payment_id = $data['payment']->id;
-            $receipt->attachment = $file;
+                $receipt = new Receipt();
+                $receipt->investment_id = $data['payment']->investment->id;
+                $receipt->payment_id = $data['payment']->id;
+                $receipt->attachment = $file;
 
-            if ($pdf->save($path . $file)) {
-                $receipt->save();
-                return true;
-            } else {
-                return false;
-            }
+                if ($pdf->save($path . $file)) {
+                    $receipt->save();
+                    return true;
+                } else {
+                    return false;
+                }
 
 //            return $pdf->download($file . '.pdf');
 //        return $pdf->stream('recibo' . '.pdf');
-        } else {
-            return false;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
         }
+
     }
 
     public function closeFrame()
