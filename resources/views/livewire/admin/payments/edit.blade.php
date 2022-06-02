@@ -1,4 +1,14 @@
 <div class="col-md-12">
+    <?php
+    $_times = [
+        'Years' => 'Anual',
+        'Quarters' => 'Trimestral',
+        'Months' => 'Mensual',
+        'Weeks' => 'Semanal',
+        'Days' => 'Diario',
+        'Hours' => 'Por horas',
+    ];
+    ?>
     <div class="card border rounded-0">
         <div class="position-absolute card-top-buttons">
             <button class="btn btn-header-light icon-button" wire:click.prevent="closeFrame">
@@ -13,9 +23,28 @@
 
         <div class="card-body">
             <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">
-                {{ $payment->code . ' - Pago Nro: ' . $payment->current_period }}
+                Retorno
+                {!! $_times[$tm = $payment->investment->isPlan->time->duration] . ' : <b class="color-theme-1">' . $payment->current_period . '</b>' !!}
+                de {{ $payment->investment->code }}
             </h5>
             <div class="separator mb-5"></div>
+
+
+            @if(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(15, 31)))
+                @if(!in_array(\Carbon\Carbon::now()->day, range(1, 5)))
+                    <div class="alert alert-warning mb-5">
+                        <b>Los pagos se habilitan los días 1—5 de cada mes.</b> Se recomienda pagar los dias sugeridos!
+                    </div>
+                @endif
+            @elseif(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(1, 14)))
+                @if(!in_array(\Carbon\Carbon::now()->day, range(15, 21)))
+                    <div class="alert alert-warning mb-5">
+                        <b>Los pagos se habilitan los días 15—20 de cada mes.</b> Se recomienda pagar los dias
+                        sugeridos!
+                    </div>
+                @endif
+            @endif
+
 
             <div class="row mt-3">
                 <div class="col-12">
@@ -35,7 +64,7 @@
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-financial"></i>
-                                    <p class="card-text font-weight-semibold mb-0">Pago Mensual
+                                    <p class="card-text font-weight-semibold mb-0">Pago {{ $_times[$tm] }}
                                     </p>
                                     <p class="lead text-center font-22">
                                         {{ $payment->investment->isCurrency->symbol . ' ' . number_format($payment->investment->return_amount, 2, '.', ',') }}
@@ -46,7 +75,7 @@
                         <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
-                                    <i class="simple-icon-calendar"></i>
+                                    <i class="iconsminds-arrow-around"></i>
                                     <p class="card-text font-weight-semibold mb-0">Pago Actual</p>
                                     <p class="lead text-center font-22">
                                         {{ $payment->current_period }}
@@ -57,7 +86,7 @@
                         <div class="col-md-6 col-lg-3 col-sm-6 col-6 mb-2">
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
-                                    <i class="iconsminds-calendar-4"></i>
+                                    <i class="iconsminds-24-hour"></i>
                                     <p class="card-text font-weight-semibold mb-0">Estado</p>
                                     <p class="lead text-center font-22">
                                         @if($payment->status == 'waiting')
@@ -81,30 +110,30 @@
                 <div class="text-right">
 
                     @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
-                        @if(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(15, 31)))
-                            @if(in_array(\Carbon\Carbon::now()->day, range(1, 5)))
-                                <a href="javascript:;" wire:click.prevent="updateData"
-                                   class="btn btn-secondary btn-sm mb-5"
-                                   id="pending"
-                                   target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
-                            @else
-                                <div class="alert alert-warning mb-5">
-                                    <b>Los pagos se habilitan los días 1—5 de cada mes.</b>
-                                </div>
-                            @endif
-                        @elseif(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(1, 14)))
-                            @if(in_array(\Carbon\Carbon::now()->day, range(15, 20)))
-                                <a href="javascript:;" wire:click.prevent="updateData"
-                                   class="btn btn-secondary btn-sm mb-5"
-                                   id="pending"
-                                   target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
-                            @else
-                                <div class="alert alert-warning mb-5">
-                                    <b>Los pagos se habilitan los días 15—20 de cada</b>
-                                    mes.
-                                </div>
-                            @endif
-                        @endif
+                        {{--                        @if(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(15, 31)))--}}
+                        {{--                            @if(in_array(\Carbon\Carbon::now()->day, range(1, 5)))--}}
+                        <a href="javascript:;" wire:click.prevent="updateData"
+                           class="btn btn-secondary btn-sm mb-5"
+                           id="pending"
+                           target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+                        {{--                            @else--}}
+                        {{--                                <div class="alert alert-warning mb-5">--}}
+                        {{--                                    <b>Los pagos se habilitan los días 1—5 de cada mes.</b>--}}
+                        {{--                                </div>--}}
+                        {{--                            @endif--}}
+                        {{--                        @elseif(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(1, 14)))--}}
+                        {{--                            @if(in_array(\Carbon\Carbon::now()->day, range(15, 21)))--}}
+                        {{--                                <a href="javascript:;" wire:click.prevent="updateData"--}}
+                        {{--                                   class="btn btn-secondary btn-sm mb-5"--}}
+                        {{--                                   id="pending"--}}
+                        {{--                                   target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>--}}
+                        {{--                            @else--}}
+                        {{--                                <div class="alert alert-warning mb-5">--}}
+                        {{--                                    <b>Los pagos se habilitan los días 15—20 de cada</b>--}}
+                        {{--                                    mes.--}}
+                        {{--                                </div>--}}
+                        {{--                            @endif--}}
+                        {{--                        @endif--}}
                     @endif
 
                     @if(in_array($payment->status, ['paid']) && $receipt = \App\Models\Admin\Receipt::where('payment_id',  $payment->id)->first())
@@ -137,13 +166,24 @@
                                 <tr>
                                     <th class="text-theme-1">Tipo de pago</th>
                                     <td>
-                                        {{ $_period[$payment->type_payment] }}
+                                        Pago {{ $_times[$tm] }}
                                     </td>
                                 </tr>
                                 <tr>
+                                    <?php
+                                    $_times = [
+                                        'Years' => 'Años',
+                                        'Quarters' => 'Trimestres',
+                                        'Months' => 'Meses',
+                                        'Weeks' => 'Semanales',
+                                        'Days' => 'Diarios',
+                                        'Hours' => 'Horas',
+                                    ];
+                                    ?>
                                     <th class="text-theme-1">Periodo Actual</th>
                                     <td>
-                                        {!! '<b class="text-theme-1">' . $payment->current_period . '</b> de ' .  $payment->investment->period . ' Meses' !!}
+                                        {!! '<b class="text-theme-1">' . $payment->current_period . '</b> de ' .  $payment->investment->period !!}
+                                        {{ $_times[$tm] }}
                                     </td>
                                 </tr>
 

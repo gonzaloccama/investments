@@ -40,6 +40,16 @@ class Investment extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function timePlan()
+    {
+        return $this->hasOneThrough(Time::class,Plan::class);
+    }
+
+    public function bonuses()
+    {
+        return $this->hasMany(Bonus::class);
+    }
+
 //    public function getRemainingDaysAttribute()
 //    {
 //        if ($this->end_date) {
@@ -50,19 +60,19 @@ class Investment extends Model
 //        return $remaining_days;
 //    }
 //
-//    public function getBeetweenDaysAttribute()
-//    {
-//        if ($this->end_date) {
-//            $remaining_days = Carbon::create($this->start_date)->diffInDays(Carbon::parse($this->end_date));
-//        } else {
-//            $remaining_days = 0;
-//        }
-//        return $remaining_days;
-//    }
+    public function getBeetweenDaysAttribute()
+    {
+        if ($this->end_date) {
+            $remaining_days = Carbon::create($this->start_date)->diffInDays(Carbon::parse($this->end_date));
+        } else {
+            $remaining_days = 0;
+        }
+        return $remaining_days;
+    }
 
     public function getRemainingHoursAttribute()
     {
-        if ($this->end_date >  Carbon::today()) {
+        if ($this->end_date > Carbon::today()) {
             $remaining_hours = Carbon::now()->diffInHours(Carbon::parse($this->end_date));
         } else {
             $remaining_hours = 0;

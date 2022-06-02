@@ -8,9 +8,11 @@
             'view' => null,
             'show' => null,
             'edit' => 'Mostar pago',
-            'go' => null,
+            'go' => 'Ir a la inversión',
             'delete' => null,
         ];
+
+        $navigateTo = 'investment';
 
         /*** status custom ***/
         //        $_statusIndex = [ // lista or lista with index

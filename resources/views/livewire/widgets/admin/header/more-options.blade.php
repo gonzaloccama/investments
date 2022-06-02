@@ -1,5 +1,5 @@
 <div class="mb-2">
-    <a class="btn pt-0 pl-0 d-inline-block d-md-none" data-toggle="collapse" href="#displayOptions"
+    <a class="btn pt-0 pl-0 d-inline-block d-md-none show-options" data-toggle="collapse" href="#displayOptions"
        role="button" aria-expanded="true" aria-controls="displayOptions">
         Mostrar opciones
         <i class="simple-icon-arrow-down align-middle"></i>

@@ -42,7 +42,7 @@ class TempFile extends Command
         $files = File::files($path);
 
         foreach ($files as $file) {
-            $yesterdayStamp = now()->subHours(12)->timestamp;
+            $yesterdayStamp = now()->subHours(6)->timestamp;
 
             if ($yesterdayStamp > File::lastModified($file)) {
                 File::delete($path . '/' . $file->getFilename());

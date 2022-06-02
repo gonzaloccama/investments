@@ -41,7 +41,7 @@
         @include('livewire.widgets.admin.header.title-page')
     </div>
     @if($frame)
-        @include('livewire.admin.administrators.'.$frame)
+        @include('livewire.admin.assistants.'.$frame)
     @endif
 
     {{--    @if($modal)--}}

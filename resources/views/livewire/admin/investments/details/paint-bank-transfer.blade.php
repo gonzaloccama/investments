@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <form action="" class="mt-3">
+
                             <?php
                             $dt = [
                                 'name' => 'bank_id',
@@ -54,7 +54,7 @@
                             ?>
                             @include('livewire.widgets.admin.form.select-h', $dt)
 
-                        </form>
+
 
                         <?php
                         $dt = [

@@ -27,10 +27,20 @@
         <td>{{ $investment->isCurrency->symbol.' ('.$investment->isCurrency->currency.')' }}</td>
     </tr>
     <tr>
-        <th class="text-theme-1">Meses:</th>
+        <?php
+        $_times = [
+            'Years' => 'Años',
+            'Quarters' => 'Trimestre',
+            'Months' => 'Meses',
+            'Weeks' => 'Semanas',
+            'Days' => 'Dias',
+            'Hours' => 'Horas',
+        ];
+        ?>
+        <th class="text-theme-1">{{ $_times[$investment->isPlan->time->duration] }}:</th>
         <td>
             <b class="text-theme-1 font-14">{{ $investment->current_period  }}</b>
-            {{ ' de ' . $period.' meses' }}
+            {{ ' de ' . $period . ' ' . $_times[$investment->isPlan->time->duration] }}
         </td>
     </tr>
     <tr>

@@ -33,10 +33,20 @@
                         </div>
 
                         <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+                            <?php
+                            $_times = [
+                                'Years' => 'Anual',
+                                'Quarters' => 'Trimestral',
+                                'Months' => 'Mensual',
+                                'Weeks' => 'Semanal',
+                                'Days' => 'Diario',
+                                'Hours' => 'Por horas',
+                            ];
+                            ?>
                             <a href="#" class="card border">
                                 <div class="card-body text-center">
                                     <i class="iconsminds-financial"></i>
-                                    <p class="card-text font-weight-semibold mb-0">Retorno Mensual</p>
+                                    <p class="card-text font-weight-semibold mb-0">{{ $_times[$investment->isPlan->time->duration] }}</p>
                                     <p class="lead text-center font-22">
                                         {{ $investment->isCurrency->symbol . ' ' . number_format($investment->return_amount, 2, '.', ',') }}
                                     </p>
@@ -98,11 +108,19 @@
                                 Más opciones
                             </button>
 
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu shadow">
 
                                 <a href="{{ route('admin.upcoming-payments').'?investment=' . base64_encode($investment->id) }}"
                                    class="dropdown-item text-primary"><b><i
                                             class="fe-corner-up-right"></i>&nbsp;&nbsp;Pagos mensuales</b></a>
+
+                                @if($investment->bonuses->count() > 0)
+{{--                                    style="border-right: 1px solid rgba(113,163,255,0.63); padding-right: 5px"--}}
+                                    <a href="{{ route('admin.bonus-payments').'?investment=' . base64_encode($investment->id) }}"
+                                       class="dropdown-item text-primary"><b><i
+                                                class="fe-gift"></i>&nbsp;&nbsp;Pagos
+                                            de bonos</b></a>
+                                @endif
 
                                 <a href="{{ route('contract.investments').'?id=' . base64_encode($investment->id) }}"
                                    class="dropdown-item text-primary" target="_blank"><b><i class="fe-printer"></i>&nbsp;&nbsp;Contrato</b></a>
@@ -122,12 +140,12 @@
                                            target="_blank"><b><i class="fe-file"></i>&nbsp;&nbsp;Recibo</b></a>
                                     @endif
                                 @else
+                                    <div class="dropdown-divider"></div>
                                     <a href="javascript:;" wire:click.prevent="cancelInvestment"
                                        class="dropdown-item text-danger" target="_blank"><b><i
                                                 class="iconsminds-delete-file"></i>&nbsp;&nbsp;Cancelar
                                             inversión</b></a>
                                 @endif
-
 
 
                             </div>
@@ -237,7 +255,8 @@
                                 ];
                                 $show = 'bankTransfer';//Show Modal and delete
                                 $dts = $investment->bankTransfer; //data show in table
-                                $deletion = 'deleteCustomConfirm';
+                                //                                $deletion = 'deleteCustomConfirm';
+                                $_bank = 'bank';
                                 ?>
                                 @include('livewire.widgets.admin.table.table-custom')
                             </div>

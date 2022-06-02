@@ -3,7 +3,7 @@
         <label for="{{ $name }}" class="col-md-3 col-form-label">{{ $text }}
             {!! $required?'<i class="text-danger">*</i>':'' !!}
         </label>
-        <div class="col-9">
+        <div class="col-9 @error($name) error-validate @enderror"">
             <div wire:ignore>
                 <textarea class="form-control scrollbar scroller" id="{{ $name }}" rows="5"
                           style="height: 60px; !important;"

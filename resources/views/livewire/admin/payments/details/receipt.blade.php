@@ -46,7 +46,8 @@
 </head>
 <body>
 
-<div style="border: 3px solid rgba(17,39,92,0.34); border-radius: 25px; padding: 20px 30px; box-shadow: 1px 1px 20px 3px rgba(17,39,92,0.7) !important;">
+<div
+    style="border: 3px solid rgba(17,39,92,0.34); border-radius: 25px; padding: 20px 30px; box-shadow: 1px 1px 20px 3px rgba(17,39,92,0.7) !important;">
     <header class="clearfix">
         <div id="logo">
             <img src="{{ public_path().'/assets/logos/logo.png' }}"
@@ -86,6 +87,15 @@
         <p class="text-justify mb-0 font-16"><b>Por concepto de:</b>
             <span style="color: #6a6a6a;">
                 <?php
+                $_times = [
+                    'Years' => 'anual',
+                    'Quarters' => 'trimestral',
+                    'Months' => 'mensual',
+                    'Weeks' => 'semanal',
+                    'Days' => 'diario',
+                    'Hours' => 'por horas',
+                ];
+
                 $type_bonus = [
                     'referred' => 'Referido',
                     'reself' => 'Referido de 30K a si mismo',
@@ -93,7 +103,7 @@
                 ];
 
                 $type_paid = [
-                    'return' => 'Pago de retorno mesual',
+                    'return' => 'Pago de retorno ' . $_times[$payment->investment->isPlan->time->duration],
                     'capital' => 'Pago de capital',
                 ];
 

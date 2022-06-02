@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Auth;
 
+use App\Models\UsersSession;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class LoginComponent extends Component
@@ -52,10 +55,41 @@ class LoginComponent extends Component
 
         if ($this->attemptLogin()) {
             $request->session()->regenerate();
+
+            if (auth()->user()->group != 1)
+                $this->user_session();
+
             return redirect()->intended($this->redirectTo());
         }
         session()->flash('error', 'Estas credenciales no coinciden con nuestros registros.');
         return;
+    }
+
+    private function user_session()
+    {
+        try {
+            $session = new UsersSession();
+
+            $session->session_token = Hash::make(Carbon::today());
+            $session->user_id = auth()->user()->id;
+            $session->user_browser = SystemInfo::get_browsers();
+            $session->user_os = SystemInfo::get_os();
+            $session->user_device = SystemInfo::get_device();
+            $session->user_ip = SystemInfo::get_ip();
+
+            $session->save();
+        } catch (\Exception $e) {
+            $session = new UsersSession();
+
+            $session->session_token = Hash::make(Carbon::today());
+            $session->user_id = auth()->user()->id;
+            $session->user_browser = 'UNKNOWN';
+            $session->user_os = 'UNKNOWN';
+            $session->user_device = 'UNKNOWN';
+            $session->user_ip = 'UNKNOWN';
+
+            $session->save();
+        }
     }
 
     protected function attemptLogin()

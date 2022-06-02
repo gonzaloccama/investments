@@ -6,7 +6,7 @@
     }
 
     /*** form validations ***/
-    .error-validate .form-control {
+    .error-validate .form-control, .error-validate .input-group .form-control{
         border-color: #e52c18 !important;
     }
 
@@ -292,7 +292,7 @@
     }
 
     .select2-container--material .select2-selection--single .select2-selection__placeholder {
-        color: #484848;
+        color: #767676;
     }
 
     .select2-container--material .select2-selection--single .select2-selection__arrow {

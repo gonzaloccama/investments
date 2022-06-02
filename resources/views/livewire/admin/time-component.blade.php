@@ -63,7 +63,7 @@
         $(document).ready(function () {
 
             window.livewire.on('refreshContent', () => {
-                // activeSelect2('#time_id', 'time_id');
+                activeSelect2('#duration', 'duration');
             });
 
             window.livewire.on('refreshSection', () => {
@@ -134,26 +134,26 @@
         //     })
         // }
 
-        {{--function activeSelect2(sel, varModel) {--}}
-        {{--    $(sel).select2({--}}
-        {{--        theme: "material",--}}
-        {{--        // dir: direction,--}}
-        {{--        placeholder: "Seleccione...",--}}
-        {{--        maximumSelectionSize: 6,--}}
-        {{--        containerCssClass: ":all:",--}}
-        {{--        templateResult: formatOption,--}}
-        {{--    });--}}
-        {{--    $(sel).on('change', function (e) {--}}
-        {{--        @this.--}}
-        {{--        set(varModel, e.target.value);--}}
-        {{--    });--}}
-        {{--    function formatOption (option) {--}}
-        {{--        var $option = $(--}}
-        {{--            '<strong>' + option.text + '</strong>'--}}
-        {{--        );--}}
-        {{--        return $option;--}}
-        {{--    }--}}
-        {{--}--}}
+        function activeSelect2(sel, varModel) {
+            $(sel).select2({
+                theme: "material",
+                // dir: direction,
+                placeholder: "Seleccione...",
+                maximumSelectionSize: 6,
+                containerCssClass: ":all:",
+                templateResult: formatOption,
+            });
+            $(sel).on('change', function (e) {
+                @this.
+                set(varModel, e.target.value);
+            });
+            function formatOption (option) {
+                var $option = $(
+                    '<strong>' + option.text + '</strong>'
+                );
+                return $option;
+            }
+        }
 
         {{--function activeFlatpickr(sel, is_time = 0) {--}}
         {{--    $(sel).flatpickr({--}}

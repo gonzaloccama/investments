@@ -183,10 +183,17 @@
                     <b><i class="simple-icon-logout"></i>&nbsp;&nbsp;Regresar</b>
                 </button>
 
-                <button type="submit" class="btn btn-secondary btn-sm"
+                <button type="submit" class="btn btn-secondary btn-sm" wire:loading.remove wire:target="saveData"
                         wire:click.prevent="saveData">
                     <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardar</b>
                 </button>
+
+                <button type="submit" class="btn btn-secondary btn-sm text-white" wire:loading wire:target="saveData" disabled>
+                    <b>
+                        <div class="spinner-grow text-light spinner-grow-sm" role="status"></div>&nbsp;&nbsp;Guardando
+                    </b>
+                </button>
+
             </div>
         </div>
     </div>

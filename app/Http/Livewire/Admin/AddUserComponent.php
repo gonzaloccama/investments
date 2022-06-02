@@ -145,7 +145,7 @@ class AddUserComponent extends Component
                 $this->lastname = mb_convert_case($data->Paterno . ' ' . $data->Materno, MB_CASE_TITLE, "UTF-8");
 
                 $this->disable_read = true;
-            }else{
+            } else {
                 $this->firstname = null;
                 $this->lastname = null;
                 $this->disable_read = false;
@@ -159,18 +159,35 @@ class AddUserComponent extends Component
 
     private function getDNI($id)
     {
-        $client = new Client(['verify' => false]);
+        $client = new Client([
+            'verify' => false,
+//            'cookies' => new \GuzzleHttp\Cookie\FileCookieJar(tempnam('/cache', __CLASS__)),
+//            'headers' => ['Referer' => 'https://www.facturacionelectronica.us/facturacion/controller/ws_consulta_rucdni_v2.php'],
+        ]);
         try {
             $response = $client
-                ->get('https://www.facturacionelectronica.us/' .
-                    'facturacion/controller/ws_consulta_rucdni_v2.php?documento=' .
-                    'DNI&usuario=10447915125&password=985511933&nro_documento=' . $id)
+                ->get('https://www.facturacionelectronica.us/facturacion/controller/ws_consulta_rucdni_v2.php', [
+                    'query' => [
+                        'documento' => 'DNI',
+                        'usuario' => '10447915125',
+                        'password' => '985511933',
+                        'nro_documento' => $id,
+                    ],
+                ])
+//                ->get('https://dniruc.apisperu.com/api/v1/dni/' . $id, [
+//                    'query' => [
+//                        'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImxtdGltYW5hZ0BnbWFpbC5jb20ifQ.udFejq_ZQw4kqP6wfRGX1RaKaksh-lFwcqlM7p9Y1dU'
+//                    ]
+//                ])
                 ->getBody();
+
+//            return json_decode($response);
             return json_decode($response)->result;
         } catch (RequestException $e) {
             $this->addError(
                 'dni',
                 'En la <b><ins>busqueda del DNI</ins></b> algo salió mal.'
+//                $e->getResponse()->getBody()->getContents()
             );
             return null;
         }

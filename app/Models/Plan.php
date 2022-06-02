@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Plan extends Model
 {
     use HasFactory;
+
+    public function time()
+    {
+        return $this->belongsTo(Time::class);
+    }
 }

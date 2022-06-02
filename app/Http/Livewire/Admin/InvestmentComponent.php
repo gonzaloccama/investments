@@ -146,8 +146,9 @@ class InvestmentComponent extends BaseAdmin
                 ->paginate(5);
         }
 
-        if ($this->period && $this->start_date) {
-            $this->end_date = Carbon::parse($this->start_date)->addMonths($this->period)->format('Y-m-d');
+        if ($this->period && $this->start_date && $this->plan) {
+            $_times = 'add' . Plan::find($this->plan)->time->duration;
+            $this->end_date = Carbon::parse($this->start_date)->$_times($this->period)->format('Y-m-d');
         }
 
         $data['_title'] = 'Inversiones';
@@ -205,8 +206,8 @@ class InvestmentComponent extends BaseAdmin
             'Dec' => 'DIC',
         ];
 
-        $today = Carbon::today();
-        $dt = Investment::whereDate('created_at', $today)->get();
+        $today = Carbon::parse($this->start_date);
+        $dt = Investment::whereDate('start_date', $today)->get();
         $i = 1;
 
         if ($dt) {
@@ -229,8 +230,6 @@ class InvestmentComponent extends BaseAdmin
         $data->start_date = $this->start_date;
         $data->end_date = $this->end_date;
         $data->return_amount = $this->return_amount;
-
-//        dd($data);
 
         if ($data->save()) {
             $this->emit('notification', ['Se creó nueva moneda exitosamente']);
@@ -282,7 +281,6 @@ class InvestmentComponent extends BaseAdmin
                 $this->attachment->storeAs('uploads/investment/', $fileSourceName);
             }
 
-
             $data = new CashDeposit();
 
             $data->investment_id = $this->investment->id;
@@ -331,7 +329,21 @@ class InvestmentComponent extends BaseAdmin
 
     public function activeInvestment()
     {
+//        $days = 'addWeeks';
+//        $days = 'addYears';
+//        $days = 'addMonths';
+//        $days = 'addDays';
+//        $days = 'addHours';
+//        $days = 'addQuarters';
+//        $days = 'addUnit';
+
+//
         $dt = Investment::find($this->itemId);
+
+        $_times = 'add' . $dt->isPlan->time->duration;
+
+//        dd(Carbon::parse($dt->start_date)->$_times());
+
         $dt->status = 'active';
         $dt->current_period = 1;
         if ($dt->save()) {
@@ -343,8 +355,11 @@ class InvestmentComponent extends BaseAdmin
             $pay->type_payment = 'return';
 
             $pay->start_date = $dt->start_date;
-            $pay->end_date = Carbon::parse($dt->start_date)->addMonths(1)->format('Y-m-d');
+            $pay->end_date = Carbon::parse($dt->start_date)->$_times(1)->format('Y-m-d');
             $pay->save();
+
+//            $dt->user->group = 4;
+//            $dt->user->save();
         }
     }
 
@@ -574,33 +589,33 @@ class InvestmentComponent extends BaseAdmin
     /*** receipt refund capital ***/
     public function receipt($id)
     {
-            $pdf = app('dompdf.wrapper');
-            $pdf->getDomPDF()->set_option("enable_php", true);
-            $pdf->setPaper('A4');
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->setPaper('A4');
 
-            $data['config'] = SystemConfig::find(1);
-            $data['payment'] = Payment::find($id);
+        $data['config'] = SystemConfig::find(1);
+        $data['payment'] = Payment::find($id);
 
-            $pdf->loadView('livewire.admin.payments.details.receipt', $data);
+        $pdf->loadView('livewire.admin.payments.details.receipt', $data);
 
-            $path = public_path()
-                . '/assets/uploads/receipts/';
+        $path = public_path()
+            . '/assets/uploads/receipts/';
 
-            $file = 'recibo-'
-                . str_pad($data['payment']->id, 6, '0', STR_PAD_LEFT) . '-'
-                . $data['payment']->investment->code . '.pdf';
+        $file = 'recibo-'
+            . str_pad($data['payment']->id, 6, '0', STR_PAD_LEFT) . '-'
+            . $data['payment']->investment->code . '.pdf';
 
-            $receipt = new Receipt();
-            $receipt->investment_id = $data['payment']->investment->id;
-            $receipt->payment_id = $data['payment']->id;
-            $receipt->attachment = $file;
+        $receipt = new Receipt();
+        $receipt->investment_id = $data['payment']->investment->id;
+        $receipt->payment_id = $data['payment']->id;
+        $receipt->attachment = $file;
 
-            if ($pdf->save($path . $file)) {
-                $receipt->save();
-                return true;
-            } else {
-                return false;
-            }
+        if ($pdf->save($path . $file)) {
+            $receipt->save();
+            return true;
+        } else {
+            return false;
+        }
 
 //            return $pdf->download($file . '.pdf');
 //        return $pdf->stream('recibo' . '.pdf');

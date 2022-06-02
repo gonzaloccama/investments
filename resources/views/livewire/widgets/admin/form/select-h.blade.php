@@ -7,7 +7,7 @@
 
             <select id="{{ $name }}" class="form-control" wire:model="{{ $name }}" style="width: 100%"
                 {{ isset($multiple) && !empty($multiple) ? 'multiple' : '' }}>
-                <option>Seleccione...</option>
+                <option value="">Seleccione...</option>
                 @if($object)
                     @if($object == 'array')
                         @foreach($options as $option)

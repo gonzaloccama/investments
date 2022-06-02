@@ -1086,9 +1086,9 @@ $.dore = function (element, options) {
                                     },
                                     ticks: {
                                         beginAtZero: true,
-                                        stepSize: 10000,
+                                        stepSize: 20000,
                                         min: 0,
-                                        max: 50000,
+                                        max: 180000,
                                         padding: 0
                                     }
                                 }
@@ -1152,9 +1152,9 @@ $.dore = function (element, options) {
                                     },
                                     ticks: {
                                         beginAtZero: true,
-                                        stepSize: 5000,
+                                        stepSize: 20000,
                                         min: 0,
-                                        max: 25000,
+                                        max: 160000,
                                         padding: 0
                                     }
                                 }

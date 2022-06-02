@@ -119,7 +119,7 @@
                         <div class="card-body">
                             <h3 class="card-title">Detalles del pago</h3>
 
-                            @if(!$refer->count())
+                            @if(!$refer->count() && $payment->toBonus->type == 'referred')
                                 <div class="alert alert-danger"><i class="fe-alert-triangle"></i> El referido por el
                                     usuario no está en nuestros registros
                                 </div>
@@ -154,7 +154,7 @@
                                     <th class="text-theme-1">Recomendado</th>
                                     <td>
                                         DNI: {{ $payment->toBonus->referred_to }} <br>
-                                        @if(!$refer->count())
+                                        @if(!$refer->count() && $payment->toBonus->type == 'referred')
                                             <div class="alert alert-danger mt-2"><i class="fe-alert-triangle"></i> El
                                                 referido aun no se encuentra!
                                             </div>

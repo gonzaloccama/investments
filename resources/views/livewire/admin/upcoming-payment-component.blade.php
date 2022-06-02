@@ -26,10 +26,10 @@
             'pending' => 'Por pagar',
         ];
 
-        $_period = [// lista type payment
-            'return' => 'Pago Mensual',
-            'capital' => 'Pago de Capital',
-        ];
+//        $_period = [// lista type payment
+//            'return' => 'Pago Mensual',
+//            'capital' => 'Pago de Capital',
+//        ];
 
         //        $percents = true;
         $currencies = true;

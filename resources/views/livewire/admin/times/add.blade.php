@@ -30,12 +30,30 @@
             <?php
             $dt = [
                 'name' => 'duration',
-                'text' => 'Duración (días)',
+                'text' => 'Duración',
                 'required' => 1,
-                'type' => 'text',
+                'object' => 'array',
+                'options' => [
+                ['id' => 'Years', 'name' => 'Años'],
+                    ['id' => 'Quarters', 'name' => 'Trimestres'],
+                    ['id' => 'Months', 'name' => 'Mes'],
+                    ['id' => 'Weeks', 'name' => 'Semanas'],
+                    ['id' => 'Days', 'name' => 'Días'],
+                    ['id' => 'Hours', 'name' => 'Horas'],
+                ],
             ];
             ?>
-            @include('livewire.widgets.admin.form.input-h', $dt)
+            @include('livewire.widgets.admin.form.select-h', $dt)
+
+{{--            <?php--}}
+{{--            $dt = [--}}
+{{--                'name' => 'propagate',--}}
+{{--                'text' => 'Propagar',--}}
+{{--                'required' => 0,--}}
+{{--                'type' => 'text',--}}
+{{--            ];--}}
+{{--            ?>--}}
+{{--            @include('livewire.widgets.admin.form.input-h', $dt)--}}
 
             <div class="separator mb-5 mt-5"></div>
 

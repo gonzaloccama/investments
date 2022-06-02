@@ -12,7 +12,7 @@
     </div>
 
     <div class="card-body">
-        <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">{{ __('Nuevo administrador') }}</h5>
+        <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">{{ __('Nuevo encargado') }}</h5>
         <div class="separator mb-5"></div>
         <div class="scroll">
             <div class="card-body border">
@@ -30,7 +30,7 @@
                     <?php
                     $dt = [
                         'name' => 'itemId',
-                        'text' => 'Seleccione uno para administrador',
+                        'text' => 'Seleccione uno para encargado',
                         'required' => 1,
                         'object' => 'fullname',
                         'options' => $data,

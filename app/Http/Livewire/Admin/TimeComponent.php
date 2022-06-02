@@ -9,11 +9,13 @@ class TimeComponent extends BaseAdmin
 {
     public $name;
     public $duration;
+//    public $propagate;
 
     public $headers = [
         'id' => '#',
         'name' => 'Nombre',
-        'duration' => 'Duración (días)',
+        'duration' => 'Duración',
+//        'propagate' => 'Propagar (x)',
 
         'not' => '',
     ];
@@ -24,7 +26,8 @@ class TimeComponent extends BaseAdmin
     ];
     protected $rules = [
         'name' => 'required|min:3',
-        'duration' => 'required|numeric',
+        'duration' => 'required',
+//        'propagate' => 'nullable|numeric',
     ];
 
     public function mount()
@@ -37,6 +40,8 @@ class TimeComponent extends BaseAdmin
         $this->sort = 'desc';
 
         $this->frame = 'index';
+
+        $this->duration = 'Months';
     }
 
     public function render()

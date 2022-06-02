@@ -38,7 +38,16 @@
     </style>
 </head>
 <body style="padding: 30px;">
-
+<?php
+$_times = [
+    'Years' => 'Anual',
+    'Quarters' => 'Trimestral',
+    'Months' => 'Mensual',
+    'Weeks' => 'Semanal',
+    'Days' => 'Diario',
+    'Hours' => 'Por horas',
+];
+?>
 <header class="clearfix">
     <div id="logo">
         <img src="{{ public_path().'/assets/logos/logo.png' }}">
@@ -47,7 +56,8 @@
         <h2 class="name font-20">{{ $config->name }}</h2>
         <div class="font-14">RUC: {{ $config->ruc }}</div>
         <div class="font-14">{{ $config->addresses }}</div>
-        <div class="font-14"><a href="tel:{{ json_decode($config->phones)[0] }}">{{ json_decode($config->phones)[0] }}</a></div>
+        <div class="font-14"><a
+                href="tel:{{ json_decode($config->phones)[0] }}">{{ json_decode($config->phones)[0] }}</a></div>
     </div>
 </header>
 
@@ -98,7 +108,8 @@
         <u>CONTRATO PRIVADO DE INVERSIONES A PLAZO</u>
     </h2>
 
-    <p class="text-justify font-14">La empresa <span>{{ $config->name }}</span> con RUC N° {{ $config->ruc }}, domiciliada en
+    <p class="text-justify font-14">La empresa <span>{{ $config->name }}</span> con RUC N° {{ $config->ruc }},
+        domiciliada en
         el {{ $config->addresses }}, de la ciudad de Puno, en la fecha indicada, ha recibido una inversión, del
         (los/las) Sr. (a) (s): <b>{{ $invest->user->fullname }}</b>.</p>
 
@@ -110,10 +121,25 @@
         <li><b>Por la suma de:</b> {{ $invest->isCurrency->symbol . ' ' . number_format($invest->amount, 2, '.', ',') }}
             con 00/100 {{ $invest->isCurrency->currency }}.
         </li>
-        <li><b>Depositados en su cuenta N°:</b></li>
-        <li>Monto que devengará una tasa de interés efectiva mensual (fija) Inicial de:
-            <b>{{  number_format($invest->isPlan->percent , 0, '.', ',') . '%' }}</b></li>
-        <li>Monto que devengará una tasa de interés efectiva anual (fija) inicial
+        @if($invest->bankTransfer->count() > 0)
+            <li><b>Depositado:</b>
+                <ul class="font-italic bank-list">
+                    @foreach($invest->bankTransfer as $bank)
+                        <li>
+                            <b>Banco:</b> {{ $bank->bank->name }},
+                            <b>Cuenta N°: </b> {{ $bank->transfer_account }}.
+                        </li>
+                    @endforeach
+                </ul>
+            </li>
+        @else
+            <li><b>Depositado:</b> Dinero en efectivo.</li>
+        @endif
+
+        <li>Monto que devengará una tasa de interés efectiva <span
+                class="text-lowercase">{{ $_times[$invest->isPlan->time->duration] }}</span>
+            (fija) Inicial de: <b>{{  number_format($invest->isPlan->percent , 0, '.', ',') . '%' }}</b></li>
+        <li>Monto que devengará una tasa de interés efectiva total (fija) inicial
             de: <b>{{ $invest->isPlan->percent * $invest->period . '%' }}</b></li>
         <li class="text-justify">Bajo las condiciones señaladas en el contrato que las condiciones generales de la
             empresa {{ $config->name }} con RUC N° {{ $config->ruc }} y el (los/las) clientes.
@@ -125,7 +151,8 @@
                 pagado:</b> {{ $invest->isCurrency->symbol . ' ' . number_format($invest->return_amount * $invest->period , 2, '.', ',') }}
             con 00/100 {{ $invest->isCurrency->currency }}.
         </li>
-        <li><b>Monto de utilidad mensual a ser
+        <li><b>Monto de utilidad <span class="text-lowercase">{{ $_times[$invest->isPlan->time->duration] }}</span> a
+                ser
                 pagado:</b> {{ $invest->isCurrency->symbol . ' ' . number_format($invest->return_amount, 2, '.', ',') }}
             con 00/100 {{ $invest->isCurrency->currency }}.
         </li>
@@ -139,52 +166,59 @@
                 ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
             ?>
         </li>
-        <li><b>Modalidad de pago de utilidades:</b> MENSUAL.</li>
+        <li class="text-uppercase">
+
+            <b>Modalidad de pago de utilidades:</b> {{ $_times[$invest->isPlan->time->duration] }}.
+        </li>
     </ul>
 
 
-
-{{--    <div class="watermark">SUR CAPITAL</div>--}}
-
+    {{--    <div class="watermark">SUR CAPITAL</div>--}}
 
 
-
-    <p class="text-justify font-14">Con la capacidad y legalidad del contrato de inversión a plazo sobre producción de activo,
+    <p class="text-justify font-14">Con la capacidad y legalidad del contrato de inversión a plazo sobre producción de
+        activo,
         tomado en
         consideración las siguientes clausulas.</p>
 
-    <p class="text-justify font-14"><b><u>PRIMERO:</u></b> Don(ña) <b class="text-uppercase">{{ $invest->user->fullname }}</b>
+    <p class="text-justify font-14"><b><u>PRIMERO:</u></b> Don(ña) <b
+            class="text-uppercase">{{ $invest->user->fullname }}</b>
         entrega en este acto por concepto de inversión al Gerente de INVERSIONES SUR CAPITAL <b class="text-uppercase">Sr.
             JHOSEP MARCELO COILA GONZALES</b>, un capital
         de <b>{{ $invest->isCurrency->symbol . ' ' . number_format($invest->amount, 2, '.', ',') }}</b>
         con 00/100 {{ $invest->isCurrency->currency }}., que reconoce haber recibido y cuyo destino es para un fondo
         inversiones a largo plazo.</p>
 
-    <p class="text-justify font-14"><b><u>SEGUNDO:</u></b> El aporte del inversionista será utilizado a discreción de la EMPRESA
+    <p class="text-justify font-14"><b><u>SEGUNDO:</u></b> El aporte del inversionista será utilizado a discreción de la
+        EMPRESA
         DE INVERSIONES SUR CAPITAL no siendo necesario el informe de actividades e inversiones de aportes.</p>
 
-    <p class="text-justify font-14"><b><u>TERCERO:</u></b> El contrato no podrá ser divulgado y/o difundido por ningún motivo,
+    <p class="text-justify font-14"><b><u>TERCERO:</u></b> El contrato no podrá ser divulgado y/o difundido por ningún
+        motivo,
         ya sea a terceros ajenos de la empresa y/o en redes sociales, en caso se diera este, quedará anulado y cancelado
         devolviéndose el monto de inversiones que incluye el descuento de las utilidades pagadas hasta la fecha.</p>
 
-    <p class="text-justify font-14"><b><u>CUARTO:</u></b> El plazo mínimo de contrato es de un año con (365 días calendarios).
+    <p class="text-justify font-14"><b><u>CUARTO:</u></b> El plazo mínimo de contrato es de un año con (365 días
+        calendarios).
         El(la) socio(a) puede realizar operaciones de retiro de dinero al vencimiento o renovación de su inversión
         presentado una solicitud simple y el contrato original. (el plazo de devolución de capital será de 15 días
         hábiles).</p>
 
-    <p class="text-justify font-14"><b><u>QUINTO:</u></b> Si la inversión del 15 al 31 de cada mes tu fecha de pago será del 01
+    <p class="text-justify font-14"><b><u>QUINTO:</u></b> Si la inversión del 15 al 31 de cada mes tu fecha de pago será
+        del 01
         al 05 de cada mes, si la inversión del 01 al 14 de cada mes tu fecha de pago será 15 al 20 de cada mes, mientras
         se tenga vigente el contrato acordado por ambas partes, iniciándose a partir de la firma del presente contrato.
     </p>
 
-    <p class="text-justify font-14"><b><u>SEXTO: </u></b>El presente contrato queda sujeto a ajustes terminado el plazo y en su
+    <p class="text-justify font-14"><b><u>SEXTO: </u></b>El presente contrato queda sujeto a ajustes terminado el plazo
+        y en su
         defecto previo sanción estipulada en la cláusula tercera.</p>
-
 
 
     <h5 class="name mb-3 mt-5 font-16"><b>PENALIDADES</b></h5>
 
-    <p class="text-justify font-14">Toda cancelación antes de su vencimiento será penalizada con el no pago de utilidades,
+    <p class="text-justify font-14">Toda cancelación antes de su vencimiento será penalizada con el no pago de
+        utilidades,
         conforme a lo siguiente:</p>
 
     <ul class="font-14">
@@ -208,18 +242,21 @@
 
     <p class="text-justify font-14">Saldo mínimo de equilibrio para obtener rendimiento: US$ 2,000 o 5,000 soles.</p>
 
-    <p class="text-justify font-14">El cliente puede realizar operaciones de retiro de dinero al vencimiento, cancelación
+    <p class="text-justify font-14">El cliente puede realizar operaciones de retiro de dinero al vencimiento,
+        cancelación
         anticipada o renovación de su inversión en nuestras oficinas portando su documento de identidad vigente. (el)
         plazo devolución de capital será de 15 días hábiles.</p>
 
-    <p class="text-justify font-14">En caso el cliente haya abierto su inversión con renovación automática al vencimiento, es su
+    <p class="text-justify font-14">En caso el cliente haya abierto su inversión con renovación automática al
+        vencimiento, es su
         responsabilidad revisar la tasa vigente en el momento de su renovación. Para esto, puede llamar a nuestra banca
         por teléfono ({{ json_decode($config->phones)[0] }}).</p>
 
     <p class="text-justify font-14">Declaro haber leído y revisado la constancia de inversión y el contrato que rige las
         condiciones generales de las {{ $config->name }} con RUC N° {{ $config->ruc }}.</p>
 
-    <p class="text-justify font-14">Todas las dudas y consultas relacionadas a estos documentos me fueron absueltas y firmo con
+    <p class="text-justify font-14">Todas las dudas y consultas relacionadas a estos documentos me fueron absueltas y
+        firmo con
         conocimiento pleno de las condiciones establecidas en dichos documentos.</p>
 
     <p class="text-right mt-4 mb-4 font-14">Puno,
@@ -262,7 +299,8 @@
         <u>CONTRATO DE ADMINISTRACION DE FONDOS INVERSION (PERSONA NATURAL)</u>
     </h2>
 
-    <p class="text-justify font-14">Conste por el presente documentos, el contrato de administración de fondos inversión que se
+    <p class="text-justify font-14">Conste por el presente documentos, el contrato de administración de fondos inversión
+        que se
         detallan en el anexo a este contrato (el contrato), que celebra de una parte, {{ $config->name }} con RUC N°
         {{ $config->ruc }}, con domicilio en {{ $config->addresses }}, Provincia y departamento de Puno, debidamente
         representado por el promotor cuyos datos figuran en la sección segunda de este documento, a quien en adelante se

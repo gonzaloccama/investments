@@ -16,7 +16,8 @@ class CreateTimesTable extends Migration
         Schema::create('times', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('duration');
+            $table->enum('duration', ['Years','Quarters','Months','Weeks','Days','Hours'])->default('Months');
+            $table->integer('propagate')->nullable();
             $table->timestamps();
         });
     }

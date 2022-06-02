@@ -1,5 +1,5 @@
 <?php
-$exclude = ['not', 'amount', 'unit', 'type_file', 'user_id', 'attachment'];
+$exclude = ['not', 'amount', 'unit', 'type_file', 'user_id', 'attachment', 'bank_id'];
 $_files = ['document' => 'PDF', 'image' => 'Imagen', 'attachment' => 'IMG']
 ?>
 <table class="table table-striped responsive">
@@ -56,6 +56,8 @@ $_files = ['document' => 'PDF', 'image' => 'Imagen', 'attachment' => 'IMG']
                                 {{ $dt[$_unit][$hdr] }}
                             @endif
 
+                        @elseif($hdr == 'bank_id' && isset($_bank) && !empty($_bank))
+                            {{ $dt[$_bank]->name }}
                         @elseif($hdr == 'not')
                             <button class="btn btn-outline-dark icon-button btn-xs"
                                     wire:click.prevent="{{ $deletion }}({{ $dt->id }}, '{{ $show }}')">

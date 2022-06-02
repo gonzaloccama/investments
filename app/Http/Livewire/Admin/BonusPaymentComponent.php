@@ -71,7 +71,7 @@ class BonusPaymentComponent extends BaseAdmin
             })
             ->where('payments.type_payment', 'bonus')
             ->when($this->investment, function ($query) {
-                $query->where('investment_id', 'LIKE', $this->investment);
+                $query->where('payments.investment_id', 'LIKE', $this->investment);
             })
             ->select($table . '.*')
             ->selectRaw("investments.code, users.dni, bonuses.code as bonus")
@@ -118,6 +118,11 @@ class BonusPaymentComponent extends BaseAdmin
             }
         } catch (\Exception $e) {
         }
+    }
+
+    public function navigateTo($id)
+    {
+        $this->redirect(route('admin.investments') . '?id=' . $id);
     }
 
     public function receipt()

@@ -13,7 +13,7 @@
 
         <div class="card-body">
             <h5 class="card-title text-muted text-uppercase pt-0 mt-0 mb-4 title-nowrap">
-                {{ $data->fullname ? $data->fullname : __('Actualizar usuario') }}
+                {{ $data->fullname ? $data->fullname : __('Editar encargado') }}
             </h5>
             <div class="separator mb-5"></div>
             <div class="scroll">

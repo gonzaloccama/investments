@@ -119,6 +119,8 @@ class UpcomingPaymentComponent extends BaseAdmin
         if ($this->itemId) {
             $data = Payment::find($this->itemId);
 
+            $_times = 'add' . $data->investment->isPlan->time->duration;
+
             $data->payment_date = Carbon::now();
             $data->status = 'paid';
 
@@ -131,8 +133,8 @@ class UpcomingPaymentComponent extends BaseAdmin
                     $dt->currency = $data->investment->currency;
                     $dt->type_payment = 'return';
                     $dt->current_period = $data->investment->current_period = $data->investment->current_period + 1;
-                    $dt->start_date = Carbon::parse($data->start_date)->addMonths(1)->format('Y-m-d');
-                    $dt->end_date = Carbon::parse($dt->start_date)->addMonths(1)->format('Y-m-d');
+                    $dt->start_date = Carbon::parse($data->start_date)->$_times(1)->format('Y-m-d');
+                    $dt->end_date = Carbon::parse($dt->start_date)->$_times(1)->format('Y-m-d');
 
                     $dt->save();
                     $data->investment->save();

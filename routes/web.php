@@ -10,6 +10,7 @@ use App\Http\Livewire\Admin\DailyReportComponent;
 use App\Http\Livewire\Admin\DashboardComponent;
 use App\Http\Livewire\Admin\InvestmentComponent;
 use App\Http\Livewire\Admin\InvestmentSearchComponent;
+use App\Http\Livewire\Admin\ManualComponent;
 use App\Http\Livewire\Admin\PaymentComponent;
 use App\Http\Livewire\Admin\PlanComponent;
 use App\Http\Livewire\Admin\ProfileComponent;
@@ -64,6 +65,8 @@ Route::middleware(['userActive'])->group(function () {
 
         Route::get('/admin/banks', BankComponent::class)->name('admin.banks');
         Route::get('/admin/currencies', CurrencyComponent::class)->name('admin.currencies');
+
+        Route::get('/admin/manual', ManualComponent::class)->name('admin.manual');
     });
 
     Route::middleware(['auth', 'isAssistant'])->group(function () {

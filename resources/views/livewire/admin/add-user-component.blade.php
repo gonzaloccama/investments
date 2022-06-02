@@ -13,7 +13,7 @@
                 @include('livewire.widgets.admin.form.input-button-h', $dt)
 
 
-            <?php
+                <?php
                 $dt = [
                     'name' => 'firstname',
                     'text' => 'Nombres',
@@ -157,9 +157,13 @@
     <div class="separator mb-5 mt-5"></div>
 
     <div class="text-right mt-3">
+
         <div wire:loading wire:target="saveData">
             <button type="submit" class="btn btn-secondary text-white" disabled>
-                <b><i class="iconsminds-save"></i>&nbsp;&nbsp;Guardando...</b>
+                <b>
+                    <div class="spinner-grow text-light spinner-grow-sm" role="status"></div>
+                    Guardando...
+                </b>
             </button>
         </div>
 

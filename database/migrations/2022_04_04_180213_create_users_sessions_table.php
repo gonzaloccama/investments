@@ -20,6 +20,7 @@ class CreateUsersSessionsTable extends Migration
             $table->bigInteger('user_id', false, true);
             $table->string('user_browser', 42);
             $table->string('user_os', 42);
+            $table->string('user_device', 42)->nullable();
             $table->string('user_ip', 42);
             $table->timestamps();
 
