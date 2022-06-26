@@ -16,6 +16,7 @@ class DailyReportComponent extends BaseAdmin
     public $headers = [
         'id' => '#',
         'attachment' => 'Reporte',
+        'officename' => 'Oficina',
         'created_at' => 'fecha',
 
         'not' => '',
@@ -35,7 +36,15 @@ class DailyReportComponent extends BaseAdmin
 
     public function render()
     {
-        $rFormat = array_diff(array_keys($this->headers), ['not']);
+        $off_id = null;
+
+        if (auth()->user()->userOffice) {
+            if (auth()->user()->userOffice->status) {
+                $off_id = auth()->user()->userOffice->office_id;
+            }
+        }
+
+        $rFormat = array_diff(array_keys($this->headers), ['not', 'officename']);
         $findIn = [];
         $table = 'daily_reports';
 
@@ -43,13 +52,22 @@ class DailyReportComponent extends BaseAdmin
             $findIn[] = $table . '.' . $item;
         }
 
+//        $findIn[] = 'offices.office';
+
         $data['results'] = DailyReport::orderBy($this->fieldSort, $this->sort)
             ->where(function ($query) use ($findIn) {
                 foreach ($findIn as $in) {
                     $query->orWhere($in, 'LIKE', '%' . $this->keyWord . '%');
                 }
             })
+            ->when(auth()->user()->group == 3 && $off_id, function ($query) use ($off_id) {
+                $query->where('office_id', $off_id);
+            })
+//            ->select($table . '.*', 'offices.office')
+//            ->join('offices', 'offices.id', '=', $table . '.office_id')
             ->paginate($this->limit);
+
+
 
         $data['_title'] = 'Reportes Diarios';
 
@@ -61,14 +79,33 @@ class DailyReportComponent extends BaseAdmin
     public function openFrame()
     {
         try {
+            $off_id = null;
+            $off = null;
+            $_group = auth()->user()->group;
+
+            if (auth()->user()->userOffice) {
+                if (auth()->user()->userOffice->status) {
+                    $off = auth()->user()->userOffice->office->office;
+                    $off_id = auth()->user()->userOffice->office_id;
+                }
+            }
+
             $report = new DailyReport();
 
             $pdf = app('dompdf.wrapper');
             $pdf->getDomPDF()->set_option("enable_php", true);
             $pdf->setPaper('A4');
 
+            $data['off_id'] = $off_id;
+            $data['_group'] = $_group;
+            $data['off'] = $off;
             $data['config'] = SystemConfig::find(1);
-            $data['investments'] = Investment::whereDate('created_at', Carbon::today())->whereIn('status', ['active'])->get();
+            $data['investments'] = Investment::whereDate('created_at', Carbon::today())->whereIn('status', ['active'])
+                ->when($off_id && $_group, function ($query) use ($off_id) {
+                    $query->where('office_id', $off_id);
+                })
+                ->get();
+
             $data['created_at'] = Carbon::now()->format('Y-m-d — g:i:s A');
 
             if ($d = DailyReport::latest('created_at')->first()) {
@@ -83,9 +120,13 @@ class DailyReportComponent extends BaseAdmin
 
             $pdf->loadView('livewire.admin.dashboard.daily-report', $data);
 
-            $file = 'REPORTE-N' . str_pad($data['next'], 3, '0', STR_PAD_LEFT) . '-' . Carbon::now()->format('Y-m-d—H-i-s') . '.pdf';
+            $file = 'REPORTE-N' . str_pad($data['next'], 4, '0', STR_PAD_LEFT) . '-' . Carbon::now()->format('Y-m-d—H-i-s') . '.pdf';
             $path = public_path()
                 . '/assets/uploads/daily-reports/';
+
+            if ($off_id) {
+                $report->office_id = $off_id;
+            }
 
             $report->type_report = 'reporte diario';
             $report->attachment = $file;

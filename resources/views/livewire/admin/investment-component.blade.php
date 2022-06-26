@@ -86,6 +86,7 @@
                 // activeSelect2('#currency', 'currency');
                 activeSelect2('#plan', 'plan');
                 activeSelect2('#bank_id', 'bank_id');
+                activeSelect2('#office_id', 'office_id');
 
                 $(".sortable").each(function () {
                     if ($(this).find(".handle").length > 0) {
@@ -107,7 +108,7 @@
             });
 
             window.livewire.on('notification', (mssg) => {
-                notificationSwal(`¡${mssg[0]}!`, 'rgba(0,67,124,0.76)');
+                notificationSwal(`¡${mssg[0]}!`, mssg[1] ?? 'rgba(0,67,124,0.76)');
                 Livewire.emit('refresh');
             });
 

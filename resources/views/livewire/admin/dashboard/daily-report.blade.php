@@ -61,7 +61,7 @@
 
 <footer class="font-italic font-14">
     <div id="notices">
-        <span>{{ $created_at }}</span>
+        <span class="text-uppercase">{{ $created_at }}{{ $off ? ' — ' . $off : '' }}</span>
     </div>
     {{--    <div class="num">pág. <span class="pagenum"></span></div>--}}
 </footer>
@@ -125,9 +125,10 @@
         </tbody>
     </table>
 
-    <p class="text-justify font-14">Yo, {{  mb_convert_case(auth()->user()->fullname, MB_CASE_TITLE, "UTF-8") }} con DNI {{ auth()->user()->dni }}, encargado de la administración y
-        caja de la empresa <b>{{ mb_convert_case($config->name, MB_CASE_UPPER, "UTF-8") }}</b>, procedo hacer parte diario por concepto de ingreso
-        de efectivo de la fecha
+    <p class="text-justify font-14">Yo, {{  mb_convert_case(auth()->user()->fullname, MB_CASE_TITLE, "UTF-8") }} con
+        DNI {{ auth()->user()->dni }}, encargado de la administración y caja de la empresa
+        <b class="text-uppercase">{{ mb_convert_case($config->name, MB_CASE_UPPER, "UTF-8") }}{{ $off ? ' — ' . $off : '' }}</b>,
+        procedo hacer parte diario por concepto de ingreso de efectivo de la fecha
         <?php
         echo ucfirst(Carbon\Carbon::today()
             ->locale('es')->translatedFormat('l\, d \d\e F \d\e\l Y'));
@@ -144,6 +145,9 @@
             <td class="p-1 pr-4  text-right w-30">
                 <?php
                 $s = \App\Models\Investment::whereIn('status', ['active'])
+                    ->when($off_id && $_group, function ($query) use ($off_id) {
+                        $query->where('office_id', $off_id);
+                    })
                     ->where('currency', 1)->whereDate('created_at', \Carbon\Carbon::today())->sum('amount');
                 ?>
                 {{ 'S/ ' . number_format($s, 2, '.', ',') }}
@@ -157,6 +161,9 @@
             <td class="p-1 pr-4 text-right w-30">
                 <?php
                 $d = \App\Models\Investment::whereIn('status', ['active'])
+                    ->when($off_id && $_group, function ($query) use ($off_id) {
+                        $query->where('office_id', $off_id);
+                    })
                     ->where('currency', 2)->whereDate('created_at', \Carbon\Carbon::today())->sum('amount');
                 ?>
                 {{ '$ ' . number_format($d, 2, '.', ',') }}

@@ -19,6 +19,11 @@
 
 <table class="table">
     <tr>
+        <th class="text-theme-1">OFICINA:</th>
+        <td class="text-uppercase">{{ $investment->office->office ?? ''  }}</td>
+    </tr>
+
+    <tr>
         <th class="text-theme-1">Codigo:</th>
         <td>{{ $code }}</td>
     </tr>

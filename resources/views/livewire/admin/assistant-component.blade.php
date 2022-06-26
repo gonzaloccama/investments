@@ -74,6 +74,7 @@
             window.livewire.on('refreshContent', () => {
                 activeSelect2('#group', 'group');
                 activeSelect2('#itemId', 'itemId');
+                activeSelect2('#office_id', 'office_id');
             });
 
             window.livewire.on('refreshSection', () => {

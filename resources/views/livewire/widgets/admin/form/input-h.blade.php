@@ -8,12 +8,13 @@
 
     <div class="form-group row">
         <label for="{{ $name }}"
-               class="col-sm-3 col-form-label">{{ $text }} {!! $required ? $txt . '<i class="text-danger">*</i>':'' !!}</label>
+               class="col-sm-3 col-form-label">{!! $text !!} {!! $required ? $txt . '<i class="text-danger">*</i>':'' !!}</label>
         <div class="col-sm-9 @error($name) error-validate @enderror">
 
             @if(in_array($type, ['text', 'password']))
                 <input type="{{ $type }}" class="form-control" id="{{ $name }}" wire:model="{{ $name }}"
                        {{ isset($readonly) && !empty($readonly) ? 'readonly' : '' }} placeholder="{{ $text }}"
+                       @if(isset($keyup) && !empty($keyup)) wire:keyup="{{ $keyup }}" @endif
                        autocomplete="off">
             @elseif($type == 'checkbox')
                 <div class="custom-switch custom-switch-primary mb-2">

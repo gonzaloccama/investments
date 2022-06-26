@@ -13,23 +13,33 @@
         <th class="text-theme-1">Codigo:</th>
         <td>{{ $code }}</td>
     </tr>
-{{--    <tr>--}}
-{{--        <th class="text-theme-1">Modeda:</th>--}}
-{{--        <td>--}}
-{{--            <?php--}}
-{{--            $options = \App\Models\Currency::select('currencies.*')--}}
-{{--                ->selectRaw('CONCAT("(", symbol,")"," ", currency) as currency')->get();--}}
-{{--            ?>--}}
-{{--            <select class="form-control" id="currency" wire:model="currency">--}}
-{{--                @foreach($options as $option)--}}
-{{--                    <option value="{{ $option->id }}">{{ $option->currency }}</option>--}}
-{{--                @endforeach--}}
-{{--            </select>--}}
-{{--            @include('livewire.widgets.admin.form.error', ['name' => 'currency'])--}}
-{{--        </td>--}}
-{{--    </tr>--}}
+    {{--    <tr>--}}
+    {{--        <th class="text-theme-1">Modeda:</th>--}}
+    {{--        <td>--}}
+    {{--            <?php--}}
+    {{--            $options = \App\Models\Currency::select('currencies.*')--}}
+    {{--                ->selectRaw('CONCAT("(", symbol,")"," ", currency) as currency')->get();--}}
+    {{--            ?>--}}
+    {{--            <select class="form-control" id="currency" wire:model="currency">--}}
+    {{--                @foreach($options as $option)--}}
+    {{--                    <option value="{{ $option->id }}">{{ $option->currency }}</option>--}}
+    {{--                @endforeach--}}
+    {{--            </select>--}}
+    {{--            @include('livewire.widgets.admin.form.error', ['name' => 'currency'])--}}
+    {{--        </td>--}}
+    {{--    </tr>--}}
     <tr>
-        <th class="text-theme-1">Meses:</th>
+        <?php
+        $_times = [
+            'Years' => 'Años',
+            'Quarters' => 'Trimestre',
+            'Months' => 'Meses',
+            'Weeks' => 'Semanas',
+            'Days' => 'Dias',
+            'Hours' => 'Horas',
+        ];
+        ?>
+        <th class="text-theme-1">{{ $_times[$investment->isPlan->time->duration] }}:</th>
         <td>
             <input type="text" class="form-control" id="period" wire:model="period">
             @include('livewire.widgets.admin.form.error', ['name' => 'period'])
@@ -66,6 +76,23 @@
             ?>
         </td>
     </tr>
+
+    @if(in_array(auth()->user()->group, [1,2]))
+        <tr>
+            <th class="text-theme-1">Oficina:</th>
+            <td>
+                <?php
+                $options = \App\Models\Office::all();
+                ?>
+                <select class="form-control" id="office_id" wire:model="office_id">
+                    @foreach($options as $option)
+                        <option value="{{ $option->id }}">{{ $option->office }}</option>
+                    @endforeach
+                </select>
+                @include('livewire.widgets.admin.form.error', ['name' => 'office_id'])
+            </td>
+        </tr>
+    @endif
 
     <tr>
         <th class="text-theme-1">Estado:</th>

@@ -15,7 +15,7 @@ class CreateInvestmentsTable extends Migration
     {
         Schema::create('investments', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 12)->autoIncrement();
+            $table->string('code', 15)->autoIncrement();
             $table->bigInteger('user_id')->unsigned();
             $table->decimal('amount')->nullable();
             $table->integer('currency');

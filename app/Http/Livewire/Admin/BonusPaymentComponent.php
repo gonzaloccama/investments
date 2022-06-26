@@ -73,6 +73,9 @@ class BonusPaymentComponent extends BaseAdmin
             ->when($this->investment, function ($query) {
                 $query->where('payments.investment_id', 'LIKE', $this->investment);
             })
+            ->when(auth()->user()->group == 3 && isset(auth()->user()->userOffice->status), function ($query) {
+                $query->where('investments.office_id', auth()->user()->userOffice->office_id);
+            })
             ->select($table . '.*')
             ->selectRaw("investments.code, users.dni, bonuses.code as bonus")
             ->join('investments', 'investments.id', '=', $table . '.investment_id')

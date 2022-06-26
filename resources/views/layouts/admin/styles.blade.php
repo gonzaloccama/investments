@@ -1066,4 +1066,61 @@
     .w-45{
         width: 45% !important;
     }
+
+
+    .font-10 {
+        font-size: 10px !important;
+    }
+
+    .font-11 {
+        font-size: 11px !important;
+    }
+
+    .font-12 {
+        font-size: 12px !important;
+    }
+
+    .font-13 {
+        font-size: 13px !important;
+    }
+
+    .font-14 {
+        font-size: 14px !important;
+    }
+
+    .font-15 {
+        font-size: 15px !important;
+    }
+
+    .font-16 {
+        font-size: 16px !important;
+    }
+
+    .font-17 {
+        font-size: 17px !important;
+    }
+
+    .font-18 {
+        font-size: 18px !important;
+    }
+
+    .font-20 {
+        font-size: 20px !important;
+    }
+
+    .font-22 {
+        font-size: 22px !important;
+    }
+
+    .font-24 {
+        font-size: 24px !important;
+    }
+
+    .font-26 {
+        font-size: 26px !important;
+    }
+
+    .font-28 {
+        font-size: 28px !important;
+    }
 </style>

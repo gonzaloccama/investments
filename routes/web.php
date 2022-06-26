@@ -11,6 +11,7 @@ use App\Http\Livewire\Admin\DashboardComponent;
 use App\Http\Livewire\Admin\InvestmentComponent;
 use App\Http\Livewire\Admin\InvestmentSearchComponent;
 use App\Http\Livewire\Admin\ManualComponent;
+use App\Http\Livewire\Admin\OfficeComponent;
 use App\Http\Livewire\Admin\PaymentComponent;
 use App\Http\Livewire\Admin\PlanComponent;
 use App\Http\Livewire\Admin\ProfileComponent;
@@ -36,13 +37,9 @@ Route::get('/clear', function () {
     $output = new \Symfony\Component\Console\Output\BufferedOutput();
     Artisan::call('log:clear');
     Artisan::call('optimize:clear', array(), $output);
+    Artisan::call('temp:file');
     return $output->fetch();
 })->name('clear');
-
-Route::get('/clear-temp', function () {
-    Artisan::call('temp:file');
-    dd('Temporary files have been cleared');
-})->name('clear-temp');
 
 Route::get('/', function () {
     return redirect(\route('login'));
@@ -65,6 +62,8 @@ Route::middleware(['userActive'])->group(function () {
 
         Route::get('/admin/banks', BankComponent::class)->name('admin.banks');
         Route::get('/admin/currencies', CurrencyComponent::class)->name('admin.currencies');
+
+        Route::get('/admin/offices', OfficeComponent::class)->name('admin.offices');
 
         Route::get('/admin/manual', ManualComponent::class)->name('admin.manual');
     });

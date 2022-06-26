@@ -22,8 +22,11 @@
         <p class="text-muted text-small mb-2">Ciudad</p>
         <p class="mb-3">{{ $dt->city }}</p>
 
-        <p class="text-muted text-small mb-2">Provincia, Región</p>
-        <p class="mb-3">{{ $dt->province }}, {{ $dt->u_region->region }}</p>
+        <p class="text-muted text-small mb-2">Provincia</p>
+        <p class="mb-3">{{ $dt->province }}</p>
+
+        <p class="text-muted text-small mb-2">Región</p>
+        <p class="mb-3">{{ $dt->u_region->region ?? '...' }}</p>
 
 {{--        <p class="text-muted text-small mb-2">Región</p>--}}
 {{--        <p class="mb-3">{{ $dt->u_region->region }}</p>--}}

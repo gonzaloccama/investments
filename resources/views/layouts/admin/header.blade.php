@@ -21,12 +21,12 @@
             </svg>
         </a>
 
-        <div class="search" data-search-path="Pages.Search.html?q=">
-            <input placeholder="Buscar...">
-            <span class="search-icon">
-                    <i class="simple-icon-magnifier"></i>
-                </span>
-        </div>
+        {{--        <div class="search" data-search-path="Pages.Search.html?q=">--}}
+        {{--            <input placeholder="Buscar...">--}}
+        {{--            <span class="search-icon">--}}
+        {{--                    <i class="simple-icon-magnifier"></i>--}}
+        {{--                </span>--}}
+        {{--        </div>--}}
 
     </div>
 
@@ -157,13 +157,38 @@
                     </span>
             </button>
 
-            <div class="dropdown-menu dropdown-menu-right mt-3">
-                <a class="dropdown-item" href="{{ route('admin.profile') . '?tab=edit-profile' }}">Mi cuenta</a>
-                <a class="dropdown-item" href="{{ route('admin.profile') . '?tab=chang-pwd' }}">Cambiar Contraseña</a>
+            <div class="dropdown-menu dropdown-menu-right mt-3 pt-0 shadow-lg border-0" style="width: 240px!important;">
+                <div class="p-3 bg-secondary border-secondary text-center" style="border-radius: 10px 10px 0 0">
+
+                    <div class="text-uppercase p-0 m-0 font-16">
+                        <?php
+                        if (isset(auth()->user()->userOffice)) {
+                            if (auth()->user()->userOffice->status && auth()->user()->group == 3) {
+                                echo auth()->user()->userOffice->office->office;
+                            }
+                        }
+                        ?>
+                    </div>
+{{--                    <hr class="bg-info m-0 p-0">--}}
+                    <div class="text-uppercase text-white-50 p-0 m-0">
+                        <?php
+                        echo '<b>' . auth()->user()->user_role->role . '</b>';
+                        ?>
+                    </div>
+                    <span class="text-white-50">{{ auth()->user()->fullname }}</span>
+                </div>
+
+
+                <a class="dropdown-item" href="{{ route('admin.profile') . '?tab=edit-profile' }}">
+                    <i class="fe-user-check pr-2"></i>Mi cuenta
+                </a>
+                <a class="dropdown-item" href="{{ route('admin.profile') . '?tab=chang-pwd' }}">
+                    <i class="fe-lock pr-2"></i>Cambiar Contraseña
+                </a>
                 <div class="separator"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Cerrar sesión
+                    <i class="fe-log-out pr-2"></i>Cerrar sesión
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>

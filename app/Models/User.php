@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Relationship::class, 'relationship');
     }
+
+    public function userOffice()
+    {
+        return $this->hasOne(UserOffice::class);
+    }
 }

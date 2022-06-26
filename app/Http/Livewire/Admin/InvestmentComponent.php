@@ -7,6 +7,7 @@ use App\Models\Admin\Receipt;
 use App\Models\BankTransfer;
 use App\Models\CashDeposit;
 use App\Models\Investment;
+use App\Models\Office;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\SystemConfig;
@@ -14,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use PDF;
 
@@ -31,6 +33,7 @@ class InvestmentComponent extends BaseAdmin
     public $end_date;
     public $return_amount;
     public $progress;
+    public $office_id;
 
     public $userId;
     public $keyTex;
@@ -56,7 +59,7 @@ class InvestmentComponent extends BaseAdmin
     public $frame = 'index';
 
     public $headers = [
-        'code' => '#',
+        'code' => 'Código',
         'dni' => 'DNI',
         'fullname' => 'Inversionista',
         'amount' => 'Monto',
@@ -73,16 +76,17 @@ class InvestmentComponent extends BaseAdmin
     ];
 
     protected $attributes = [
-        'code' => '<b><ins>Moneda</ins></b>',
-        'user_id' => '<b><ins>Simbolo</ins></b>',
-        'amount' => '<b><ins>Código</ins></b>',
-        'currency' => '<b><ins>Código</ins></b>',
-        'period' => '<b><ins>Código</ins></b>',
-        'plan' => '<b><ins>Código</ins></b>',
-        'start_date' => '<b><ins>Código</ins></b>',
-        'end_date' => '<b><ins>Código</ins></b>',
-        'return_amount' => '<b><ins>Código</ins></b>',
-        'progress' => '<b><ins>Código</ins></b>',
+        'code' => '<b><ins>Código</ins></b>',
+        'user_id' => '<b><ins>Inversionista</ins></b>',
+        'amount' => '<b><ins>Monto capital</ins></b>',
+        'currency' => '<b><ins>Nominación</ins></b>',
+        'period' => '<b><ins>Periodos</ins></b>',
+        'plan' => '<b><ins>Plan</ins></b>',
+        'start_date' => '<b><ins>Fecha de inicio</ins></b>',
+        'end_date' => '<b><ins>Fecha de culminación</ins></b>',
+        'return_amount' => '<b><ins>Monto de retorno</ins></b>',
+        'progress' => '<b><ins>Progreso</ins></b>',
+        'office_id' => '<b><ins>Oficina</ins></b>',
     ];
     protected $rules = [
 //        'currency' => 'required',
@@ -90,6 +94,7 @@ class InvestmentComponent extends BaseAdmin
         'plan' => 'required',
         'start_date' => 'required',
         'end_date' => 'required',
+//        'office_id' => 'nullable',
     ];
 
     public function mount()
@@ -127,6 +132,9 @@ class InvestmentComponent extends BaseAdmin
                     $query->orWhere($in, 'LIKE', '%' . $this->keyWord . '%');
                 }
                 $query->orWhere(DB::raw("CONCAT(users.firstname, ' ', users.lastname)"), 'LIKE', '%' . $this->keyWord . '%');
+            })
+            ->when(auth()->user()->group == 3 && isset(auth()->user()->userOffice->status), function ($query) {
+                $query->where('office_id', auth()->user()->userOffice->office_id);
             })
             ->select($table . '.*')
             ->selectRaw("
@@ -190,51 +198,72 @@ class InvestmentComponent extends BaseAdmin
 
     public function saveData()
     {
-        $this->validate($this->rules, [], $this->attributes);
-        $months = [
-            'Jan' => 'ENE',
-            'Feb' => 'FEB',
-            'Mar' => 'MAR',
-            'Apr' => 'ABR',
-            'May' => 'MAY',
-            'Jun' => 'JUN',
-            'Jul' => 'JUL',
-            'Aug' => 'AGO',
-            'Sep' => 'SEP',
-            'Oct' => 'OCT',
-            'Nov' => 'NOV',
-            'Dec' => 'DIC',
-        ];
+        if (in_array(auth()->user()->group, [1, 2])) {
+            $rules = $this->rules;
+            $this->validate(array_merge($rules, ['office_id' => 'required']), [], $this->attributes);
+        } else {
+            $this->validate($this->rules, [], $this->attributes);
 
-        $today = Carbon::parse($this->start_date);
-        $dt = Investment::whereDate('start_date', $today)->get();
-        $i = 1;
-
-        if ($dt) {
-            $i = $dt->count() + 1;
+            if (auth()->user()->userOffice) {
+                if (auth()->user()->userOffice->status) {
+                    $this->office_id = auth()->user()->userOffice->office_id;
+                }
+            }
         }
 
-        $code = $months[$today->format('M')]
-            . $today->format('d')
-            . str_pad($i, 3, '0', STR_PAD_LEFT)
-            . $today->format('y');
+        $prefix = Office::find($this->office_id)->prefix;
 
-        $data = new Investment();
+        try {
+            $months = [
+                'Jan' => 'ENE',
+                'Feb' => 'FEB',
+                'Mar' => 'MAR',
+                'Apr' => 'ABR',
+                'May' => 'MAY',
+                'Jun' => 'JUN',
+                'Jul' => 'JUL',
+                'Aug' => 'AGO',
+                'Sep' => 'SEP',
+                'Oct' => 'OCT',
+                'Nov' => 'NOV',
+                'Dec' => 'DIC',
+            ];
 
-        $data->code = $code;
-        $data->user_id = $this->userId;
-        $data->amount = $this->amount;
-        $data->currency = Plan::find($this->plan)->currency;
-        $data->period = $this->period;
-        $data->plan = $this->plan;
-        $data->start_date = $this->start_date;
-        $data->end_date = $this->end_date;
-        $data->return_amount = $this->return_amount;
+            $today = Carbon::parse($this->start_date);
+            $dt = Investment::whereDate('start_date', $today)->where('office_id', $this->office_id)->get();
+            $i = 1;
 
-        if ($data->save()) {
-            $this->emit('notification', ['Se creó nueva moneda exitosamente']);
-            $this->cleanItems();
-            $this->edit($data->id);
+            if ($dt) {
+                $i = $dt->count() + 1;
+            }
+
+            $code = $months[$today->format('M')]
+                . $today->format('d')
+                . str_pad($i, 3, '0', STR_PAD_LEFT)
+                . $today->format('y') . '-' . $prefix;
+
+//            dd($code);
+
+            $data = new Investment();
+
+            $data->code = $code;
+            $data->user_id = $this->userId;
+            $data->amount = $this->amount;
+            $data->currency = Plan::find($this->plan)->currency;
+            $data->period = $this->period;
+            $data->plan = $this->plan;
+            $data->start_date = $this->start_date;
+            $data->end_date = $this->end_date;
+            $data->office_id = $this->office_id;
+            $data->return_amount = $this->return_amount;
+
+            if ($data->save()) {
+                $this->emit('notification', ['Se creó nueva inversión exitosamente']);
+                $this->cleanItems();
+                $this->edit($data->id);
+            }
+        } catch (\Exception $e) {
+            $this->emit('notification', ['Algo salió mal al crear nueva inversión', 'rgba(255,2,52,0.56)']);
         }
     }
 
@@ -252,6 +281,13 @@ class InvestmentComponent extends BaseAdmin
 
     public function saveEdit()
     {
+//        if (auth()->user()->userOffice) {
+//            if (auth()->user()->userOffice->status) {
+//                $this->office_id = auth()->user()->userOffice->office_id;
+//            }
+//        }
+
+
         $this->validate($this->rules, [], $this->attributes);
         $data = Investment::find($this->itemId);
 
@@ -259,6 +295,10 @@ class InvestmentComponent extends BaseAdmin
         $data->period = $this->period;
         $data->plan = $this->plan;
         $data->start_date = $this->start_date;
+
+        if (in_array(auth()->user()->group, [1, 2])) {
+            $data->office_id = $this->office_id;
+        }
 
         if ($data->save()) {
             $this->update = null;
@@ -448,6 +488,7 @@ class InvestmentComponent extends BaseAdmin
         $this->start_date = $this->investment->start_date;
         $this->end_date = $this->investment->end_date;
         $this->return_amount = $this->investment->return_amount;
+        $this->office_id = $this->investment->office_id;
 
         $this->frame = 'edit';
         $this->emit('refreshSection');
@@ -543,6 +584,7 @@ class InvestmentComponent extends BaseAdmin
         $this->end_date = null;
         $this->return_amount = null;
         $this->progress = null;
+        $this->office_id = null;
 
         $this->_user = null;
         $this->investment = null;

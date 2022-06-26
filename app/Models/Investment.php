@@ -50,6 +50,11 @@ class Investment extends Model
         return $this->hasMany(Bonus::class);
     }
 
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
+    }
+
 //    public function getRemainingDaysAttribute()
 //    {
 //        if ($this->end_date) {

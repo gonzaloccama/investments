@@ -54,10 +54,11 @@
                  style="width: 66px !important;height: 66px !important;">
         </div>
         <div class="pl-2 mt-1">
-            <h2 class="name font-18">{{ $config->name }}</h2>
-            <div class="font-11">RUC: {{ $config->ruc }}</div>
-            <div class="font-11">{{ $config->addresses }}</div>
-            <div class="font-11"><a
+            <h2 class="name font-17">{{ $config->name }}</h2>
+            <h2 class="name font-13 text-uppercase">{{ $payment->investment->office->office }}</h2>
+            <div class="font-8">RUC: {{ $config->ruc }}</div>
+            <div class="font-8">{{ $config->addresses }}</div>
+            <div class="font-8"><a
                     href="tel:{{ json_decode($config->phones)[0] }}">{{ json_decode($config->phones)[0] }}</a></div>
         </div>
 
@@ -103,7 +104,9 @@
                 ];
 
                 $type_paid = [
-                    'return' => 'Pago de retorno ' . $_times[$payment->investment->isPlan->time->duration],
+                    'return' => 'Pago de retorno ' . $_times[$payment->investment->isPlan->time->duration] . ', <b>'
+                        . $payment->current_period . '</b> de ' . $payment->investment->period . ', de la inversión <b>'
+                        . $payment->investment->code . '</b>',
                     'capital' => 'Pago de capital',
                 ];
 
@@ -114,7 +117,7 @@
                 }
 
                 ?>
-                {{ $type_paid[$payment->type_payment] }}.
+                {!! $type_paid[$payment->type_payment] !!}.
             </span>
         </p>
 
@@ -130,9 +133,9 @@
                 <td class="bg-white pt-4 pb-0">
                     <hr>
                 </td>
-                <td class="bg-white pt-4 pb-0">
-                    <hr>
-                </td>
+{{--                <td class="bg-white pt-4 pb-0">--}}
+{{--                    <hr>--}}
+{{--                </td>--}}
             </tr>
             <tr class="p-0 m-0 font-11 text-uppercase">
                 <td class="col-md-6 p-0 m-0 bg-white text-center">
@@ -140,11 +143,11 @@
                     <p class="p-0 m-0">{{ $payment->investment->user->fullname }}</p>
                     <p class="p-0 m-0">DNI: {{ $payment->investment->user->dni }}</p>
                 </td>
-                <td class="col-md-6 p-0 m-0 bg-white text-center">
-                    <p class="p-0 m-0">ENTREGUÉ CONFORME</p>
-                    <p class="p-0 m-0">Sr. ANGEL JESUS CASILLA GONZALES</p>
-                    <p class="p-0 m-0">DNI: 70188069</p>
-                </td>
+{{--                <td class="col-md-6 p-0 m-0 bg-white text-center">--}}
+{{--                    <p class="p-0 m-0">ENTREGUÉ CONFORME</p>--}}
+{{--                    <p class="p-0 m-0">Sr. ANGEL JESUS CASILLA GONZALES</p>--}}
+{{--                    <p class="p-0 m-0">DNI: 70188069</p>--}}
+{{--                </td>--}}
             </tr>
         </table>
     </main>
@@ -157,10 +160,11 @@
                  style="width: 66px !important;height: 66px !important;">
         </div>
         <div class="pl-2 mt-1">
-            <h2 class="name font-18">{{ $config->name }}</h2>
-            <div class="font-11">RUC: {{ $config->ruc }}</div>
-            <div class="font-11">{{ $config->addresses }}</div>
-            <div class="font-11"><a
+            <h2 class="name font-17">{{ $config->name }}</h2>
+            <h2 class="name font-13 text-uppercase">{{ $payment->investment->office->office }}</h2>
+            <div class="font-8">RUC: {{ $config->ruc }}</div>
+            <div class="font-8">{{ $config->addresses }}</div>
+            <div class="font-8"><a
                     href="tel:{{ json_decode($config->phones)[0] }}">{{ json_decode($config->phones)[0] }}</a></div>
         </div>
 
@@ -189,7 +193,7 @@
 
         <p class="text-justify mb-0 font-16"><b>Por concepto de:</b>
             <span style="color: #6a6a6a;">
-                {{ $type_paid[$payment->type_payment] }}.
+                {!! $type_paid[$payment->type_payment] !!}.
             </span>
         </p>
 
@@ -205,9 +209,9 @@
                 <td class="bg-white pt-4 pb-0">
                     <hr>
                 </td>
-                <td class="bg-white pt-4 pb-0">
-                    <hr>
-                </td>
+{{--                <td class="bg-white pt-4 pb-0">--}}
+{{--                    <hr>--}}
+{{--                </td>--}}
             </tr>
             <tr class="p-0 m-0 font-11 text-uppercase">
                 <td class="col-md-6 p-0 m-0 bg-white text-center">
@@ -215,11 +219,11 @@
                     <p class="p-0 m-0">{{ $payment->investment->user->fullname }}</p>
                     <p class="p-0 m-0">DNI: {{ $payment->investment->user->dni }}</p>
                 </td>
-                <td class="col-md-6 p-0 m-0 bg-white text-center">
-                    <p class="p-0 m-0">ENTREGUÉ CONFORME</p>
-                    <p class="p-0 m-0">Sr. ANGEL JESUS CASILLA GONZALES</p>
-                    <p class="p-0 m-0">DNI: 70188069</p>
-                </td>
+{{--                <td class="col-md-6 p-0 m-0 bg-white text-center">--}}
+{{--                    <p class="p-0 m-0">ENTREGUÉ CONFORME</p>--}}
+{{--                    <p class="p-0 m-0">Sr. ANGEL JESUS CASILLA GONZALES</p>--}}
+{{--                    <p class="p-0 m-0">DNI: 70188069</p>--}}
+{{--                </td>--}}
             </tr>
         </table>
     </main>

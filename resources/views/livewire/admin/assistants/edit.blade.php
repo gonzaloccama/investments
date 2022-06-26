@@ -34,6 +34,17 @@
 
                     <?php
                     $dt = [
+                        'name' => 'office_id',
+                        'text' => 'Oficina',
+                        'required' => 0,
+                        'object' => 'office',
+                        'options' => $offices,
+                    ];
+                    ?>
+                    @include('livewire.widgets.admin.form.select-h', $dt)
+
+                    <?php
+                    $dt = [
                         'name' => 'activated',
                         'text' => 'Cuenta activada',
                         'required' => 0,

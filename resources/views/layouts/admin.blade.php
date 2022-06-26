@@ -9,6 +9,45 @@ $config = \App\Models\SystemConfig::find(1);
     <title>@stack('title') | {{ $config->name ?? config('app.name', 'Laravel') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <!-- INIT PWA -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}"><!-- Chrome for Android theme color -->
+    <meta name="theme-color" content="#1D477A">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PWA">
+    <link rel="icon" sizes="512x512" href="{{ asset('/images/icons/icon-512x512.png') }}">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#1D477A">
+    <meta name="apple-mobile-web-app-title" content="PWA">
+    <link rel="apple-touch-icon" href="{{ asset('/images/icons/icon-512x512.png') }}">
+
+    <link href="{{ asset('/images/icons/icon-72x72.png') }}"
+          media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image">
+
+    <!-- Tile for Win8 -->
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ asset('/images/icons/icon-512x512.png') }}">
+
+    <script type="text/javascript">
+        // Initialize the service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js', {
+                scope: '.'
+            }).then(function (registration) {
+                // Registration was successful
+                console.log('Laravel PWA: ServiceWorker registration successful with scope: ', registration.scope);
+            }, function (err) {
+                // registration failed :(
+                console.log('Laravel PWA: ServiceWorker registration failed: ', err);
+            });
+        }
+    </script>
+    <!-- END PWA -->
+
     <link rel="stylesheet" href="{{ asset('assets/font/iconsmind-s/css/iconsminds.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/font/simple-line-icons/css/simple-line-icons.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.css') }}"/>

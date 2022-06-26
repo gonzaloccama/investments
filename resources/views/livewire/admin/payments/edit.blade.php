@@ -112,10 +112,18 @@
                     @if(in_array($payment->status, ['pending']) && $payment->remaining_hours == 0)
                         {{--                        @if(in_array(Carbon\Carbon::parse($payment->start_date)->day, range(15, 31)))--}}
                         {{--                            @if(in_array(\Carbon\Carbon::now()->day, range(1, 5)))--}}
-                        <a href="javascript:;" wire:click.prevent="updateData"
-                           class="btn btn-secondary btn-sm mb-5"
-                           id="pending"
-                           target="_blank"><b><i class="la la-money"></i>&nbsp;&nbsp;Pagar</b></a>
+
+                        <a href="javascript:;"  wire:click.prevent="updateData"
+                           class="btn btn-secondary btn-sm mb-5 text-white-50" wire:loading.class="disabled"
+                           id="pending" target="_blank">
+                            <b wire:loading.remove wire:target="updateData">
+                                <i class="la la-money"></i>&nbsp;&nbsp;Pagar
+                            </b>
+                            <b wire:loading wire:target="updateData">
+                                <div class="spinner-grow text-light spinner-grow-sm" role="status"></div>
+                                Pagando...
+                            </b>
+                        </a>
                         {{--                            @else--}}
                         {{--                                <div class="alert alert-warning mb-5">--}}
                         {{--                                    <b>Los pagos se habilitan los días 1—5 de cada mes.</b>--}}

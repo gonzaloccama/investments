@@ -12,7 +12,7 @@
                 <thead class="thead-light">
                 <tr>
                     @foreach($headers as $key => $header)
-                        @if($key != 'not')
+                        @if(!in_array($key, ['not', 'officename']))
                             <th class="align-middle">
                                 <a href="javascript:;" wire:click.prevent="changeSort('{{ $key }}')"
                                    class="{{ $fieldSort == $key ? ' text-primary' : '' }} text-uppercase"
@@ -23,7 +23,7 @@
                             </th>
                         @else
                             <th class="text-dark align-middle text-center">
-                                {{ $header }}
+                                <a href="javascript:;" class="text-uppercase disabled">{{ $header }}</a>
                             </th>
                         @endif
                     @endforeach

@@ -25,17 +25,17 @@
                             <h5 class="card-title">Crear Inversión</h5>
                             <div class="separator mb-3 mt-3"></div>
                             <form action="">
-{{--                                <?php--}}
-{{--                                $dt = [--}}
-{{--                                    'name' => 'currency',--}}
-{{--                                    'text' => 'Nominación',--}}
-{{--                                    'required' => 1,--}}
-{{--                                    'object' => 'currency',--}}
-{{--                                    'options' => \App\Models\Currency::select('currencies.*')--}}
-{{--                                        ->selectRaw('CONCAT("(", symbol,")"," ", currency) as currency')->get(),--}}
-{{--                                ];--}}
-{{--                                ?>--}}
-{{--                                @include('livewire.widgets.admin.form.select-h', $dt)--}}
+                                {{--                                <?php--}}
+                                {{--                                $dt = [--}}
+                                {{--                                    'name' => 'currency',--}}
+                                {{--                                    'text' => 'Nominación',--}}
+                                {{--                                    'required' => 1,--}}
+                                {{--                                    'object' => 'currency',--}}
+                                {{--                                    'options' => \App\Models\Currency::select('currencies.*')--}}
+                                {{--                                        ->selectRaw('CONCAT("(", symbol,")"," ", currency) as currency')->get(),--}}
+                                {{--                                ];--}}
+                                {{--                                ?>--}}
+                                {{--                                @include('livewire.widgets.admin.form.select-h', $dt)--}}
 
                                 <?php
                                 $dt = [
@@ -50,9 +50,25 @@
                                 @include('livewire.widgets.admin.form.select-h', $dt)
 
                                 <?php
+                                $_times = [
+                                    'Years' => 'años',
+                                    'Quarters' => 'trimestre',
+                                    'Months' => 'meses',
+                                    'Weeks' => 'semanas',
+                                    'Days' => 'dias',
+                                    'Hours' => 'horas',
+                                ];
+
+                                $_plan = 'Cantidad';
+                                if ($plan) {
+                                    $_plan .= ' de ' . $_times[\App\Models\Plan::find($plan)->time->duration];
+                                }
+                                ?>
+
+                                <?php
                                 $dt = [
                                     'name' => 'period',
-                                    'text' => 'Cantidad de meses',
+                                    'text' => $_plan,
                                     'required' => 1,
                                     'type' => 'text',
                                 ];
@@ -78,6 +94,19 @@
                                 ];
                                 ?>
                                 @include('livewire.widgets.admin.form.input-h', $dt)
+
+                                @if(in_array(auth()->user()->group, [1,2]))
+                                    <?php
+                                    $dt = [
+                                        'name' => 'office_id',
+                                        'text' => 'Oficina',
+                                        'required' => 1,
+                                        'object' => 'office',
+                                        'options' => \App\Models\Office::all(),
+                                    ];
+                                    ?>
+                                    @include('livewire.widgets.admin.form.select-h', $dt)
+                                @endif
 
                             </form>
                             <div class="separator mb-4 mt-4"></div>
