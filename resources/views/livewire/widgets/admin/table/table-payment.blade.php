@@ -1,4 +1,4 @@
-<div class="card border rounded-0" style="border-color: grey;">
+<div class="card border rounded-0" wire:loading.class="loading-blur" wire:target="openFrame,openView,show,edit" style="border-color: grey;">
     <?php
     $money = ['amount'];
     $fld = ['not', 'status', 'progress', 'for_percent', 'type'];

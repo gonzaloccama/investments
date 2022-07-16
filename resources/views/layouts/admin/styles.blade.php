@@ -977,6 +977,31 @@
         display: inline-block
     }
 
+    @keyframes placeHolderShimmer {
+        0% {
+            background-position: -800px 0
+        }
+        100% {
+            background-position: 800px 0
+        }
+    }
+
+    .loading-blur{
+        filter: blur(2px);
+        animation-duration: 2s;
+
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: placeHolderShimmer;
+        animation-timing-function: linear;
+        /*background-color: #b1b1b1;*/
+        /*background-color: rgba(102, 102, 102, 0.27);*/
+        background: rgba(50, 59, 72, 0.05) linear-gradient(to right, rgba(238, 238, 238, 0.008) 2%, rgba(29, 71, 122, 0.05) 24%, rgba(238, 238, 238, 0.005) 46%);
+        background-size: 800px 154px;
+        position: relative;
+    }
+
+
     .text-pending {
         color: #fc751c !important;
     }

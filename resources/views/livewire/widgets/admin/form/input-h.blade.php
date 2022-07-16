@@ -12,14 +12,14 @@
         <div class="col-sm-9 @error($name) error-validate @enderror">
 
             @if(in_array($type, ['text', 'password']))
-                <input type="{{ $type }}" class="form-control" id="{{ $name }}" wire:model="{{ $name }}"
+                <input type="{{ $type }}" class="form-control" id="{{ $name }}" wire:model.lazy="{{ $name }}"
                        {{ isset($readonly) && !empty($readonly) ? 'readonly' : '' }} placeholder="{{ $text }}"
                        @if(isset($keyup) && !empty($keyup)) wire:keyup="{{ $keyup }}" @endif
                        autocomplete="off">
             @elseif($type == 'checkbox')
                 <div class="custom-switch custom-switch-primary mb-2">
                     <input class="custom-switch-input" id="{{ $name }}" type="{{ $type }}"
-                           wire:model="{{ $name }}">
+                           wire:model.lazy="{{ $name }}">
                     <label class="custom-switch-btn" for="{{ $name }}"></label>
                 </div>
             @elseif($type == 'file')
@@ -31,7 +31,7 @@
                         <span class="input-group-text">Cargar</span>
                     </div>
                     <div class="custom-file">
-                        <input type="{{ $type }}" class="custom-file-input" id="{{ $name }}" wire:model="{{ $name }}"
+                        <input type="{{ $type }}" class="custom-file-input" id="{{ $name }}" wire:model.lazy="{{ $name }}"
                                accept="{{ $acc }}">
 
                         <label class="custom-file-label" for="{{ $name }}">Elejir archivo</label>
@@ -41,9 +41,9 @@
             @elseif($type == 'radio')
                 {{--                <div class="radio-check">--}}
                 {{--                    <input type="radio" value="{{ $val1[0] }}" id="{{ $val1[2] }}"--}}
-                {{--                           wire:model="{{ $name }}">--}}
+                {{--                           wire:model.lazy="{{ $name }}">--}}
                 {{--                    <input type="radio" value="{{ $val2[0] }}" id="{{ $val2[2] }}"--}}
-                {{--                           wire:model="{{ $name }}">--}}
+                {{--                           wire:model.lazy="{{ $name }}">--}}
                 {{--                    <label for="{{ $val1[2] }}" class="option option-1">--}}
                 {{--                        <span>{{ $val1[1] }}</span>--}}
                 {{--                    </label>--}}
@@ -54,10 +54,10 @@
 
                 <div class="radio-button">
 
-                    <input type="radio" id="{{ $val1[2] }}" value="{{ $val1[0] }}" wire:model="{{ $name }}">
+                    <input type="radio" id="{{ $val1[2] }}" value="{{ $val1[0] }}" wire:model.lazy="{{ $name }}">
                     <label for="{{ $val1[2] }}">{{ $val1[1] }}</label>
 
-                    <input type="radio" id="{{ $val2[2] }}" value="{{ $val2[0] }}" wire:model="{{ $name }}">
+                    <input type="radio" id="{{ $val2[2] }}" value="{{ $val2[0] }}" wire:model.lazy="{{ $name }}">
                     <label for="{{ $val2[2] }}">{{ $val2[1] }}</label>
 
                     <div id="flap">

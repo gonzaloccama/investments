@@ -5,10 +5,22 @@
     $lnk = ['url', 'link', 'mobile', 'phone', 'email', 'whatsapp', 'website'];
     $dtes = ['created_at', 'updated_at', 'start_date', 'end_date'];
     ?>
+    <div wire:loading wire:target="openFrame,openView,show,edit">
+        <div class="position-absolute w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: rgba(241, 242, 243, 0); display: block;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <text x="50" y="50" text-anchor="middle" dy="0.38em" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="rgba(18, 71, 152, 0.9302580901115172)" stroke-width="0.4" font-size="19" font-family="arial">
+                    Cargando...
+                    <animate attributeName="stroke-dasharray" repeatCount="indefinite" calcMode="spline" dur="1.4925373134328357s" values="0 100;100 100;0 100" keyTimes="0;0.5;1" keySplines="0.3 0 0.7 1;0.3 0 0.7 1"></animate>
+                    <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="1.4925373134328357s" values="0;0;-100" keyTimes="0;0.5;1"></animate>
+                </text>
+            </svg>
+        </div>
+    </div>
     <div class="card-body" style="overflow-x: auto">
         {{ $results->links('livewire.widgets.admin.table.detail-pagination') }}
         <div class="scrollbar scroller">
-            <table class="table table-hover responsive">
+            <table class="table table-hover responsive" wire:loading.class="loading-blur"
+                   wire:target="openFrame,openView,show,edit">
                 <thead class="thead-light">
                 <tr>
                     @foreach($headers as $key => $header)

@@ -185,6 +185,7 @@ class InvestmentComponent extends BaseAdmin
 
     public function openFrame()
     {
+//        sleep(5);
         $this->frame = 'add';
         $this->emit('refreshSection');
     }

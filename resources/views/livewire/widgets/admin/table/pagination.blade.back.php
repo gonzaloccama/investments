@@ -1,5 +1,5 @@
 
-<div class="mt-4 mb-3 row">
+<div class="mt-2 mb-1 row">
     <div class="text-left col-md-6">
         @if ($paginator->hasPages())
             <ul class="pagination mb-0">

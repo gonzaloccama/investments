@@ -21,7 +21,7 @@
     </div>
 @elseif(isset($customs['button']))
     <button type="button" class="btn btn-secondary btn-xs"
-            style="border-radius: 15px"
+            style="border-radius: 0px 15px 15px 0px"
             wire:click.prevent="{{ $customs['action'] . '('. $result->id. ')' }}">
         {{ $customs['button'] }}
     </button>

@@ -80,31 +80,36 @@ class AddUserComponent extends Component
     {
         $this->validate($this->rules, [], $this->attributes);
 
-        $data = new User();
+        try {
 
-        $data->username = Str::slug(explode(' ', $this->lastname)[0]) . $this->dni;
-        $data->password = \Hash::make($this->dni);
-        $data->email = $this->email;
-        $data->mobile = $this->mobile;
-        $data->address = $this->address;
-        $data->city = $this->city;
-        $data->province = $this->province;
-        $data->region = $this->region;
-        $data->country = $this->country;
-        $data->dni = $this->dni;
-        $data->firstname = mb_convert_case($this->firstname, MB_CASE_TITLE, "UTF-8");
-        $data->lastname = mb_convert_case($this->lastname, MB_CASE_TITLE, "UTF-8");
-        $data->gender = $this->gender;
-        $data->birthdate = $this->birthdate;
-        $data->relationship = $this->relationship;
-        $data->job = $this->job;
+            $data = new User();
 
-        if ($data->save()) {
-            $this->emitUp('custom', [$this->dni, $data->id]);
-            $this->emitUp('closeModal');
-            $this->emit('notification', ['Se creó nuevo usuario exitosamente']);
+            $data->username = Str::slug(explode(' ', $this->lastname)[0]) . $this->dni;
+            $data->password = \Hash::make($this->dni);
+            $data->email = $this->email;
+            $data->mobile = $this->mobile;
+            $data->address = $this->address;
+            $data->city = $this->city;
+            $data->province = $this->province;
+            $data->region = $this->region;
+            $data->country = $this->country;
+            $data->dni = $this->dni;
+            $data->firstname = mb_convert_case($this->firstname, MB_CASE_TITLE, "UTF-8");
+            $data->lastname = mb_convert_case($this->lastname, MB_CASE_TITLE, "UTF-8");
+            $data->gender = $this->gender;
+            $data->birthdate = $this->birthdate;
+            $data->relationship = $this->relationship;
+            $data->job = $this->job;
 
-            $this->cleanItems();
+            if ($data->save()) {
+                $this->emitUp('custom', [$this->dni, $data->id]);
+                $this->emitUp('closeModal');
+                $this->emit('notification', ['Se creó nuevo usuario exitosamente']);
+
+                $this->cleanItems();
+            }
+        } catch (\Exception $e) {
+            $this->emit('notification', ['Algo salió mal INTENTA DE NUEVO', 'rgba(255,2,52,0.56)']);
         }
     }
 

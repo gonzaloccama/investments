@@ -272,7 +272,6 @@ class BonusComponent extends BaseAdmin
         });
 
         Validator::extend('exists30high', function ($attr, $value) {
-            $validate = false;
 
             $data = Investment::where('id', $value)->whereIn('status', ['completed', 'active'])->first();
 
